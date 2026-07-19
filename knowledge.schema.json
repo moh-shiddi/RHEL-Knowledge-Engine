@@ -1,0 +1,330 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RHEL Arabic Knowledge Base",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "project",
+    "language",
+    "baseline",
+    "supported_versions",
+    "categories",
+    "tasks"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "2.0.0"
+    },
+    "project": {
+      "type": "string"
+    },
+    "language": {
+      "const": "ar"
+    },
+    "baseline": {
+      "type": "string"
+    },
+    "supported_versions": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "8",
+          "9",
+          "10"
+        ]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "categories": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "tasks": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/task"
+      },
+      "minItems": 1
+    }
+  },
+  "$defs": {
+    "step": {
+      "type": "object",
+      "required": [
+        "id",
+        "title_ar",
+        "command",
+        "explanation_ar",
+        "requires_sudo",
+        "risk",
+        "optional"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$"
+        },
+        "title_ar": {
+          "type": "string"
+        },
+        "command": {
+          "type": "string"
+        },
+        "explanation_ar": {
+          "type": "string"
+        },
+        "requires_sudo": {
+          "type": "boolean"
+        },
+        "risk": {
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "critical"
+          ]
+        },
+        "optional": {
+          "type": "boolean"
+        },
+        "expected_result_ar": {
+          "type": "string"
+        },
+        "notes_ar": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "check": {
+      "type": "object",
+      "required": [
+        "title_ar",
+        "command",
+        "expected_result_ar"
+      ],
+      "properties": {
+        "title_ar": {
+          "type": "string"
+        },
+        "command": {
+          "type": "string"
+        },
+        "expected_result_ar": {
+          "type": "string"
+        },
+        "requires_sudo": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "error": {
+      "type": "object",
+      "required": [
+        "symptom_ar",
+        "likely_causes_ar",
+        "checks",
+        "fixes_ar"
+      ],
+      "properties": {
+        "symptom_ar": {
+          "type": "string"
+        },
+        "likely_causes_ar": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "checks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/check"
+          }
+        },
+        "fixes_ar": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "task": {
+      "type": "object",
+      "required": [
+        "id",
+        "entity_type",
+        "content_level",
+        "title_ar",
+        "goal_ar",
+        "summary_ar",
+        "category",
+        "difficulty",
+        "estimated_minutes",
+        "keywords_ar",
+        "supported_versions",
+        "risk",
+        "prerequisites_ar",
+        "variables",
+        "steps",
+        "verification",
+        "rollback_ar",
+        "common_errors",
+        "files",
+        "ports",
+        "related_tasks",
+        "safety_notes_ar",
+        "sources",
+        "status"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$"
+        },
+        "entity_type": {
+          "const": "task"
+        },
+        "content_level": {
+          "enum": [
+            "legacy",
+            "workflow",
+            "troubleshooting"
+          ]
+        },
+        "title_ar": {
+          "type": "string"
+        },
+        "goal_ar": {
+          "type": "string"
+        },
+        "summary_ar": {
+          "type": "string"
+        },
+        "category": {
+          "type": "string"
+        },
+        "difficulty": {
+          "enum": [
+            "beginner",
+            "intermediate",
+            "advanced"
+          ]
+        },
+        "estimated_minutes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 480
+        },
+        "keywords_ar": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        },
+        "supported_versions": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "8",
+              "9",
+              "10"
+            ]
+          },
+          "minItems": 1
+        },
+        "risk": {
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "critical"
+          ]
+        },
+        "prerequisites_ar": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "variables": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "steps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/step"
+          },
+          "minItems": 1
+        },
+        "verification": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/check"
+          }
+        },
+        "rollback_ar": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "common_errors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/error"
+          }
+        },
+        "files": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "ports": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "related_tasks": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "safety_notes_ar": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "status": {
+          "enum": [
+            "draft",
+            "reviewed",
+            "verified"
+          ]
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

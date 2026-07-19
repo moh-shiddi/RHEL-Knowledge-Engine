@@ -1,0 +1,732 @@
+{
+  "schema_version": "2.0.0",
+  "project": "RHEL Arabic Knowledge Base",
+  "language": "ar",
+  "baseline": "Red Hat Enterprise Linux 9",
+  "supported_versions": [
+    "8",
+    "9",
+    "10"
+  ],
+  "categories": {
+    "packages": "الحزم والبرامج",
+    "web_servers": "خوادم الويب",
+    "services": "الخدمات وSystemd",
+    "users": "المستخدمون والصلاحيات",
+    "storage": "الأقراص والتخزين",
+    "network": "الشبكات والاتصال",
+    "firewall": "الجدار الناري",
+    "selinux": "SELinux",
+    "ssh": "SSH والوصول البعيد",
+    "scheduling": "الجدولة والمهام"
+  },
+  "tasks": [
+    {
+      "id": "install-package-dnf",
+      "entity_type": "task",
+      "content_level": "workflow",
+      "title_ar": "تثبيت برنامج باستخدام DNF",
+      "goal_ar": "أريد تثبيت برنامج أو حزمة",
+      "summary_ar": "البحث عن الحزمة وفحصها ثم تثبيتها والتحقق من نجاح العملية.",
+      "category": "packages",
+      "difficulty": "beginner",
+      "estimated_minutes": 5,
+      "keywords_ar": [
+        "تثبيت برنامج",
+        "تحميل تطبيق",
+        "تنزيل حزمة",
+        "dnf",
+        "install package"
+      ],
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "risk": "medium",
+      "prerequisites_ar": [
+        "اتصال بالمستودعات",
+        "صلاحية sudo للتثبيت"
+      ],
+      "variables": [
+        {
+          "name": "PACKAGE",
+          "label_ar": "اسم الحزمة",
+          "example": "nginx",
+          "required": true
+        }
+      ],
+      "steps": [
+        {
+          "id": "search",
+          "title_ar": "البحث عن الحزمة",
+          "command": "dnf search <PACKAGE>",
+          "explanation_ar": "يتأكد من الاسم الصحيح للحزمة.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "ظهور نتائج مطابقة.",
+          "notes_ar": ""
+        },
+        {
+          "id": "info",
+          "title_ar": "عرض معلومات الحزمة",
+          "command": "dnf info <PACKAGE>",
+          "explanation_ar": "يعرض الإصدار والحجم والمستودع.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "ظهور معلومات الحزمة.",
+          "notes_ar": ""
+        },
+        {
+          "id": "install",
+          "title_ar": "تثبيت الحزمة",
+          "command": "sudo dnf install <PACKAGE>",
+          "explanation_ar": "يثبت الحزمة واعتمادياتها.",
+          "requires_sudo": true,
+          "risk": "medium",
+          "optional": false,
+          "expected_result_ar": "اكتمال العملية دون أخطاء.",
+          "notes_ar": ""
+        },
+        {
+          "id": "verify",
+          "title_ar": "التحقق من التثبيت",
+          "command": "rpm -q <PACKAGE>",
+          "explanation_ar": "يتأكد أن الحزمة أصبحت مثبتة.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "اسم الحزمة وإصدارها.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "التحقق بواسطة RPM",
+          "command": "rpm -q <PACKAGE>",
+          "expected_result_ar": "اسم الحزمة وإصدارها.",
+          "requires_sudo": false
+        }
+      ],
+      "rollback_ar": [
+        "sudo dnf remove <PACKAGE>"
+      ],
+      "common_errors": [
+        {
+          "symptom_ar": "No match for argument",
+          "likely_causes_ar": [
+            "اسم الحزمة غير صحيح",
+            "المستودع المطلوب غير مفعّل"
+          ],
+          "checks": [
+            {
+              "title_ar": "البحث عن الاسم",
+              "command": "dnf search <PACKAGE>",
+              "expected_result_ar": "نتائج أو بدائل.",
+              "requires_sudo": false
+            },
+            {
+              "title_ar": "عرض المستودعات",
+              "command": "dnf repolist",
+              "expected_result_ar": "قائمة المستودعات.",
+              "requires_sudo": false
+            }
+          ],
+          "fixes_ar": [
+            "صحح اسم الحزمة",
+            "فعّل المستودع المناسب"
+          ]
+        }
+      ],
+      "files": [],
+      "ports": [],
+      "related_tasks": [
+        "install-nginx-web-server"
+      ],
+      "safety_notes_ar": [
+        "راجع قائمة التغييرات قبل الموافقة."
+      ],
+      "sources": [],
+      "status": "reviewed"
+    },
+    {
+      "id": "install-nginx-web-server",
+      "entity_type": "task",
+      "content_level": "workflow",
+      "title_ar": "تثبيت وتشغيل خادم Nginx",
+      "goal_ar": "أريد تجهيز خادم ويب Nginx",
+      "summary_ar": "تثبيت Nginx وتشغيله وفتح HTTP ثم اختبار الاستجابة.",
+      "category": "web_servers",
+      "difficulty": "beginner",
+      "estimated_minutes": 10,
+      "keywords_ar": [
+        "nginx",
+        "خادم ويب",
+        "ويب سيرفر",
+        "http"
+      ],
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "risk": "high",
+      "prerequisites_ar": [
+        "صلاحية sudo",
+        "عدم استخدام المنفذ 80 من خدمة أخرى"
+      ],
+      "variables": [],
+      "steps": [
+        {
+          "id": "install",
+          "title_ar": "تثبيت Nginx",
+          "command": "sudo dnf install nginx",
+          "explanation_ar": "يثبت حزمة Nginx.",
+          "requires_sudo": true,
+          "risk": "medium",
+          "optional": false,
+          "expected_result_ar": "اكتمال التثبيت.",
+          "notes_ar": ""
+        },
+        {
+          "id": "enable",
+          "title_ar": "تشغيل الخدمة الآن ومع الإقلاع",
+          "command": "sudo systemctl enable --now nginx",
+          "explanation_ar": "يشغل الخدمة ويفعلها مع الإقلاع.",
+          "requires_sudo": true,
+          "risk": "high",
+          "optional": false,
+          "expected_result_ar": "الخدمة active.",
+          "notes_ar": ""
+        },
+        {
+          "id": "firewall",
+          "title_ar": "السماح بخدمة HTTP",
+          "command": "sudo firewall-cmd --permanent --add-service=http",
+          "explanation_ar": "يسمح باتصالات HTTP.",
+          "requires_sudo": true,
+          "risk": "high",
+          "optional": false,
+          "expected_result_ar": "success",
+          "notes_ar": ""
+        },
+        {
+          "id": "reload",
+          "title_ar": "تطبيق قواعد الجدار الناري",
+          "command": "sudo firewall-cmd --reload",
+          "explanation_ar": "يعيد تحميل القواعد.",
+          "requires_sudo": true,
+          "risk": "medium",
+          "optional": false,
+          "expected_result_ar": "success",
+          "notes_ar": ""
+        },
+        {
+          "id": "test",
+          "title_ar": "اختبار الاستجابة",
+          "command": "curl -I http://localhost",
+          "explanation_ar": "يفحص استجابة الخادم محلياً.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "HTTP 200 أو استجابة صحيحة.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "حالة الخدمة",
+          "command": "systemctl status nginx",
+          "expected_result_ar": "active (running)",
+          "requires_sudo": false
+        },
+        {
+          "title_ar": "فحص HTTP",
+          "command": "curl -I http://localhost",
+          "expected_result_ar": "استجابة HTTP",
+          "requires_sudo": false
+        }
+      ],
+      "rollback_ar": [
+        "sudo systemctl disable --now nginx",
+        "sudo dnf remove nginx"
+      ],
+      "common_errors": [
+        {
+          "symptom_ar": "الخدمة تفشل عند التشغيل",
+          "likely_causes_ar": [
+            "المنفذ 80 مستخدم",
+            "خطأ في الإعداد"
+          ],
+          "checks": [
+            {
+              "title_ar": "حالة الخدمة",
+              "command": "systemctl status nginx",
+              "expected_result_ar": "سبب الفشل.",
+              "requires_sudo": false
+            },
+            {
+              "title_ar": "السجل",
+              "command": "journalctl -u nginx -b --no-pager",
+              "expected_result_ar": "رسائل الخطأ.",
+              "requires_sudo": false
+            },
+            {
+              "title_ar": "اختبار الإعداد",
+              "command": "sudo nginx -t",
+              "expected_result_ar": "syntax is ok",
+              "requires_sudo": true
+            }
+          ],
+          "fixes_ar": [
+            "حرر المنفذ أو غيّر listen",
+            "صحح ملف الإعداد"
+          ]
+        }
+      ],
+      "files": [
+        "/etc/nginx/nginx.conf",
+        "/etc/nginx/conf.d/",
+        "/usr/share/nginx/html/"
+      ],
+      "ports": [
+        {
+          "port": 80,
+          "protocol": "tcp",
+          "purpose_ar": "HTTP"
+        },
+        {
+          "port": 443,
+          "protocol": "tcp",
+          "purpose_ar": "HTTPS"
+        }
+      ],
+      "related_tasks": [
+        "troubleshoot-systemd-service",
+        "open-firewall-port"
+      ],
+      "safety_notes_ar": [
+        "فتح المنافذ يغيّر سطح الوصول إلى الخادم."
+      ],
+      "sources": [],
+      "status": "draft"
+    },
+    {
+      "id": "troubleshoot-systemd-service",
+      "entity_type": "task",
+      "content_level": "troubleshooting",
+      "title_ar": "تشخيص خدمة Systemd لا تعمل",
+      "goal_ar": "أريد معرفة سبب توقف خدمة",
+      "summary_ar": "فحص الحالة والسجل وملف الوحدة والمنافذ ثم إعادة الاختبار.",
+      "category": "services",
+      "difficulty": "intermediate",
+      "estimated_minutes": 15,
+      "keywords_ar": [
+        "الخدمة لا تعمل",
+        "service failed",
+        "systemctl",
+        "journalctl"
+      ],
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "risk": "medium",
+      "prerequisites_ar": [
+        "معرفة اسم الخدمة"
+      ],
+      "variables": [
+        {
+          "name": "SERVICE",
+          "label_ar": "اسم الخدمة",
+          "example": "nginx",
+          "required": true
+        }
+      ],
+      "steps": [
+        {
+          "id": "status",
+          "title_ar": "عرض الحالة",
+          "command": "systemctl status <SERVICE> --no-pager -l",
+          "explanation_ar": "يعرض الحالة وآخر الرسائل.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "سبب أولي للفشل.",
+          "notes_ar": ""
+        },
+        {
+          "id": "logs",
+          "title_ar": "عرض سجل الإقلاع الحالي",
+          "command": "journalctl -u <SERVICE> -b --no-pager",
+          "explanation_ar": "يعرض رسائل الخدمة منذ آخر إقلاع.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "رسائل تشخيصية.",
+          "notes_ar": ""
+        },
+        {
+          "id": "unit",
+          "title_ar": "عرض ملف الوحدة",
+          "command": "systemctl cat <SERVICE>",
+          "explanation_ar": "يعرض ملف الوحدة والـ overrides.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "إعدادات التشغيل.",
+          "notes_ar": ""
+        },
+        {
+          "id": "ports",
+          "title_ar": "فحص المنافذ",
+          "command": "sudo ss -tulpn",
+          "explanation_ar": "يكشف تعارض المنافذ.",
+          "requires_sudo": true,
+          "risk": "low",
+          "optional": true,
+          "expected_result_ar": "قائمة المنافذ.",
+          "notes_ar": ""
+        },
+        {
+          "id": "restart",
+          "title_ar": "إعادة التشغيل بعد الإصلاح",
+          "command": "sudo systemctl restart <SERVICE>",
+          "explanation_ar": "يعيد تشغيل الخدمة بعد معالجة السبب.",
+          "requires_sudo": true,
+          "risk": "high",
+          "optional": true,
+          "expected_result_ar": "الخدمة active.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "الحالة النهائية",
+          "command": "systemctl is-active <SERVICE>",
+          "expected_result_ar": "active",
+          "requires_sudo": false
+        }
+      ],
+      "rollback_ar": [
+        "ارجع آخر تعديل قبل إعادة المحاولة."
+      ],
+      "common_errors": [
+        {
+          "symptom_ar": "Unit not found",
+          "likely_causes_ar": [
+            "اسم الخدمة غير صحيح",
+            "الحزمة غير مثبتة"
+          ],
+          "checks": [
+            {
+              "title_ar": "البحث عن الوحدة",
+              "command": "systemctl list-unit-files | grep -i <SERVICE>",
+              "expected_result_ar": "اسم الوحدة الصحيح.",
+              "requires_sudo": false
+            },
+            {
+              "title_ar": "البحث عن الحزمة",
+              "command": "dnf search <SERVICE>",
+              "expected_result_ar": "حزمة محتملة.",
+              "requires_sudo": false
+            }
+          ],
+          "fixes_ar": [
+            "استخدم اسم الوحدة الصحيح",
+            "ثبت الحزمة التي توفر الخدمة"
+          ]
+        }
+      ],
+      "files": [
+        "/etc/systemd/system/",
+        "/usr/lib/systemd/system/"
+      ],
+      "ports": [],
+      "related_tasks": [
+        "install-nginx-web-server"
+      ],
+      "safety_notes_ar": [
+        "إعادة تشغيل خدمة إنتاجية قد تسبب انقطاعاً مؤقتاً."
+      ],
+      "sources": [],
+      "status": "reviewed"
+    },
+    {
+      "id": "create-user-with-admin-access",
+      "entity_type": "task",
+      "content_level": "workflow",
+      "title_ar": "إنشاء مستخدم ومنحه صلاحية إدارية",
+      "goal_ar": "أريد إنشاء مستخدم جديد وإضافته إلى wheel",
+      "summary_ar": "إنشاء الحساب وتعيين كلمة المرور ومنحه sudo ثم التحقق.",
+      "category": "users",
+      "difficulty": "beginner",
+      "estimated_minutes": 6,
+      "keywords_ar": [
+        "إنشاء مستخدم",
+        "اضافة حساب",
+        "sudo user",
+        "wheel",
+        "useradd"
+      ],
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "risk": "high",
+      "prerequisites_ar": [
+        "صلاحية root أو sudo"
+      ],
+      "variables": [
+        {
+          "name": "USER",
+          "label_ar": "اسم المستخدم",
+          "example": "ahmed",
+          "required": true
+        }
+      ],
+      "steps": [
+        {
+          "id": "create",
+          "title_ar": "إنشاء الحساب",
+          "command": "sudo useradd <USER>",
+          "explanation_ar": "ينشئ حساب المستخدم.",
+          "requires_sudo": true,
+          "risk": "high",
+          "optional": false,
+          "expected_result_ar": "إنشاء الحساب.",
+          "notes_ar": ""
+        },
+        {
+          "id": "password",
+          "title_ar": "تعيين كلمة المرور",
+          "command": "sudo passwd <USER>",
+          "explanation_ar": "يعيّن كلمة مرور الحساب.",
+          "requires_sudo": true,
+          "risk": "high",
+          "optional": false,
+          "expected_result_ar": "نجاح تحديث كلمة المرور.",
+          "notes_ar": ""
+        },
+        {
+          "id": "wheel",
+          "title_ar": "إضافة المستخدم إلى wheel",
+          "command": "sudo usermod -aG wheel <USER>",
+          "explanation_ar": "يمنحه صلاحيات إدارية عبر wheel.",
+          "requires_sudo": true,
+          "risk": "high",
+          "optional": false,
+          "expected_result_ar": "إتمام الأمر.",
+          "notes_ar": ""
+        },
+        {
+          "id": "verify",
+          "title_ar": "التحقق من المجموعات",
+          "command": "id <USER>",
+          "explanation_ar": "يجب أن تظهر wheel ضمن المجموعات.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "ظهور wheel.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "اختبار الهوية",
+          "command": "id <USER>",
+          "expected_result_ar": "ظهور المستخدم ومجموعة wheel.",
+          "requires_sudo": false
+        }
+      ],
+      "rollback_ar": [
+        "sudo userdel -r <USER>"
+      ],
+      "common_errors": [
+        {
+          "symptom_ar": "المستخدم لا يستطيع استخدام sudo",
+          "likely_causes_ar": [
+            "لم تتم إضافته إلى wheel",
+            "الجلسة القديمة لم تلتقط المجموعة"
+          ],
+          "checks": [
+            {
+              "title_ar": "فحص المجموعات",
+              "command": "id <USER>",
+              "expected_result_ar": "ظهور wheel.",
+              "requires_sudo": false
+            },
+            {
+              "title_ar": "فحص sudoers",
+              "command": "sudo grep -R '^%wheel' /etc/sudoers /etc/sudoers.d",
+              "expected_result_ar": "قاعدة wheel فعالة.",
+              "requires_sudo": true
+            }
+          ],
+          "fixes_ar": [
+            "أعد تسجيل الدخول",
+            "تحقق من قاعدة wheel"
+          ]
+        }
+      ],
+      "files": [
+        "/etc/passwd",
+        "/etc/group",
+        "/etc/sudoers"
+      ],
+      "ports": [],
+      "related_tasks": [],
+      "safety_notes_ar": [
+        "منح wheel يعني صلاحيات إدارية واسعة."
+      ],
+      "sources": [],
+      "status": "reviewed"
+    },
+    {
+      "id": "find-and-clean-large-files",
+      "entity_type": "task",
+      "content_level": "workflow",
+      "title_ar": "العثور على سبب امتلاء القرص",
+      "goal_ar": "أريد معرفة ما الذي يستهلك مساحة كبيرة",
+      "summary_ar": "تحديد القسم الممتلئ ثم تحليل المجلدات والملفات الكبيرة قبل الحذف.",
+      "category": "storage",
+      "difficulty": "intermediate",
+      "estimated_minutes": 12,
+      "keywords_ar": [
+        "الهارد ممتلئ",
+        "مساحة القرص",
+        "ملفات كبيرة",
+        "disk full",
+        "du",
+        "find"
+      ],
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "risk": "medium",
+      "prerequisites_ar": [
+        "عدم حذف ملف قبل معرفة وظيفته"
+      ],
+      "variables": [
+        {
+          "name": "PATH",
+          "label_ar": "المسار المراد تحليله",
+          "example": "/var",
+          "required": true
+        }
+      ],
+      "steps": [
+        {
+          "id": "df",
+          "title_ar": "تحديد القسم الممتلئ",
+          "command": "df -hT",
+          "explanation_ar": "يعرض الاستخدام ونوع نظام الملفات.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "تحديد القسم المرتفع.",
+          "notes_ar": ""
+        },
+        {
+          "id": "inodes",
+          "title_ar": "فحص inodes",
+          "command": "df -ih",
+          "explanation_ar": "يتأكد أن المشكلة ليست نفاد inodes.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "نسب inodes.",
+          "notes_ar": ""
+        },
+        {
+          "id": "directories",
+          "title_ar": "عرض أكبر المجلدات",
+          "command": "sudo du -xhd1 <PATH> | sort -h",
+          "explanation_ar": "يرتب أحجام المجلدات.",
+          "requires_sudo": true,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "قائمة مرتبة.",
+          "notes_ar": ""
+        },
+        {
+          "id": "files",
+          "title_ar": "البحث عن الملفات الكبيرة",
+          "command": "sudo find <PATH> -xdev -type f -size +500M -printf '%s %p\\n' | sort -n",
+          "explanation_ar": "يعرض الملفات الأكبر من 500M.",
+          "requires_sudo": true,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "قائمة ملفات.",
+          "notes_ar": ""
+        },
+        {
+          "id": "deleted",
+          "title_ar": "فحص الملفات المحذوفة المفتوحة",
+          "command": "sudo lsof +L1",
+          "explanation_ar": "يكشف ملفات محذوفة ما زالت مفتوحة.",
+          "requires_sudo": true,
+          "risk": "low",
+          "optional": true,
+          "expected_result_ar": "قائمة أو نتيجة فارغة.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "مراجعة المساحة",
+          "command": "df -hT",
+          "expected_result_ar": "انخفاض نسبة الاستخدام.",
+          "requires_sudo": false
+        }
+      ],
+      "rollback_ar": [
+        "أنشئ نسخة احتياطية قبل حذف ملفات مهمة."
+      ],
+      "common_errors": [
+        {
+          "symptom_ar": "df ممتلئ لكن du لا يفسر الحجم",
+          "likely_causes_ar": [
+            "ملف محذوف ما زال مفتوحاً",
+            "نقطة ربط تخفي ملفات"
+          ],
+          "checks": [
+            {
+              "title_ar": "ملفات محذوفة مفتوحة",
+              "command": "sudo lsof +L1",
+              "expected_result_ar": "عمليات تحتفظ بملفات.",
+              "requires_sudo": true
+            },
+            {
+              "title_ar": "نقاط الربط",
+              "command": "findmnt",
+              "expected_result_ar": "قائمة نقاط الربط.",
+              "requires_sudo": false
+            }
+          ],
+          "fixes_ar": [
+            "أعد تشغيل الخدمة بعد التحقق",
+            "افحص المسار دون نقطة الربط"
+          ]
+        }
+      ],
+      "files": [
+        "/var/log/",
+        "/var/cache/"
+      ],
+      "ports": [],
+      "related_tasks": [],
+      "safety_notes_ar": [
+        "لا تستخدم rm لمجرد أن الملف كبير."
+      ],
+      "sources": [],
+      "status": "draft"
+    }
+  ]
+}
