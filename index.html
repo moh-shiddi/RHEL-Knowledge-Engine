@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="ar" dir="rtl" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="معجم عربي تفاعلي للبحث في أوامر Red Hat Enterprise Linux">
+  <meta name="theme-color" content="#0b6b50">
+  <title>معجم أوامر RHEL العربي</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <a class="skip-link" href="#results">الانتقال إلى النتائج</a>
+
+  <div class="app">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="الصفحة الرئيسية">
+        <span class="brand__mark" aria-hidden="true">$_</span>
+        <span>
+          <strong>معجم RHEL العربي</strong>
+          <small>ابحث بالهدف، لا باسم الأمر</small>
+        </span>
+      </a>
+
+      <div class="topbar__actions">
+        <button id="favoritesViewButton" class="topbar-button" type="button">
+          <span aria-hidden="true">★</span>
+          <span>المفضلة</span>
+          <b id="favoritesCount">0</b>
+        </button>
+
+        <button id="themeButton" class="icon-button" type="button"
+                aria-label="تفعيل الوضع الليلي" title="الوضع الليلي">
+          <span id="themeIcon" aria-hidden="true">☾</span>
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero__content">
+          <span class="eyebrow">Red Hat Enterprise Linux 8 / 9 / 10</span>
+          <h1>ماذا تريد أن تفعل في لينكس؟</h1>
+          <p>
+            اكتب المهمة بالعربية، مثل: «أريد تثبيت برنامج» أو
+            «أين أجد أخطاء خدمة nginx؟».
+          </p>
+
+          <div class="search-area">
+            <div id="searchBox" class="search-box">
+              <span class="search-box__icon" aria-hidden="true">⌕</span>
+
+              <input id="searchInput"
+                     type="search"
+                     autocomplete="off"
+                     spellcheck="false"
+                     aria-autocomplete="list"
+                     aria-controls="suggestions"
+                     aria-expanded="false"
+                     placeholder="ابحث عن أمر، مهمة، خدمة أو مشكلة...">
+
+              <kbd>Ctrl K</kbd>
+
+              <button id="clearSearchButton" class="clear-button"
+                      type="button" aria-label="مسح البحث" hidden>×</button>
+            </div>
+
+            <div id="suggestions" class="suggestions"
+                 role="listbox" aria-label="اقتراحات البحث" hidden></div>
+          </div>
+
+          <div id="quickSearches" class="quick-searches" aria-label="عمليات بحث مقترحة">
+            <span>أمثلة:</span>
+            <button type="button" data-query="تثبيت برنامج">تثبيت برنامج</button>
+            <button type="button" data-query="الخدمة لا تعمل">الخدمة لا تعمل</button>
+            <button type="button" data-query="معرفة مساحة القرص">مساحة القرص</button>
+            <button type="button" data-query="فتح منفذ">فتح منفذ</button>
+            <button type="button" data-query="البحث داخل ملف">البحث داخل ملف</button>
+          </div>
+        </div>
+
+        <div class="hero__metrics" aria-label="إحصائيات المعجم">
+          <article>
+            <strong id="commandsMetric">—</strong>
+            <span>أمر وعملية</span>
+          </article>
+          <article>
+            <strong id="categoriesMetric">—</strong>
+            <span>تصنيفاً</span>
+          </article>
+          <article>
+            <strong>100%</strong>
+            <span>يعمل محلياً</span>
+          </article>
+        </div>
+      </section>
+
+      <section class="control-panel" aria-label="خيارات عرض النتائج">
+        <div class="view-tabs" role="tablist" aria-label="نوع النتائج">
+          <button id="allViewButton" class="view-tab is-active"
+                  type="button" role="tab" aria-selected="true">
+            كل الأوامر
+          </button>
+          <button id="favoriteTabButton" class="view-tab"
+                  type="button" role="tab" aria-selected="false">
+            المفضلة فقط
+          </button>
+          <button id="recentTabButton" class="view-tab"
+                  type="button" role="tab" aria-selected="false">
+            آخر عمليات البحث
+          </button>
+        </div>
+
+        <div class="filters">
+          <label>
+            <span>التصنيف</span>
+            <select id="categoryFilter">
+              <option value="all">كل التصنيفات</option>
+            </select>
+          </label>
+
+          <label>
+            <span>الخطورة</span>
+            <select id="riskFilter">
+              <option value="all">كل المستويات</option>
+              <option value="low">منخفضة</option>
+              <option value="medium">متوسطة</option>
+              <option value="high">عالية</option>
+              <option value="critical">حرجة</option>
+            </select>
+          </label>
+
+          <label>
+            <span>الصلاحية</span>
+            <select id="sudoFilter">
+              <option value="all">الكل</option>
+              <option value="yes">يحتاج sudo</option>
+              <option value="no">لا يحتاج sudo</option>
+            </select>
+          </label>
+
+          <label>
+            <span>الإصدار</span>
+            <select id="versionFilter">
+              <option value="all">كل الإصدارات</option>
+              <option value="8">RHEL 8</option>
+              <option value="9">RHEL 9</option>
+              <option value="10">RHEL 10</option>
+            </select>
+          </label>
+
+          <label>
+            <span>الترتيب</span>
+            <select id="sortFilter">
+              <option value="relevance">الأكثر صلة</option>
+              <option value="title">أبجدياً</option>
+              <option value="risk">الأعلى خطورة</option>
+              <option value="category">حسب التصنيف</option>
+            </select>
+          </label>
+
+          <button id="resetButton" class="reset-button" type="button">
+            إعادة الضبط
+          </button>
+        </div>
+      </section>
+
+      <section id="recentSearchesPanel" class="recent-panel" hidden>
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">محفوظة على هذا الجهاز</span>
+            <h2>آخر عمليات البحث</h2>
+          </div>
+          <button id="clearHistoryButton" class="text-button" type="button">
+            مسح السجل
+          </button>
+        </div>
+        <div id="recentSearchesList" class="history-list"></div>
+      </section>
+
+      <section id="results" class="results-section" tabindex="-1">
+        <div class="section-heading">
+          <div>
+            <span id="resultsEyebrow" class="eyebrow">المعجم الكامل</span>
+            <h2 id="resultsTitle">كل الأوامر</h2>
+            <p id="resultsSummary">جاري تحميل البيانات...</p>
+          </div>
+
+          <div class="result-actions">
+            <button id="compactViewButton" class="icon-button is-active"
+                    type="button" aria-label="عرض شبكي" title="عرض شبكي">▦</button>
+            <button id="listViewButton" class="icon-button"
+                    type="button" aria-label="عرض قائمة" title="عرض قائمة">☷</button>
+          </div>
+        </div>
+
+        <div id="activeFilters" class="active-filters" hidden></div>
+
+        <div id="loadingState" class="state-card">
+          <div class="loader" aria-hidden="true"></div>
+          <h3>جاري تجهيز الفهرس</h3>
+          <p>يتم تحميل الأوامر وبناء فهرس البحث العربي.</p>
+        </div>
+
+        <div id="errorState" class="state-card state-card--error" hidden>
+          <span class="state-card__icon" aria-hidden="true">!</span>
+          <h3>تعذر تحميل ملف الأوامر</h3>
+          <p>
+            تأكد من وجود <code>commands.json</code> بجانب الصفحة، ثم افتح
+            المشروع بواسطة خادم محلي أو ارفعه على خدمة استضافة.
+          </p>
+          <code class="server-command">python -m http.server 8000</code>
+        </div>
+
+        <div id="emptyState" class="state-card" hidden>
+          <span class="state-card__icon" aria-hidden="true">⌕</span>
+          <h3>لا توجد نتائج مطابقة</h3>
+          <p>جرّب وصف المهمة بكلمات أبسط، مثل: برنامج، ملف، خدمة، شبكة، مستخدم.</p>
+          <button id="emptyResetButton" class="primary-button" type="button">
+            عرض كل الأوامر
+          </button>
+        </div>
+
+        <div id="resultsGrid" class="results-grid" aria-live="polite"></div>
+
+        <button id="loadMoreButton" class="load-more" type="button" hidden>
+          عرض نتائج إضافية
+        </button>
+      </section>
+    </main>
+
+    <footer>
+      <p>
+        معجم تعليمي. راجع <code>man</code> والتوثيق الرسمي قبل تنفيذ أوامر
+        مرتفعة الخطورة على بيئة إنتاج.
+      </p>
+      <span id="schemaVersion"></span>
+    </footer>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <dialog id="commandDialog" class="command-dialog">
+    <button id="closeDialogButton" class="dialog-close"
+            type="button" aria-label="إغلاق">×</button>
+    <div id="dialogContent"></div>
+  </dialog>
+
+  <template id="commandCardTemplate">
+    <article class="command-card">
+      <header class="command-card__header">
+        <div class="command-card__heading">
+          <span class="category-badge"></span>
+          <h3 class="command-title"></h3>
+        </div>
+        <button class="favorite-button" type="button"
+                aria-label="إضافة إلى المفضلة" title="المفضلة">☆</button>
+      </header>
+
+      <p class="command-description"></p>
+
+      <div class="code-box">
+        <code class="command-code"></code>
+        <button class="copy-button" type="button">نسخ</button>
+      </div>
+
+      <div class="command-card__meta">
+        <span class="risk-badge"></span>
+        <span class="sudo-badge"></span>
+        <span class="version-badge"></span>
+      </div>
+
+      <div class="command-card__footer">
+        <button class="details-button" type="button">عرض التفاصيل</button>
+        <button class="copy-example-button" type="button">نسخ المثال</button>
+      </div>
+    </article>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>

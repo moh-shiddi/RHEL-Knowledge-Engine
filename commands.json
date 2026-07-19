@@ -1,0 +1,4018 @@
+{
+  "schema_version": "1.0.0",
+  "project": "RHEL Arabic Command Dictionary",
+  "language": "ar",
+  "baseline": "Red Hat Enterprise Linux 9",
+  "supported_versions": [
+    "8",
+    "9",
+    "10"
+  ],
+  "generated_date": "2026-07-19",
+  "disclaimer_ar": "هذا معجم تعليمي لمهام الإدارة الشائعة وليس قائمة حرفية بكل البرامج والخيارات الموجودة في لينكس. اختبر الأوامر في بيئة تدريبية، وراجع man والتوثيق الرسمي قبل تنفيذ أوامر عالية الخطورة.",
+  "risk_levels": {
+    "low": "قراءة أو تغيير محدود",
+    "medium": "قد يغير ملفات أو إعدادات",
+    "high": "قد يوقف خدمة أو يغير الوصول والصلاحيات",
+    "critical": "قد يسبب فقد بيانات أو انقطاع النظام"
+  },
+  "categories": {
+    "navigation": "التنقل واستعراض النظام",
+    "files": "الملفات والمجلدات",
+    "search_text": "البحث والنصوص",
+    "permissions": "الصلاحيات والملكية",
+    "packages": "الحزم والبرامج",
+    "services": "الخدمات وSystemd",
+    "logs": "السجلات والتشخيص",
+    "processes": "العمليات والموارد",
+    "users": "المستخدمون والمجموعات",
+    "network": "الشبكات والاتصال",
+    "firewall": "الجدار الناري",
+    "selinux": "SELinux",
+    "storage": "الأقراص وأنظمة الملفات",
+    "archives": "الضغط والأرشفة",
+    "ssh": "SSH ونقل الملفات",
+    "system": "معلومات النظام والطاقة",
+    "subscription": "اشتراك ومستودعات Red Hat",
+    "scheduling": "الجدولة والمهام"
+  },
+  "commands": [
+    {
+      "id": "nav-pwd",
+      "category": "navigation",
+      "title_ar": "معرفة المجلد الحالي",
+      "command": "pwd",
+      "description_ar": "يعرض المسار الكامل للمجلد الذي تعمل بداخله.",
+      "keywords_ar": [
+        "اين انا",
+        "المجلد الحالي",
+        "المسار",
+        "مكان العمل"
+      ],
+      "example": "pwd",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "nav-ls",
+      "category": "navigation",
+      "title_ar": "عرض الملفات",
+      "command": "ls",
+      "description_ar": "يعرض الملفات والمجلدات في المسار الحالي.",
+      "keywords_ar": [
+        "عرض الملفات",
+        "قائمة الملفات",
+        "محتويات المجلد"
+      ],
+      "example": "ls -lah",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "nav-ls-hidden",
+      "category": "navigation",
+      "title_ar": "عرض الملفات المخفية",
+      "command": "ls -la",
+      "description_ar": "يعرض جميع الملفات بما فيها الملفات التي تبدأ بنقطة.",
+      "keywords_ar": [
+        "ملفات مخفية",
+        "عرض المخفي",
+        "كل الملفات"
+      ],
+      "example": "ls -la",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "nav-cd",
+      "category": "navigation",
+      "title_ar": "الانتقال إلى مجلد",
+      "command": "cd <PATH>",
+      "description_ar": "ينقلك إلى المجلد المحدد.",
+      "keywords_ar": [
+        "فتح مجلد",
+        "انتقال لمجلد",
+        "ادخل مجلد"
+      ],
+      "example": "cd /var/log",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "nav-cd-home",
+      "category": "navigation",
+      "title_ar": "العودة إلى مجلد المستخدم",
+      "command": "cd ~",
+      "description_ar": "ينقلك إلى المجلد المنزلي للمستخدم الحالي.",
+      "keywords_ar": [
+        "الصفحة الرئيسية",
+        "مجلدي",
+        "home"
+      ],
+      "example": "cd ~",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "nav-cd-up",
+      "category": "navigation",
+      "title_ar": "الرجوع مستوى واحد",
+      "command": "cd ..",
+      "description_ar": "ينقلك إلى المجلد الأب.",
+      "keywords_ar": [
+        "رجوع",
+        "مجلد سابق",
+        "فوق"
+      ],
+      "example": "cd ..",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "nav-tree",
+      "category": "navigation",
+      "title_ar": "عرض شجرة المجلدات",
+      "command": "tree <PATH>",
+      "description_ar": "يعرض بنية المجلدات والملفات بشكل شجري.",
+      "keywords_ar": [
+        "شجرة الملفات",
+        "هيكل المجلدات"
+      ],
+      "example": "tree /etc",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [
+        "tree"
+      ],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "file-touch",
+      "category": "files",
+      "title_ar": "إنشاء ملف فارغ",
+      "command": "touch <FILE>",
+      "description_ar": "ينشئ ملفاً فارغاً أو يحدّث وقت تعديله.",
+      "keywords_ar": [
+        "انشاء ملف",
+        "ملف جديد"
+      ],
+      "example": "touch notes.txt",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "file-mkdir",
+      "category": "files",
+      "title_ar": "إنشاء مجلد",
+      "command": "mkdir <DIR>",
+      "description_ar": "ينشئ مجلداً جديداً.",
+      "keywords_ar": [
+        "انشاء مجلد",
+        "مجلد جديد"
+      ],
+      "example": "mkdir reports",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "file-mkdir-p",
+      "category": "files",
+      "title_ar": "إنشاء مجلدات متداخلة",
+      "command": "mkdir -p <PATH>",
+      "description_ar": "ينشئ المسار كاملاً حتى لو كانت المجلدات الأب غير موجودة.",
+      "keywords_ar": [
+        "مجلدات متداخلة",
+        "انشاء مسار كامل"
+      ],
+      "example": "mkdir -p project/logs/archive",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "file-cp",
+      "category": "files",
+      "title_ar": "نسخ ملف",
+      "command": "cp <SOURCE> <DESTINATION>",
+      "description_ar": "ينسخ ملفاً إلى مكان آخر.",
+      "keywords_ar": [
+        "نسخ ملف",
+        "عمل نسخة"
+      ],
+      "example": "cp report.txt /tmp/",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "file-cp-dir",
+      "category": "files",
+      "title_ar": "نسخ مجلد كامل",
+      "command": "cp -a <SOURCE_DIR> <DESTINATION>",
+      "description_ar": "ينسخ المجلد مع خصائصه ومحتوياته.",
+      "keywords_ar": [
+        "نسخ مجلد",
+        "نسخ كامل",
+        "نسخة احتياطية"
+      ],
+      "example": "cp -a /etc/nginx /backup/",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "file-mv",
+      "category": "files",
+      "title_ar": "نقل ملف أو إعادة تسميته",
+      "command": "mv <SOURCE> <DESTINATION>",
+      "description_ar": "ينقل الملف أو يغيّر اسمه.",
+      "keywords_ar": [
+        "نقل ملف",
+        "تغيير اسم",
+        "اعادة تسمية"
+      ],
+      "example": "mv old.txt new.txt",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "file-rm",
+      "category": "files",
+      "title_ar": "حذف ملف",
+      "command": "rm <FILE>",
+      "description_ar": "يحذف ملفاً نهائياً من سطر الأوامر.",
+      "keywords_ar": [
+        "حذف ملف",
+        "ازالة ملف"
+      ],
+      "example": "rm old.txt",
+      "requires_sudo": false,
+      "risk": "medium",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": "تحقق من الاسم والمسار قبل التنفيذ."
+    },
+    {
+      "id": "file-rmdir",
+      "category": "files",
+      "title_ar": "حذف مجلد فارغ",
+      "command": "rmdir <DIR>",
+      "description_ar": "يحذف مجلداً بشرط أن يكون فارغاً.",
+      "keywords_ar": [
+        "حذف مجلد فارغ"
+      ],
+      "example": "rmdir empty_dir",
+      "requires_sudo": false,
+      "risk": "medium",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "file-rm-dir",
+      "category": "files",
+      "title_ar": "حذف مجلد ومحتوياته",
+      "command": "rm -r <DIR>",
+      "description_ar": "يحذف المجلد وكل ما بداخله.",
+      "keywords_ar": [
+        "حذف مجلد كامل",
+        "مسح مجلد"
+      ],
+      "example": "rm -r old_project",
+      "requires_sudo": false,
+      "risk": "high",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": "لا تستخدم -f للمبتدئ، وتحقق من المسار بعناية."
+    },
+    {
+      "id": "file-ln-s",
+      "category": "files",
+      "title_ar": "إنشاء رابط رمزي",
+      "command": "ln -s <TARGET> <LINK_NAME>",
+      "description_ar": "ينشئ اختصاراً رمزياً يشير إلى ملف أو مجلد.",
+      "keywords_ar": [
+        "رابط رمزي",
+        "اختصار",
+        "symlink"
+      ],
+      "example": "ln -s /var/log/app app-logs",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "file-stat",
+      "category": "files",
+      "title_ar": "عرض تفاصيل ملف",
+      "command": "stat <FILE>",
+      "description_ar": "يعرض الحجم والصلاحيات والمالك وأوقات الملف.",
+      "keywords_ar": [
+        "معلومات ملف",
+        "تفاصيل ملف",
+        "وقت التعديل"
+      ],
+      "example": "stat report.txt",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "file-file",
+      "category": "files",
+      "title_ar": "معرفة نوع الملف",
+      "command": "file <FILE>",
+      "description_ar": "يحدد نوع محتوى الملف بغض النظر عن امتداده.",
+      "keywords_ar": [
+        "نوع الملف",
+        "ماهو الملف"
+      ],
+      "example": "file archive.bin",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "file-du",
+      "category": "files",
+      "title_ar": "معرفة حجم مجلد",
+      "command": "du -sh <PATH>",
+      "description_ar": "يعرض الحجم الإجمالي لمسار بصيغة سهلة القراءة.",
+      "keywords_ar": [
+        "حجم مجلد",
+        "مساحة مجلد"
+      ],
+      "example": "du -sh /var/log",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "file-df",
+      "category": "files",
+      "title_ar": "عرض مساحة الأقراص",
+      "command": "df -h",
+      "description_ar": "يعرض المساحة المستخدمة والمتاحة لأنظمة الملفات.",
+      "keywords_ar": [
+        "مساحة القرص",
+        "الهارد ممتلئ",
+        "التخزين"
+      ],
+      "example": "df -h",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "file-head",
+      "category": "files",
+      "title_ar": "عرض بداية ملف",
+      "command": "head -n <COUNT> <FILE>",
+      "description_ar": "يعرض أول عدد محدد من أسطر الملف.",
+      "keywords_ar": [
+        "اول سطور",
+        "بداية ملف"
+      ],
+      "example": "head -n 20 /etc/passwd",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "file-tail",
+      "category": "files",
+      "title_ar": "عرض نهاية ملف",
+      "command": "tail -n <COUNT> <FILE>",
+      "description_ar": "يعرض آخر عدد محدد من أسطر الملف.",
+      "keywords_ar": [
+        "اخر سطور",
+        "نهاية ملف"
+      ],
+      "example": "tail -n 50 /var/log/messages",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "file-tail-follow",
+      "category": "files",
+      "title_ar": "متابعة ملف يتغير مباشرة",
+      "command": "tail -f <FILE>",
+      "description_ar": "يعرض الأسطر الجديدة فور إضافتها إلى الملف.",
+      "keywords_ar": [
+        "متابعة سجل",
+        "مشاهدة مباشر",
+        "لوق مباشر"
+      ],
+      "example": "tail -f /var/log/messages",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "text-cat",
+      "category": "search_text",
+      "title_ar": "عرض محتوى ملف",
+      "command": "cat <FILE>",
+      "description_ar": "يطبع محتوى الملف كاملاً.",
+      "keywords_ar": [
+        "قراءة ملف",
+        "عرض ملف"
+      ],
+      "example": "cat /etc/os-release",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "text-less",
+      "category": "search_text",
+      "title_ar": "قراءة ملف طويل",
+      "command": "less <FILE>",
+      "description_ar": "يفتح الملف للقراءة والتنقل والبحث دون تعديله.",
+      "keywords_ar": [
+        "قراءة ملف طويل",
+        "تصفح ملف"
+      ],
+      "example": "less /var/log/messages",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "text-grep",
+      "category": "search_text",
+      "title_ar": "البحث عن كلمة داخل ملف",
+      "command": "grep -n '<TEXT>' <FILE>",
+      "description_ar": "يبحث عن النص ويعرض رقم السطر.",
+      "keywords_ar": [
+        "بحث داخل ملف",
+        "ابحث عن كلمة",
+        "فلترة نص"
+      ],
+      "example": "grep -n 'error' app.log",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "text-grep-rec",
+      "category": "search_text",
+      "title_ar": "البحث داخل مجلد كامل",
+      "command": "grep -Rni '<TEXT>' <PATH>",
+      "description_ar": "يبحث بشكل متكرر داخل ملفات المجلد دون حساسية لحالة الأحرف.",
+      "keywords_ar": [
+        "بحث في كل الملفات",
+        "بحث داخل مجلد"
+      ],
+      "example": "grep -Rni 'server_name' /etc/nginx",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "text-find-name",
+      "category": "search_text",
+      "title_ar": "البحث عن ملف بالاسم",
+      "command": "find <PATH> -name '<PATTERN>'",
+      "description_ar": "يبحث عن ملفات أو مجلدات حسب الاسم.",
+      "keywords_ar": [
+        "اين الملف",
+        "البحث عن ملف",
+        "اسم ملف"
+      ],
+      "example": "find /etc -name '*.conf'",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "text-find-size",
+      "category": "search_text",
+      "title_ar": "البحث عن ملفات كبيرة",
+      "command": "find <PATH> -type f -size +<SIZE>",
+      "description_ar": "يبحث عن الملفات الأكبر من حجم معين.",
+      "keywords_ar": [
+        "ملفات كبيرة",
+        "ما الذي يستهلك المساحة"
+      ],
+      "example": "find /var -type f -size +500M",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "text-locate",
+      "category": "search_text",
+      "title_ar": "بحث سريع عن مسار ملف",
+      "command": "locate <NAME>",
+      "description_ar": "يبحث في قاعدة بيانات أسماء الملفات بسرعة.",
+      "keywords_ar": [
+        "بحث سريع",
+        "مكان ملف"
+      ],
+      "example": "locate sshd_config",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [
+        "mlocate"
+      ],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": "قد تحتاج إلى تشغيل updatedb بصلاحية المدير."
+    },
+    {
+      "id": "text-wc",
+      "category": "search_text",
+      "title_ar": "عد الأسطر والكلمات",
+      "command": "wc -l <FILE>",
+      "description_ar": "يحسب عدد أسطر الملف.",
+      "keywords_ar": [
+        "عدد الاسطر",
+        "عد السجلات"
+      ],
+      "example": "wc -l data.csv",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "text-sort",
+      "category": "search_text",
+      "title_ar": "ترتيب الأسطر",
+      "command": "sort <FILE>",
+      "description_ar": "يرتب أسطر الملف.",
+      "keywords_ar": [
+        "ترتيب نص",
+        "فرز"
+      ],
+      "example": "sort names.txt",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "text-uniq",
+      "category": "search_text",
+      "title_ar": "إزالة الأسطر المتكررة",
+      "command": "sort <FILE> | uniq",
+      "description_ar": "يرتب النص ثم يعرض الأسطر الفريدة.",
+      "keywords_ar": [
+        "حذف التكرار",
+        "قيم فريدة"
+      ],
+      "example": "sort names.txt | uniq",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "text-cut",
+      "category": "search_text",
+      "title_ar": "استخراج عمود من نص",
+      "command": "cut -d'<DELIMITER>' -f<FIELD> <FILE>",
+      "description_ar": "يستخرج حقلاً محدداً من ملف مفصول بعلامة.",
+      "keywords_ar": [
+        "استخراج عمود",
+        "تقسيم نص"
+      ],
+      "example": "cut -d: -f1 /etc/passwd",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "text-sed-replace",
+      "category": "search_text",
+      "title_ar": "استبدال نص داخل ملف",
+      "command": "sed -i 's/<OLD>/<NEW>/g' <FILE>",
+      "description_ar": "يستبدل كل ظهور للنص داخل الملف مباشرة.",
+      "keywords_ar": [
+        "استبدال كلمة",
+        "تعديل نص جماعي"
+      ],
+      "example": "sed -i 's/old/new/g' config.txt",
+      "requires_sudo": false,
+      "risk": "medium",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": "أنشئ نسخة احتياطية أو استخدم sed -i.bak عند الملفات المهمة."
+    },
+    {
+      "id": "text-awk",
+      "category": "search_text",
+      "title_ar": "طباعة عمود باستخدام awk",
+      "command": "awk -F'<DELIMITER>' '{print $<NUMBER>}' <FILE>",
+      "description_ar": "يقرأ النصوص المنظمة ويطبع العمود المحدد.",
+      "keywords_ar": [
+        "awk",
+        "عرض عمود",
+        "تحليل نص"
+      ],
+      "example": "awk -F: '{print $1}' /etc/passwd",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "text-diff",
+      "category": "search_text",
+      "title_ar": "مقارنة ملفين",
+      "command": "diff -u <FILE1> <FILE2>",
+      "description_ar": "يعرض الفروقات بين ملفين.",
+      "keywords_ar": [
+        "مقارنة ملفين",
+        "الفرق بين الملفات"
+      ],
+      "example": "diff -u old.conf new.conf",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "perm-ls",
+      "category": "permissions",
+      "title_ar": "عرض صلاحيات الملفات",
+      "command": "ls -l <PATH>",
+      "description_ar": "يعرض المالك والمجموعة وصلاحيات القراءة والكتابة والتنفيذ.",
+      "keywords_ar": [
+        "عرض الصلاحيات",
+        "من يملك الملف"
+      ],
+      "example": "ls -l /etc/hosts",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "perm-chmod-symbolic",
+      "category": "permissions",
+      "title_ar": "إضافة صلاحية التنفيذ",
+      "command": "chmod +x <FILE>",
+      "description_ar": "يجعل الملف قابلاً للتنفيذ.",
+      "keywords_ar": [
+        "تشغيل سكربت",
+        "صلاحية تنفيذ"
+      ],
+      "example": "chmod +x deploy.sh",
+      "requires_sudo": false,
+      "risk": "medium",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "perm-chmod-octal",
+      "category": "permissions",
+      "title_ar": "تعيين صلاحيات رقمية",
+      "command": "chmod <MODE> <FILE>",
+      "description_ar": "يعيّن الصلاحيات باستخدام أرقام مثل 640 أو 755.",
+      "keywords_ar": [
+        "تغيير الصلاحيات",
+        "chmod",
+        "755",
+        "644"
+      ],
+      "example": "chmod 640 secret.conf",
+      "requires_sudo": false,
+      "risk": "high",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": "لا تستخدم 777 كحل عام."
+    },
+    {
+      "id": "perm-chown",
+      "category": "permissions",
+      "title_ar": "تغيير مالك ملف",
+      "command": "sudo chown <USER>:<GROUP> <PATH>",
+      "description_ar": "يغيّر المستخدم والمجموعة المالكة.",
+      "keywords_ar": [
+        "تغيير المالك",
+        "chown",
+        "ملكية الملف"
+      ],
+      "example": "sudo chown app:app /srv/app",
+      "requires_sudo": true,
+      "risk": "high",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "perm-umask",
+      "category": "permissions",
+      "title_ar": "عرض قناع الصلاحيات الافتراضي",
+      "command": "umask",
+      "description_ar": "يعرض القناع الذي يؤثر في صلاحيات الملفات الجديدة.",
+      "keywords_ar": [
+        "صلاحيات افتراضية",
+        "umask"
+      ],
+      "example": "umask",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "perm-getfacl",
+      "category": "permissions",
+      "title_ar": "عرض ACL",
+      "command": "getfacl <PATH>",
+      "description_ar": "يعرض الصلاحيات الإضافية ACL على ملف أو مجلد.",
+      "keywords_ar": [
+        "صلاحيات متقدمة",
+        "acl"
+      ],
+      "example": "getfacl /srv/shared",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [
+        "acl"
+      ],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "perm-setfacl",
+      "category": "permissions",
+      "title_ar": "إضافة صلاحية ACL لمستخدم",
+      "command": "sudo setfacl -m u:<USER>:<PERMS> <PATH>",
+      "description_ar": "يمنح مستخدماً صلاحيات محددة دون تغيير المالك.",
+      "keywords_ar": [
+        "منح مستخدم صلاحية",
+        "acl",
+        "setfacl"
+      ],
+      "example": "sudo setfacl -m u:ahmed:rw /srv/shared/report.csv",
+      "requires_sudo": true,
+      "risk": "high",
+      "parts_ar": [],
+      "required_packages": [
+        "acl"
+      ],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "pkg-search",
+      "category": "packages",
+      "title_ar": "البحث عن برنامج",
+      "command": "dnf search <NAME>",
+      "description_ar": "يبحث عن الحزم التي يطابق اسمها أو وصفها الكلمة.",
+      "keywords_ar": [
+        "بحث عن برنامج",
+        "هل البرنامج موجود",
+        "حزمة"
+      ],
+      "example": "dnf search nginx",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "pkg-info",
+      "category": "packages",
+      "title_ar": "عرض معلومات حزمة",
+      "command": "dnf info <PACKAGE>",
+      "description_ar": "يعرض وصف الحزمة وإصدارها وحجمها ومستودعها.",
+      "keywords_ar": [
+        "معلومات برنامج",
+        "اصدار الحزمة"
+      ],
+      "example": "dnf info nginx",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "pkg-install",
+      "category": "packages",
+      "title_ar": "تثبيت برنامج",
+      "command": "sudo dnf install <PACKAGE>",
+      "description_ar": "يثبت الحزمة ويحل الاعتماديات تلقائياً.",
+      "keywords_ar": [
+        "تنزيل تطبيق",
+        "تثبيت برنامج",
+        "تنصيب حزمة",
+        "تحميل برنامج"
+      ],
+      "example": "sudo dnf install nginx",
+      "requires_sudo": true,
+      "risk": "medium",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "pkg-install-rpm",
+      "category": "packages",
+      "title_ar": "تثبيت ملف RPM محلي",
+      "command": "sudo dnf install ./<FILE>.rpm",
+      "description_ar": "يثبت ملف RPM محلياً مع حل الاعتماديات.",
+      "keywords_ar": [
+        "تثبيت rpm",
+        "ملف rpm",
+        "برنامج محمل"
+      ],
+      "example": "sudo dnf install ./package.rpm",
+      "requires_sudo": true,
+      "risk": "medium",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "pkg-remove",
+      "category": "packages",
+      "title_ar": "إزالة برنامج",
+      "command": "sudo dnf remove <PACKAGE>",
+      "description_ar": "يزيل الحزمة وقد يزيل اعتماديات لم تعد مطلوبة.",
+      "keywords_ar": [
+        "حذف برنامج",
+        "ازالة حزمة",
+        "الغاء تثبيت"
+      ],
+      "example": "sudo dnf remove nginx",
+      "requires_sudo": true,
+      "risk": "medium",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "pkg-update-all",
+      "category": "packages",
+      "title_ar": "تحديث النظام",
+      "command": "sudo dnf upgrade",
+      "description_ar": "يحدث جميع الحزم المثبتة إلى الإصدارات المتاحة.",
+      "keywords_ar": [
+        "تحديث النظام",
+        "تحديث البرامج",
+        "ابديت"
+      ],
+      "example": "sudo dnf upgrade",
+      "requires_sudo": true,
+      "risk": "medium",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "pkg-update-one",
+      "category": "packages",
+      "title_ar": "تحديث برنامج واحد",
+      "command": "sudo dnf upgrade <PACKAGE>",
+      "description_ar": "يحدث الحزمة المحددة واعتمادياتها.",
+      "keywords_ar": [
+        "تحديث برنامج",
+        "ترقية حزمة"
+      ],
+      "example": "sudo dnf upgrade nginx",
+      "requires_sudo": true,
+      "risk": "medium",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "pkg-check-update",
+      "category": "packages",
+      "title_ar": "فحص التحديثات",
+      "command": "dnf check-update",
+      "description_ar": "يعرض الحزم التي تتوفر لها تحديثات دون تثبيتها.",
+      "keywords_ar": [
+        "هل يوجد تحديث",
+        "فحص تحديثات"
+      ],
+      "example": "dnf check-update",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "pkg-list-installed",
+      "category": "packages",
+      "title_ar": "عرض البرامج المثبتة",
+      "command": "dnf list installed",
+      "description_ar": "يعرض الحزم المثبتة على النظام.",
+      "keywords_ar": [
+        "البرامج المثبتة",
+        "الحزم الموجودة"
+      ],
+      "example": "dnf list installed",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "pkg-provides",
+      "category": "packages",
+      "title_ar": "معرفة الحزمة التي توفر ملفاً",
+      "command": "dnf provides '*/<FILE>'",
+      "description_ar": "يبحث عن الحزمة التي تحتوي الملف أو الأمر.",
+      "keywords_ar": [
+        "اي حزمة توفر الامر",
+        "الامر غير موجود",
+        "ملف تابع لأي حزمة"
+      ],
+      "example": "dnf provides '*/semanage'",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "pkg-history",
+      "category": "packages",
+      "title_ar": "عرض سجل عمليات DNF",
+      "command": "dnf history",
+      "description_ar": "يعرض عمليات التثبيت والحذف والتحديث السابقة.",
+      "keywords_ar": [
+        "سجل التثبيت",
+        "ماذا تم تثبيته",
+        "تاريخ dnf"
+      ],
+      "example": "dnf history",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "pkg-history-undo",
+      "category": "packages",
+      "title_ar": "التراجع عن عملية DNF",
+      "command": "sudo dnf history undo <ID>",
+      "description_ar": "يحاول عكس عملية سابقة من سجل DNF.",
+      "keywords_ar": [
+        "تراجع عن تحديث",
+        "الغاء تثبيت سابق"
+      ],
+      "example": "sudo dnf history undo 12",
+      "requires_sudo": true,
+      "risk": "high",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "pkg-clean",
+      "category": "packages",
+      "title_ar": "تنظيف ذاكرة DNF",
+      "command": "sudo dnf clean all",
+      "description_ar": "يحذف البيانات المؤقتة وذاكرة المستودعات.",
+      "keywords_ar": [
+        "تنظيف dnf",
+        "مسح الكاش"
+      ],
+      "example": "sudo dnf clean all",
+      "requires_sudo": true,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "pkg-repolist",
+      "category": "packages",
+      "title_ar": "عرض المستودعات المفعلة",
+      "command": "dnf repolist",
+      "description_ar": "يعرض مستودعات البرامج المفعلة.",
+      "keywords_ar": [
+        "المستودعات",
+        "repo",
+        "مصادر البرامج"
+      ],
+      "example": "dnf repolist",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "pkg-group-list",
+      "category": "packages",
+      "title_ar": "عرض مجموعات البرامج",
+      "command": "dnf group list",
+      "description_ar": "يعرض مجموعات الحزم الجاهزة.",
+      "keywords_ar": [
+        "مجموعات برامج",
+        "development tools"
+      ],
+      "example": "dnf group list",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "pkg-group-install",
+      "category": "packages",
+      "title_ar": "تثبيت مجموعة برامج",
+      "command": "sudo dnf group install '<GROUP>'",
+      "description_ar": "يثبت مجموعة كاملة من الحزم.",
+      "keywords_ar": [
+        "تثبيت ادوات التطوير",
+        "مجموعة حزم"
+      ],
+      "example": "sudo dnf group install 'Development Tools'",
+      "requires_sudo": true,
+      "risk": "medium",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "pkg-rpm-query",
+      "category": "packages",
+      "title_ar": "التحقق من حزمة RPM مثبتة",
+      "command": "rpm -q <PACKAGE>",
+      "description_ar": "يعرض إصدار الحزمة المثبتة أو يخبرك أنها غير مثبتة.",
+      "keywords_ar": [
+        "هل الحزمة مثبتة",
+        "rpm query"
+      ],
+      "example": "rpm -q bash",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "pkg-rpm-files",
+      "category": "packages",
+      "title_ar": "عرض ملفات حزمة مثبتة",
+      "command": "rpm -ql <PACKAGE>",
+      "description_ar": "يعرض الملفات التي ثبتتها الحزمة.",
+      "keywords_ar": [
+        "ملفات الحزمة",
+        "اين ملفات البرنامج"
+      ],
+      "example": "rpm -ql nginx",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "svc-status",
+      "category": "services",
+      "title_ar": "عرض حالة خدمة",
+      "command": "systemctl status <SERVICE>",
+      "description_ar": "يعرض حالة الخدمة وآخر رسائلها.",
+      "keywords_ar": [
+        "حالة خدمة",
+        "هل الخدمة تعمل",
+        "systemctl"
+      ],
+      "example": "systemctl status sshd",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "svc-start",
+      "category": "services",
+      "title_ar": "تشغيل خدمة الآن",
+      "command": "sudo systemctl start <SERVICE>",
+      "description_ar": "يشغل الخدمة في الجلسة الحالية.",
+      "keywords_ar": [
+        "تشغيل خدمة",
+        "ابدأ السيرفس"
+      ],
+      "example": "sudo systemctl start nginx",
+      "requires_sudo": true,
+      "risk": "medium",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "svc-stop",
+      "category": "services",
+      "title_ar": "إيقاف خدمة",
+      "command": "sudo systemctl stop <SERVICE>",
+      "description_ar": "يوقف الخدمة الآن.",
+      "keywords_ar": [
+        "ايقاف خدمة",
+        "وقف السيرفس"
+      ],
+      "example": "sudo systemctl stop nginx",
+      "requires_sudo": true,
+      "risk": "high",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "svc-restart",
+      "category": "services",
+      "title_ar": "إعادة تشغيل خدمة",
+      "command": "sudo systemctl restart <SERVICE>",
+      "description_ar": "يوقف الخدمة ثم يشغلها مجدداً.",
+      "keywords_ar": [
+        "اعادة تشغيل خدمة",
+        "ريستارت"
+      ],
+      "example": "sudo systemctl restart nginx",
+      "requires_sudo": true,
+      "risk": "high",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "svc-reload",
+      "category": "services",
+      "title_ar": "إعادة تحميل إعدادات خدمة",
+      "command": "sudo systemctl reload <SERVICE>",
+      "description_ar": "يطلب من الخدمة قراءة إعداداتها دون إيقاف كامل إن كانت تدعم ذلك.",
+      "keywords_ar": [
+        "تحديث اعدادات خدمة",
+        "reload"
+      ],
+      "example": "sudo systemctl reload nginx",
+      "requires_sudo": true,
+      "risk": "medium",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "svc-enable",
+      "category": "services",
+      "title_ar": "تشغيل خدمة مع الإقلاع",
+      "command": "sudo systemctl enable <SERVICE>",
+      "description_ar": "يضبط الخدمة لتبدأ تلقائياً عند تشغيل النظام.",
+      "keywords_ar": [
+        "تشغيل تلقائي",
+        "مع الاقلاع",
+        "enable service"
+      ],
+      "example": "sudo systemctl enable nginx",
+      "requires_sudo": true,
+      "risk": "medium",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "svc-enable-now",
+      "category": "services",
+      "title_ar": "تشغيل الخدمة الآن ومع الإقلاع",
+      "command": "sudo systemctl enable --now <SERVICE>",
+      "description_ar": "يفعّل بدء الخدمة تلقائياً ويشغلها مباشرة.",
+      "keywords_ar": [
+        "تشغيل الان وتلقائي",
+        "enable now"
+      ],
+      "example": "sudo systemctl enable --now cockpit.socket",
+      "requires_sudo": true,
+      "risk": "medium",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "svc-disable",
+      "category": "services",
+      "title_ar": "منع تشغيل خدمة مع الإقلاع",
+      "command": "sudo systemctl disable <SERVICE>",
+      "description_ar": "يلغي بدء الخدمة التلقائي ولا يوقفها حالياً.",
+      "keywords_ar": [
+        "الغاء تشغيل تلقائي",
+        "disable service"
+      ],
+      "example": "sudo systemctl disable nginx",
+      "requires_sudo": true,
+      "risk": "medium",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "svc-list-running",
+      "category": "services",
+      "title_ar": "عرض الخدمات العاملة",
+      "command": "systemctl list-units --type=service --state=running",
+      "description_ar": "يعرض الخدمات التي تعمل حالياً.",
+      "keywords_ar": [
+        "الخدمات الشغالة",
+        "سيرفس تعمل"
+      ],
+      "example": "systemctl list-units --type=service --state=running",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "svc-list-failed",
+      "category": "services",
+      "title_ar": "عرض الخدمات الفاشلة",
+      "command": "systemctl --failed",
+      "description_ar": "يعرض الوحدات التي فشلت.",
+      "keywords_ar": [
+        "خدمات فاشلة",
+        "سبب الاقلاع",
+        "failed services"
+      ],
+      "example": "systemctl --failed",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "svc-is-enabled",
+      "category": "services",
+      "title_ar": "التحقق من التفعيل عند الإقلاع",
+      "command": "systemctl is-enabled <SERVICE>",
+      "description_ar": "يوضح هل تبدأ الخدمة تلقائياً.",
+      "keywords_ar": [
+        "هل تعمل مع الاقلاع",
+        "enabled"
+      ],
+      "example": "systemctl is-enabled sshd",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "svc-daemon-reload",
+      "category": "services",
+      "title_ar": "إعادة تحميل ملفات systemd",
+      "command": "sudo systemctl daemon-reload",
+      "description_ar": "يعيد قراءة ملفات الوحدات بعد تعديلها.",
+      "keywords_ar": [
+        "تحديث systemd",
+        "unit file changed"
+      ],
+      "example": "sudo systemctl daemon-reload",
+      "requires_sudo": true,
+      "risk": "medium",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "log-journal",
+      "category": "logs",
+      "title_ar": "عرض سجل النظام",
+      "command": "journalctl",
+      "description_ar": "يعرض سجل systemd journal.",
+      "keywords_ar": [
+        "سجل النظام",
+        "لوقات",
+        "journal"
+      ],
+      "example": "journalctl",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "log-boot",
+      "category": "logs",
+      "title_ar": "عرض سجل الإقلاع الحالي",
+      "command": "journalctl -b",
+      "description_ar": "يعرض الرسائل منذ آخر إقلاع.",
+      "keywords_ar": [
+        "سجل الاقلاع",
+        "مشاكل البوت"
+      ],
+      "example": "journalctl -b",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "log-unit",
+      "category": "logs",
+      "title_ar": "عرض سجل خدمة",
+      "command": "journalctl -u <SERVICE>",
+      "description_ar": "يعرض رسائل خدمة محددة.",
+      "keywords_ar": [
+        "سجل خدمة",
+        "لوق سيرفس"
+      ],
+      "example": "journalctl -u nginx",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "log-unit-follow",
+      "category": "logs",
+      "title_ar": "متابعة سجل خدمة مباشرة",
+      "command": "journalctl -fu <SERVICE>",
+      "description_ar": "يتابع رسائل الخدمة فور وصولها.",
+      "keywords_ar": [
+        "لوق مباشر للخدمة",
+        "متابعة خدمة"
+      ],
+      "example": "journalctl -fu nginx",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "log-since",
+      "category": "logs",
+      "title_ar": "عرض السجل منذ وقت محدد",
+      "command": "journalctl --since '<TIME>'",
+      "description_ar": "يعرض الرسائل منذ وقت أو تاريخ محدد.",
+      "keywords_ar": [
+        "سجل من وقت",
+        "لوقات اليوم"
+      ],
+      "example": "journalctl --since 'today'",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "log-priority",
+      "category": "logs",
+      "title_ar": "عرض الأخطاء فقط",
+      "command": "journalctl -p err..alert",
+      "description_ar": "يعرض الرسائل من مستوى خطأ إلى تنبيه.",
+      "keywords_ar": [
+        "اخطاء النظام",
+        "فلترة اللوق",
+        "errors"
+      ],
+      "example": "journalctl -p err..alert",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "log-kernel",
+      "category": "logs",
+      "title_ar": "عرض رسائل النواة",
+      "command": "journalctl -k",
+      "description_ar": "يعرض رسائل Kernel من journal.",
+      "keywords_ar": [
+        "رسائل الكيرنل",
+        "مشاكل الهاردوير"
+      ],
+      "example": "journalctl -k",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "log-dmesg",
+      "category": "logs",
+      "title_ar": "عرض رسائل النواة الحالية",
+      "command": "dmesg --level=err,warn",
+      "description_ar": "يعرض تحذيرات وأخطاء النواة.",
+      "keywords_ar": [
+        "dmesg",
+        "اخطاء العتاد",
+        "kernel errors"
+      ],
+      "example": "dmesg --level=err,warn",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "proc-ps",
+      "category": "processes",
+      "title_ar": "عرض العمليات",
+      "command": "ps aux",
+      "description_ar": "يعرض العمليات الجارية وتفاصيلها.",
+      "keywords_ar": [
+        "العمليات",
+        "برامج شغالة",
+        "processes"
+      ],
+      "example": "ps aux",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "proc-top",
+      "category": "processes",
+      "title_ar": "مراقبة الموارد مباشرة",
+      "command": "top",
+      "description_ar": "يعرض العمليات واستهلاك المعالج والذاكرة لحظياً.",
+      "keywords_ar": [
+        "استهلاك المعالج",
+        "استهلاك الرام",
+        "مراقبة النظام"
+      ],
+      "example": "top",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "proc-free",
+      "category": "processes",
+      "title_ar": "عرض استخدام الذاكرة",
+      "command": "free -h",
+      "description_ar": "يعرض الذاكرة المستخدمة والمتاحة.",
+      "keywords_ar": [
+        "الرام",
+        "الذاكرة",
+        "memory"
+      ],
+      "example": "free -h",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "proc-uptime",
+      "category": "processes",
+      "title_ar": "عرض مدة تشغيل النظام والحمل",
+      "command": "uptime",
+      "description_ar": "يعرض مدة التشغيل ومتوسط الحمل.",
+      "keywords_ar": [
+        "مدة التشغيل",
+        "load average"
+      ],
+      "example": "uptime",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "proc-pgrep",
+      "category": "processes",
+      "title_ar": "البحث عن عملية بالاسم",
+      "command": "pgrep -a <NAME>",
+      "description_ar": "يعرض معرفات العمليات المطابقة مع سطر الأمر.",
+      "keywords_ar": [
+        "ابحث عن عملية",
+        "pid"
+      ],
+      "example": "pgrep -a nginx",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "proc-kill",
+      "category": "processes",
+      "title_ar": "إنهاء عملية بلطف",
+      "command": "kill <PID>",
+      "description_ar": "يرسل إشارة الإنهاء الاعتيادية للعملية.",
+      "keywords_ar": [
+        "اغلاق عملية",
+        "انهاء برنامج"
+      ],
+      "example": "kill 1234",
+      "requires_sudo": false,
+      "risk": "medium",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "proc-kill-force",
+      "category": "processes",
+      "title_ar": "إجبار عملية على التوقف",
+      "command": "kill -9 <PID>",
+      "description_ar": "يوقف العملية فوراً دون منحها فرصة للتنظيف.",
+      "keywords_ar": [
+        "قتل عملية",
+        "برنامج معلق",
+        "force kill"
+      ],
+      "example": "kill -9 1234",
+      "requires_sudo": false,
+      "risk": "high",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": "استخدمه فقط بعد فشل الإنهاء العادي."
+    },
+    {
+      "id": "proc-nice",
+      "category": "processes",
+      "title_ar": "تشغيل بأولوية أقل",
+      "command": "nice -n <VALUE> <COMMAND>",
+      "description_ar": "يشغل أمراً بقيمة nice تحدد أولوية المعالج.",
+      "keywords_ar": [
+        "اولوية عملية",
+        "تقليل استهلاك cpu"
+      ],
+      "example": "nice -n 10 tar -czf backup.tar.gz /data",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "proc-lsof-port",
+      "category": "processes",
+      "title_ar": "معرفة العملية التي تستخدم منفذاً",
+      "command": "sudo lsof -i :<PORT>",
+      "description_ar": "يعرض العملية التي تستمع أو تتصل عبر المنفذ.",
+      "keywords_ar": [
+        "من يستخدم البورت",
+        "المنفذ مشغول"
+      ],
+      "example": "sudo lsof -i :80",
+      "requires_sudo": true,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [
+        "lsof"
+      ],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "proc-ss-listen",
+      "category": "processes",
+      "title_ar": "عرض المنافذ المستمعة",
+      "command": "ss -tulpn",
+      "description_ar": "يعرض منافذ TCP وUDP المستمعة والعمليات المرتبطة.",
+      "keywords_ar": [
+        "البورتات المفتوحة",
+        "المنافذ",
+        "listening ports"
+      ],
+      "example": "ss -tulpn",
+      "requires_sudo": true,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": "بعض أسماء العمليات تحتاج sudo."
+    },
+    {
+      "id": "usr-whoami",
+      "category": "users",
+      "title_ar": "معرفة المستخدم الحالي",
+      "command": "whoami",
+      "description_ar": "يعرض اسم المستخدم الحالي.",
+      "keywords_ar": [
+        "من انا",
+        "المستخدم الحالي"
+      ],
+      "example": "whoami",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "usr-id",
+      "category": "users",
+      "title_ar": "عرض هوية وصلاحيات مستخدم",
+      "command": "id <USER>",
+      "description_ar": "يعرض UID وGID والمجموعات.",
+      "keywords_ar": [
+        "مجموعات المستخدم",
+        "uid",
+        "gid"
+      ],
+      "example": "id ahmed",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "usr-list",
+      "category": "users",
+      "title_ar": "عرض أسماء المستخدمين",
+      "command": "cut -d: -f1 /etc/passwd",
+      "description_ar": "يعرض أسماء الحسابات المسجلة.",
+      "keywords_ar": [
+        "قائمة المستخدمين",
+        "كل الحسابات"
+      ],
+      "example": "cut -d: -f1 /etc/passwd",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "usr-add",
+      "category": "users",
+      "title_ar": "إنشاء مستخدم",
+      "command": "sudo useradd <USER>",
+      "description_ar": "ينشئ حساب مستخدم جديداً.",
+      "keywords_ar": [
+        "اضافة مستخدم",
+        "انشاء حساب"
+      ],
+      "example": "sudo useradd ahmed",
+      "requires_sudo": true,
+      "risk": "high",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "usr-passwd",
+      "category": "users",
+      "title_ar": "تعيين كلمة مرور مستخدم",
+      "command": "sudo passwd <USER>",
+      "description_ar": "يعيّن أو يغيّر كلمة مرور الحساب.",
+      "keywords_ar": [
+        "كلمة مرور مستخدم",
+        "تغيير الباسورد"
+      ],
+      "example": "sudo passwd ahmed",
+      "requires_sudo": true,
+      "risk": "high",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "usr-mod-group",
+      "category": "users",
+      "title_ar": "إضافة مستخدم إلى مجموعة",
+      "command": "sudo usermod -aG <GROUP> <USER>",
+      "description_ar": "يضيف المستخدم إلى مجموعة إضافية دون إزالة مجموعاته الحالية.",
+      "keywords_ar": [
+        "اضافة مستخدم لمجموعة",
+        "منح sudo",
+        "usermod"
+      ],
+      "example": "sudo usermod -aG wheel ahmed",
+      "requires_sudo": true,
+      "risk": "high",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "usr-del",
+      "category": "users",
+      "title_ar": "حذف مستخدم",
+      "command": "sudo userdel <USER>",
+      "description_ar": "يحذف حساب المستخدم مع إبقاء مجلده المنزلي.",
+      "keywords_ar": [
+        "حذف مستخدم",
+        "ازالة حساب"
+      ],
+      "example": "sudo userdel ahmed",
+      "requires_sudo": true,
+      "risk": "high",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "usr-del-home",
+      "category": "users",
+      "title_ar": "حذف مستخدم وملفاته المنزلية",
+      "command": "sudo userdel -r <USER>",
+      "description_ar": "يحذف الحساب ومجلده المنزلي وبريده.",
+      "keywords_ar": [
+        "حذف المستخدم نهائيا",
+        "حذف home"
+      ],
+      "example": "sudo userdel -r ahmed",
+      "requires_sudo": true,
+      "risk": "critical",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "grp-add",
+      "category": "users",
+      "title_ar": "إنشاء مجموعة",
+      "command": "sudo groupadd <GROUP>",
+      "description_ar": "ينشئ مجموعة جديدة.",
+      "keywords_ar": [
+        "اضافة مجموعة",
+        "انشاء قروب"
+      ],
+      "example": "sudo groupadd developers",
+      "requires_sudo": true,
+      "risk": "medium",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "grp-del",
+      "category": "users",
+      "title_ar": "حذف مجموعة",
+      "command": "sudo groupdel <GROUP>",
+      "description_ar": "يحذف مجموعة من النظام.",
+      "keywords_ar": [
+        "حذف مجموعة"
+      ],
+      "example": "sudo groupdel developers",
+      "requires_sudo": true,
+      "risk": "high",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "usr-last",
+      "category": "users",
+      "title_ar": "عرض آخر عمليات الدخول",
+      "command": "last",
+      "description_ar": "يعرض سجل دخول وخروج المستخدمين.",
+      "keywords_ar": [
+        "من دخل السيرفر",
+        "سجل الدخول"
+      ],
+      "example": "last",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "usr-w",
+      "category": "users",
+      "title_ar": "عرض المستخدمين النشطين",
+      "command": "w",
+      "description_ar": "يعرض المستخدمين المتصلين وما ينفذونه.",
+      "keywords_ar": [
+        "المتصلين الان",
+        "جلسات المستخدمين"
+      ],
+      "example": "w",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "net-ip",
+      "category": "network",
+      "title_ar": "عرض عناوين الشبكة",
+      "command": "ip address show",
+      "description_ar": "يعرض واجهات الشبكة وعناوين IP.",
+      "keywords_ar": [
+        "عنوان ip",
+        "كروت الشبكة",
+        "واجهات الشبكة"
+      ],
+      "example": "ip address show",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "net-route",
+      "category": "network",
+      "title_ar": "عرض جدول التوجيه",
+      "command": "ip route show",
+      "description_ar": "يعرض البوابة والمسارات الحالية.",
+      "keywords_ar": [
+        "gateway",
+        "الراوتر",
+        "جدول التوجيه"
+      ],
+      "example": "ip route show",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "net-ping",
+      "category": "network",
+      "title_ar": "اختبار الوصول إلى جهاز",
+      "command": "ping -c 4 <HOST>",
+      "description_ar": "يرسل أربع رزم ICMP لاختبار الاتصال.",
+      "keywords_ar": [
+        "اختبار الانترنت",
+        "هل السيرفر يرد",
+        "ping"
+      ],
+      "example": "ping -c 4 8.8.8.8",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "net-dns",
+      "category": "network",
+      "title_ar": "اختبار DNS",
+      "command": "dig <DOMAIN>",
+      "description_ar": "يعرض نتيجة استعلام DNS.",
+      "keywords_ar": [
+        "فحص dns",
+        "تحويل اسم الى ip"
+      ],
+      "example": "dig example.com",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [
+        "bind-utils"
+      ],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "net-host",
+      "category": "network",
+      "title_ar": "استعلام DNS مبسط",
+      "command": "host <DOMAIN>",
+      "description_ar": "يعرض عناوين DNS المرتبطة بالاسم.",
+      "keywords_ar": [
+        "معرفة ip الموقع",
+        "dns"
+      ],
+      "example": "host example.com",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [
+        "bind-utils"
+      ],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "net-curl-head",
+      "category": "network",
+      "title_ar": "اختبار استجابة موقع",
+      "command": "curl -I <URL>",
+      "description_ar": "يعرض رؤوس استجابة HTTP دون تنزيل المحتوى.",
+      "keywords_ar": [
+        "هل الموقع يعمل",
+        "اختبار رابط",
+        "http status"
+      ],
+      "example": "curl -I https://example.com",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "net-curl-download",
+      "category": "network",
+      "title_ar": "تنزيل ملف",
+      "command": "curl -O <URL>",
+      "description_ar": "ينزّل الملف مع الاحتفاظ باسمه.",
+      "keywords_ar": [
+        "تحميل ملف",
+        "تنزيل من رابط",
+        "curl"
+      ],
+      "example": "curl -O https://example.com/file.tar.gz",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "net-nmcli-status",
+      "category": "network",
+      "title_ar": "عرض اتصالات NetworkManager",
+      "command": "nmcli connection show",
+      "description_ar": "يعرض ملفات اتصالات الشبكة.",
+      "keywords_ar": [
+        "اتصالات الشبكة",
+        "nmcli",
+        "networkmanager"
+      ],
+      "example": "nmcli connection show",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "net-nmcli-dev",
+      "category": "network",
+      "title_ar": "عرض حالة أجهزة الشبكة",
+      "command": "nmcli device status",
+      "description_ar": "يعرض الواجهات وحالتها والاتصال المرتبط.",
+      "keywords_ar": [
+        "حالة كرت الشبكة",
+        "واجهة متصلة"
+      ],
+      "example": "nmcli device status",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "net-hostname",
+      "category": "network",
+      "title_ar": "عرض اسم الجهاز",
+      "command": "hostnamectl",
+      "description_ar": "يعرض اسم الجهاز ومعلومات النظام.",
+      "keywords_ar": [
+        "اسم السيرفر",
+        "hostname"
+      ],
+      "example": "hostnamectl",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "net-set-hostname",
+      "category": "network",
+      "title_ar": "تغيير اسم الجهاز",
+      "command": "sudo hostnamectl set-hostname <NAME>",
+      "description_ar": "يغيّر اسم المضيف للنظام.",
+      "keywords_ar": [
+        "تغيير اسم السيرفر",
+        "hostname جديد"
+      ],
+      "example": "sudo hostnamectl set-hostname server01",
+      "requires_sudo": true,
+      "risk": "medium",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "fw-state",
+      "category": "firewall",
+      "title_ar": "عرض حالة الجدار الناري",
+      "command": "sudo firewall-cmd --state",
+      "description_ar": "يختبر هل firewalld يعمل.",
+      "keywords_ar": [
+        "حالة الجدار الناري",
+        "firewall يعمل"
+      ],
+      "example": "sudo firewall-cmd --state",
+      "requires_sudo": true,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "fw-zones",
+      "category": "firewall",
+      "title_ar": "عرض المناطق النشطة",
+      "command": "sudo firewall-cmd --get-active-zones",
+      "description_ar": "يعرض المناطق المرتبطة بواجهات الشبكة.",
+      "keywords_ar": [
+        "firewall zones",
+        "المناطق النشطة"
+      ],
+      "example": "sudo firewall-cmd --get-active-zones",
+      "requires_sudo": true,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "fw-list",
+      "category": "firewall",
+      "title_ar": "عرض قواعد المنطقة الحالية",
+      "command": "sudo firewall-cmd --list-all",
+      "description_ar": "يعرض الخدمات والمنافذ والقواعد في المنطقة الافتراضية.",
+      "keywords_ar": [
+        "قواعد الجدار الناري",
+        "البورتات المسموحة"
+      ],
+      "example": "sudo firewall-cmd --list-all",
+      "requires_sudo": true,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "fw-add-service",
+      "category": "firewall",
+      "title_ar": "السماح بخدمة دائماً",
+      "command": "sudo firewall-cmd --permanent --add-service=<SERVICE>",
+      "description_ar": "يضيف خدمة معروفة إلى الإعداد الدائم.",
+      "keywords_ar": [
+        "فتح خدمة",
+        "السماح http",
+        "فتح ssh"
+      ],
+      "example": "sudo firewall-cmd --permanent --add-service=http",
+      "requires_sudo": true,
+      "risk": "high",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": "نفّذ reload بعد التعديل الدائم."
+    },
+    {
+      "id": "fw-add-port",
+      "category": "firewall",
+      "title_ar": "فتح منفذ دائماً",
+      "command": "sudo firewall-cmd --permanent --add-port=<PORT>/<PROTOCOL>",
+      "description_ar": "يفتح منفذاً في الإعداد الدائم.",
+      "keywords_ar": [
+        "فتح بورت",
+        "السماح منفذ"
+      ],
+      "example": "sudo firewall-cmd --permanent --add-port=8080/tcp",
+      "requires_sudo": true,
+      "risk": "high",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "fw-remove-port",
+      "category": "firewall",
+      "title_ar": "إغلاق منفذ دائم",
+      "command": "sudo firewall-cmd --permanent --remove-port=<PORT>/<PROTOCOL>",
+      "description_ar": "يزيل المنفذ من الإعداد الدائم.",
+      "keywords_ar": [
+        "اغلاق بورت",
+        "حذف منفذ"
+      ],
+      "example": "sudo firewall-cmd --permanent --remove-port=8080/tcp",
+      "requires_sudo": true,
+      "risk": "high",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "fw-reload",
+      "category": "firewall",
+      "title_ar": "تطبيق إعدادات firewalld",
+      "command": "sudo firewall-cmd --reload",
+      "description_ar": "يعيد تحميل الإعدادات الدائمة.",
+      "keywords_ar": [
+        "تطبيق firewall",
+        "reload firewall"
+      ],
+      "example": "sudo firewall-cmd --reload",
+      "requires_sudo": true,
+      "risk": "medium",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "se-getenforce",
+      "category": "selinux",
+      "title_ar": "عرض وضع SELinux",
+      "command": "getenforce",
+      "description_ar": "يعرض Enforcing أو Permissive أو Disabled.",
+      "keywords_ar": [
+        "حالة selinux",
+        "هل selinux مفعل"
+      ],
+      "example": "getenforce",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "se-sestatus",
+      "category": "selinux",
+      "title_ar": "عرض تفاصيل SELinux",
+      "command": "sestatus",
+      "description_ar": "يعرض حالة SELinux والسياسة والوضع الحالي.",
+      "keywords_ar": [
+        "تفاصيل selinux",
+        "سياسة الحماية"
+      ],
+      "example": "sestatus",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "se-setenforce",
+      "category": "selinux",
+      "title_ar": "تغيير SELinux مؤقتاً",
+      "command": "sudo setenforce <0|1>",
+      "description_ar": "يبدّل مؤقتاً بين Permissive وEnforcing حتى إعادة التشغيل.",
+      "keywords_ar": [
+        "تعطيل selinux مؤقت",
+        "تفعيل selinux"
+      ],
+      "example": "sudo setenforce 0",
+      "requires_sudo": true,
+      "risk": "critical",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": "استخدمه للتشخيص فقط، ولا تعطل SELinux كحل دائم."
+    },
+    {
+      "id": "se-ls-z",
+      "category": "selinux",
+      "title_ar": "عرض سياق SELinux للملفات",
+      "command": "ls -Z <PATH>",
+      "description_ar": "يعرض نوع وسياق SELinux.",
+      "keywords_ar": [
+        "سياق selinux",
+        "context"
+      ],
+      "example": "ls -Z /var/www/html",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "se-restorecon",
+      "category": "selinux",
+      "title_ar": "استعادة سياق SELinux الصحيح",
+      "command": "sudo restorecon -Rv <PATH>",
+      "description_ar": "يعيد تطبيق السياقات الافتراضية على المسار.",
+      "keywords_ar": [
+        "اصلاح سياق selinux",
+        "permission denied"
+      ],
+      "example": "sudo restorecon -Rv /var/www/html",
+      "requires_sudo": true,
+      "risk": "medium",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "se-getsebool",
+      "category": "selinux",
+      "title_ar": "عرض متغيرات SELinux",
+      "command": "getsebool -a",
+      "description_ar": "يعرض المتغيرات المنطقية للسياسة.",
+      "keywords_ar": [
+        "selinux boolean",
+        "خيارات selinux"
+      ],
+      "example": "getsebool -a",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "se-setsebool",
+      "category": "selinux",
+      "title_ar": "تغيير متغير SELinux دائماً",
+      "command": "sudo setsebool -P <BOOLEAN> <on|off>",
+      "description_ar": "يغيّر Boolean ويحفظه بشكل دائم.",
+      "keywords_ar": [
+        "تفعيل boolean",
+        "السماح للخدمة"
+      ],
+      "example": "sudo setsebool -P httpd_can_network_connect on",
+      "requires_sudo": true,
+      "risk": "high",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "se-ausearch",
+      "category": "selinux",
+      "title_ar": "عرض رفض SELinux الأخير",
+      "command": "sudo ausearch -m AVC,USER_AVC -ts recent",
+      "description_ar": "يعرض أحداث الرفض الحديثة.",
+      "keywords_ar": [
+        "لماذا selinux يمنع",
+        "avc denied"
+      ],
+      "example": "sudo ausearch -m AVC,USER_AVC -ts recent",
+      "requires_sudo": true,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [
+        "audit"
+      ],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "se-semanage-port",
+      "category": "selinux",
+      "title_ar": "عرض منافذ SELinux",
+      "command": "sudo semanage port -l",
+      "description_ar": "يعرض أنواع المنافذ المسموحة في سياسة SELinux.",
+      "keywords_ar": [
+        "selinux ports",
+        "منفذ httpd"
+      ],
+      "example": "sudo semanage port -l",
+      "requires_sudo": true,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [
+        "policycoreutils-python-utils"
+      ],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "disk-lsblk",
+      "category": "storage",
+      "title_ar": "عرض الأقراص والأقسام",
+      "command": "lsblk -f",
+      "description_ar": "يعرض الأقراص والأقسام وأنظمة الملفات ونقاط الربط.",
+      "keywords_ar": [
+        "الاقراص",
+        "الهاردات",
+        "البارتشن"
+      ],
+      "example": "lsblk -f",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "disk-blkid",
+      "category": "storage",
+      "title_ar": "عرض UUID وأنواع الملفات",
+      "command": "sudo blkid",
+      "description_ar": "يعرض UUID ونوع نظام الملفات للأقسام.",
+      "keywords_ar": [
+        "uuid القرص",
+        "نوع البارتشن"
+      ],
+      "example": "sudo blkid",
+      "requires_sudo": true,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "disk-mounts",
+      "category": "storage",
+      "title_ar": "عرض نقاط الربط",
+      "command": "findmnt",
+      "description_ar": "يعرض أنظمة الملفات المركبة بشكل شجري.",
+      "keywords_ar": [
+        "mounts",
+        "نقاط الربط",
+        "الاقراص المركبة"
+      ],
+      "example": "findmnt",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "disk-mount",
+      "category": "storage",
+      "title_ar": "تركيب نظام ملفات",
+      "command": "sudo mount <DEVICE> <MOUNT_POINT>",
+      "description_ar": "يربط قسماً أو جهازاً بمجلد.",
+      "keywords_ar": [
+        "تركيب قرص",
+        "mount هارد"
+      ],
+      "example": "sudo mount /dev/sdb1 /mnt/data",
+      "requires_sudo": true,
+      "risk": "high",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "disk-umount",
+      "category": "storage",
+      "title_ar": "فصل نظام ملفات",
+      "command": "sudo umount <MOUNT_POINT>",
+      "description_ar": "يفصل نظام الملفات بأمان إذا لم يكن مستخدماً.",
+      "keywords_ar": [
+        "فصل قرص",
+        "unmount"
+      ],
+      "example": "sudo umount /mnt/data",
+      "requires_sudo": true,
+      "risk": "high",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "disk-fdisk",
+      "category": "storage",
+      "title_ar": "عرض جدول الأقسام",
+      "command": "sudo fdisk -l",
+      "description_ar": "يعرض الأقراص وجداول الأقسام.",
+      "keywords_ar": [
+        "تقسيم الهارد",
+        "عرض البارتشنات"
+      ],
+      "example": "sudo fdisk -l",
+      "requires_sudo": true,
+      "risk": "medium",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "disk-xfs-info",
+      "category": "storage",
+      "title_ar": "عرض معلومات XFS",
+      "command": "sudo xfs_info <MOUNT_POINT>",
+      "description_ar": "يعرض خصائص نظام ملفات XFS.",
+      "keywords_ar": [
+        "معلومات xfs"
+      ],
+      "example": "sudo xfs_info /",
+      "requires_sudo": true,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "disk-xfs-grow",
+      "category": "storage",
+      "title_ar": "توسيع نظام ملفات XFS",
+      "command": "sudo xfs_growfs <MOUNT_POINT>",
+      "description_ar": "يوسع XFS ليستفيد من المساحة المتاحة في الجهاز.",
+      "keywords_ar": [
+        "تكبير xfs",
+        "توسيع البارتشن"
+      ],
+      "example": "sudo xfs_growfs /data",
+      "requires_sudo": true,
+      "risk": "critical",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "disk-lvm-pvs",
+      "category": "storage",
+      "title_ar": "عرض Physical Volumes",
+      "command": "sudo pvs",
+      "description_ar": "يعرض الأقراص أو الأقسام المستخدمة في LVM.",
+      "keywords_ar": [
+        "lvm",
+        "physical volume"
+      ],
+      "example": "sudo pvs",
+      "requires_sudo": true,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "disk-lvm-vgs",
+      "category": "storage",
+      "title_ar": "عرض Volume Groups",
+      "command": "sudo vgs",
+      "description_ar": "يعرض مجموعات LVM ومساحاتها.",
+      "keywords_ar": [
+        "volume group",
+        "lvm groups"
+      ],
+      "example": "sudo vgs",
+      "requires_sudo": true,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "disk-lvm-lvs",
+      "category": "storage",
+      "title_ar": "عرض Logical Volumes",
+      "command": "sudo lvs",
+      "description_ar": "يعرض الوحدات المنطقية.",
+      "keywords_ar": [
+        "logical volume",
+        "lvm volumes"
+      ],
+      "example": "sudo lvs",
+      "requires_sudo": true,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "arc-tar-create",
+      "category": "archives",
+      "title_ar": "إنشاء أرشيف tar.gz",
+      "command": "tar -czf <ARCHIVE>.tar.gz <PATH>",
+      "description_ar": "يضغط ملفاً أو مجلداً باستخدام gzip.",
+      "keywords_ar": [
+        "ضغط مجلد",
+        "tar gz",
+        "نسخة مضغوطة"
+      ],
+      "example": "tar -czf backup.tar.gz /srv/app",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "arc-tar-list",
+      "category": "archives",
+      "title_ar": "عرض محتويات أرشيف",
+      "command": "tar -tf <ARCHIVE>.tar.gz",
+      "description_ar": "يعرض الملفات داخل الأرشيف دون فكّه.",
+      "keywords_ar": [
+        "محتويات الملف المضغوط",
+        "عرض tar"
+      ],
+      "example": "tar -tf backup.tar.gz",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "arc-tar-extract",
+      "category": "archives",
+      "title_ar": "فك أرشيف tar.gz",
+      "command": "tar -xzf <ARCHIVE>.tar.gz",
+      "description_ar": "يفك الأرشيف في المجلد الحالي.",
+      "keywords_ar": [
+        "فك ضغط",
+        "استخراج tar"
+      ],
+      "example": "tar -xzf backup.tar.gz",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "arc-zip",
+      "category": "archives",
+      "title_ar": "إنشاء ملف ZIP",
+      "command": "zip -r <ARCHIVE>.zip <PATH>",
+      "description_ar": "ينشئ أرشيف ZIP للمجلد.",
+      "keywords_ar": [
+        "ضغط zip",
+        "انشاء zip"
+      ],
+      "example": "zip -r project.zip project",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [
+        "zip"
+      ],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "arc-unzip",
+      "category": "archives",
+      "title_ar": "فك ملف ZIP",
+      "command": "unzip <ARCHIVE>.zip",
+      "description_ar": "يفك ملف ZIP.",
+      "keywords_ar": [
+        "فك zip",
+        "استخراج zip"
+      ],
+      "example": "unzip project.zip",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [
+        "unzip"
+      ],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "arc-gzip",
+      "category": "archives",
+      "title_ar": "ضغط ملف باستخدام gzip",
+      "command": "gzip <FILE>",
+      "description_ar": "يضغط ملفاً ويحوله إلى .gz.",
+      "keywords_ar": [
+        "ضغط ملف gz",
+        "gzip"
+      ],
+      "example": "gzip access.log",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "arc-gunzip",
+      "category": "archives",
+      "title_ar": "فك ملف gzip",
+      "command": "gunzip <FILE>.gz",
+      "description_ar": "يفك ملف .gz.",
+      "keywords_ar": [
+        "فك gz",
+        "gunzip"
+      ],
+      "example": "gunzip access.log.gz",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "ssh-connect",
+      "category": "ssh",
+      "title_ar": "الاتصال بسيرفر SSH",
+      "command": "ssh <USER>@<HOST>",
+      "description_ar": "يفتح جلسة طرفية مشفرة على جهاز بعيد.",
+      "keywords_ar": [
+        "دخول سيرفر",
+        "اتصال ssh",
+        "remote"
+      ],
+      "example": "ssh admin@192.168.1.10",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "ssh-port",
+      "category": "ssh",
+      "title_ar": "الاتصال بمنفذ SSH مختلف",
+      "command": "ssh -p <PORT> <USER>@<HOST>",
+      "description_ar": "يتصل بخدمة SSH على منفذ غير 22.",
+      "keywords_ar": [
+        "ssh port",
+        "منفذ مختلف"
+      ],
+      "example": "ssh -p 2222 admin@server",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "ssh-keygen",
+      "category": "ssh",
+      "title_ar": "إنشاء مفتاح SSH",
+      "command": "ssh-keygen -t ed25519",
+      "description_ar": "ينشئ زوج مفاتيح حديثاً للمصادقة.",
+      "keywords_ar": [
+        "مفتاح ssh",
+        "دخول بدون كلمة مرور"
+      ],
+      "example": "ssh-keygen -t ed25519",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "ssh-copy-key",
+      "category": "ssh",
+      "title_ar": "نسخ المفتاح إلى السيرفر",
+      "command": "ssh-copy-id <USER>@<HOST>",
+      "description_ar": "يضيف المفتاح العام إلى حساب الجهاز البعيد.",
+      "keywords_ar": [
+        "دخول بدون باسورد",
+        "ارسال public key"
+      ],
+      "example": "ssh-copy-id admin@server",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "ssh-scp-file",
+      "category": "ssh",
+      "title_ar": "نسخ ملف إلى سيرفر",
+      "command": "scp <FILE> <USER>@<HOST>:<PATH>",
+      "description_ar": "ينقل ملفاً عبر SSH.",
+      "keywords_ar": [
+        "ارسال ملف لسيرفر",
+        "scp",
+        "رفع ملف"
+      ],
+      "example": "scp report.csv admin@server:/tmp/",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "ssh-scp-download",
+      "category": "ssh",
+      "title_ar": "تنزيل ملف من سيرفر",
+      "command": "scp <USER>@<HOST>:<FILE> <LOCAL_PATH>",
+      "description_ar": "ينقل ملفاً من الجهاز البعيد إلى المحلي.",
+      "keywords_ar": [
+        "تحميل ملف من سيرفر",
+        "scp download"
+      ],
+      "example": "scp admin@server:/tmp/report.csv .",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "ssh-rsync",
+      "category": "ssh",
+      "title_ar": "مزامنة مجلد عبر SSH",
+      "command": "rsync -avh --progress <SOURCE> <USER>@<HOST>:<DEST>",
+      "description_ar": "ينقل الفروقات ويحافظ على الخصائص.",
+      "keywords_ar": [
+        "مزامنة ملفات",
+        "نسخ احتياطي سيرفر",
+        "rsync"
+      ],
+      "example": "rsync -avh --progress /data/ admin@server:/backup/",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [
+        "rsync"
+      ],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "sys-os-release",
+      "category": "system",
+      "title_ar": "عرض إصدار نظام التشغيل",
+      "command": "cat /etc/redhat-release",
+      "description_ar": "يعرض إصدار Red Hat Enterprise Linux.",
+      "keywords_ar": [
+        "اصدار ريد هات",
+        "نسخة النظام",
+        "rhel version"
+      ],
+      "example": "cat /etc/redhat-release",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "sys-uname",
+      "category": "system",
+      "title_ar": "عرض إصدار النواة",
+      "command": "uname -r",
+      "description_ar": "يعرض إصدار Kernel الحالي.",
+      "keywords_ar": [
+        "اصدار الكيرنل",
+        "kernel version"
+      ],
+      "example": "uname -r",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "sys-arch",
+      "category": "system",
+      "title_ar": "عرض معمارية الجهاز",
+      "command": "uname -m",
+      "description_ar": "يعرض المعمارية مثل x86_64 أو aarch64.",
+      "keywords_ar": [
+        "معمارية الجهاز",
+        "64 بت",
+        "architecture"
+      ],
+      "example": "uname -m",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "sys-cpu",
+      "category": "system",
+      "title_ar": "عرض معلومات المعالج",
+      "command": "lscpu",
+      "description_ar": "يعرض الأنوية والمعمارية وخصائص المعالج.",
+      "keywords_ar": [
+        "معلومات cpu",
+        "عدد الانوية"
+      ],
+      "example": "lscpu",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "sys-time",
+      "category": "system",
+      "title_ar": "عرض الوقت وإعداداته",
+      "command": "timedatectl",
+      "description_ar": "يعرض الوقت والمنطقة الزمنية وحالة NTP.",
+      "keywords_ar": [
+        "الوقت",
+        "المنطقة الزمنية",
+        "ntp"
+      ],
+      "example": "timedatectl",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "sys-set-timezone",
+      "category": "system",
+      "title_ar": "تغيير المنطقة الزمنية",
+      "command": "sudo timedatectl set-timezone <ZONE>",
+      "description_ar": "يغير المنطقة الزمنية للنظام.",
+      "keywords_ar": [
+        "تغيير التوقيت",
+        "timezone"
+      ],
+      "example": "sudo timedatectl set-timezone Asia/Riyadh",
+      "requires_sudo": true,
+      "risk": "medium",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "sys-reboot",
+      "category": "system",
+      "title_ar": "إعادة تشغيل النظام",
+      "command": "sudo systemctl reboot",
+      "description_ar": "يعيد تشغيل الجهاز.",
+      "keywords_ar": [
+        "اعادة تشغيل السيرفر",
+        "reboot"
+      ],
+      "example": "sudo systemctl reboot",
+      "requires_sudo": true,
+      "risk": "critical",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "sys-poweroff",
+      "category": "system",
+      "title_ar": "إيقاف تشغيل النظام",
+      "command": "sudo systemctl poweroff",
+      "description_ar": "يغلق النظام ويطفئ الجهاز.",
+      "keywords_ar": [
+        "اطفاء السيرفر",
+        "shutdown"
+      ],
+      "example": "sudo systemctl poweroff",
+      "requires_sudo": true,
+      "risk": "critical",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "sys-history",
+      "category": "system",
+      "title_ar": "عرض سجل الأوامر",
+      "command": "history",
+      "description_ar": "يعرض أوامر shell السابقة.",
+      "keywords_ar": [
+        "الاوامر السابقة",
+        "سجل الطرفية"
+      ],
+      "example": "history",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "sys-which",
+      "category": "system",
+      "title_ar": "معرفة مسار أمر",
+      "command": "command -v <COMMAND>",
+      "description_ar": "يعرض المسار التنفيذي للأمر إن كان متاحاً.",
+      "keywords_ar": [
+        "اين الامر",
+        "مسار البرنامج"
+      ],
+      "example": "command -v python3",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "sys-man",
+      "category": "system",
+      "title_ar": "فتح دليل أمر",
+      "command": "man <COMMAND>",
+      "description_ar": "يفتح صفحة المساعدة الرسمية للأمر المثبت.",
+      "keywords_ar": [
+        "شرح امر",
+        "مساعدة",
+        "manual"
+      ],
+      "example": "man systemctl",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "sys-help",
+      "category": "system",
+      "title_ar": "عرض مساعدة أمر",
+      "command": "<COMMAND> --help",
+      "description_ar": "يعرض الخيارات المختصرة التي يدعمها الأمر.",
+      "keywords_ar": [
+        "خيارات الامر",
+        "كيف استخدم الامر"
+      ],
+      "example": "dnf --help",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "sub-status",
+      "category": "subscription",
+      "title_ar": "عرض حالة اشتراك Red Hat",
+      "command": "sudo subscription-manager status",
+      "description_ar": "يعرض حالة تسجيل واشتراك النظام.",
+      "keywords_ar": [
+        "حالة الاشتراك",
+        "subscription"
+      ],
+      "example": "sudo subscription-manager status",
+      "requires_sudo": true,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "sub-register",
+      "category": "subscription",
+      "title_ar": "تسجيل النظام في Red Hat",
+      "command": "sudo subscription-manager register",
+      "description_ar": "يبدأ تسجيل النظام بحساب Red Hat.",
+      "keywords_ar": [
+        "تسجيل ريد هات",
+        "ربط الاشتراك"
+      ],
+      "example": "sudo subscription-manager register",
+      "requires_sudo": true,
+      "risk": "high",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "sub-repos",
+      "category": "subscription",
+      "title_ar": "عرض مستودعات Red Hat",
+      "command": "sudo subscription-manager repos --list-enabled",
+      "description_ar": "يعرض المستودعات المفعلة عبر الاشتراك.",
+      "keywords_ar": [
+        "مستودعات الاشتراك",
+        "repos enabled"
+      ],
+      "example": "sudo subscription-manager repos --list-enabled",
+      "requires_sudo": true,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "sub-enable-repo",
+      "category": "subscription",
+      "title_ar": "تفعيل مستودع Red Hat",
+      "command": "sudo subscription-manager repos --enable=<REPO_ID>",
+      "description_ar": "يفعل مستودعاً محدداً.",
+      "keywords_ar": [
+        "تفعيل repo",
+        "اضافة مستودع"
+      ],
+      "example": "sudo subscription-manager repos --enable=<REPO_ID>",
+      "requires_sudo": true,
+      "risk": "high",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "sched-crontab-list",
+      "category": "scheduling",
+      "title_ar": "عرض مهام المستخدم المجدولة",
+      "command": "crontab -l",
+      "description_ar": "يعرض مهام cron للمستخدم الحالي.",
+      "keywords_ar": [
+        "المهام المجدولة",
+        "cron jobs"
+      ],
+      "example": "crontab -l",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "sched-crontab-edit",
+      "category": "scheduling",
+      "title_ar": "تعديل مهام المستخدم المجدولة",
+      "command": "crontab -e",
+      "description_ar": "يفتح ملف cron الخاص بالمستخدم للتعديل.",
+      "keywords_ar": [
+        "جدولة امر",
+        "تشغيل يومي",
+        "cron"
+      ],
+      "example": "crontab -e",
+      "requires_sudo": false,
+      "risk": "medium",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "sched-at",
+      "category": "scheduling",
+      "title_ar": "تشغيل أمر مرة واحدة لاحقاً",
+      "command": "echo '<COMMAND>' | at <TIME>",
+      "description_ar": "يجدول أمراً للتنفيذ مرة واحدة.",
+      "keywords_ar": [
+        "تشغيل لاحقا",
+        "جدولة مرة واحدة"
+      ],
+      "example": "echo 'touch /tmp/done' | at 23:00",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [
+        "at"
+      ],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    },
+    {
+      "id": "sched-systemd-timers",
+      "category": "scheduling",
+      "title_ar": "عرض مؤقتات systemd",
+      "command": "systemctl list-timers --all",
+      "description_ar": "يعرض المهام المجدولة باستخدام systemd timers.",
+      "keywords_ar": [
+        "systemd timer",
+        "مهام تلقائية"
+      ],
+      "example": "systemctl list-timers --all",
+      "requires_sudo": false,
+      "risk": "low",
+      "parts_ar": [],
+      "required_packages": [],
+      "rhel_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "notes_ar": ""
+    }
+  ]
+}
