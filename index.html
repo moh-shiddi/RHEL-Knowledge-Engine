@@ -3,34 +3,31 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="معجم عربي تفاعلي للبحث في أوامر Red Hat Enterprise Linux">
-  <meta name="theme-color" content="#0b6b50">
-  <title>معجم أوامر RHEL العربي</title>
+  <meta name="description" content="موسوعة عربية تفاعلية لمهام وأوامر Red Hat Enterprise Linux">
+  <meta name="theme-color" content="#0c6b50">
+  <title>موسوعة RHEL العربية</title>
   <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-  <a class="skip-link" href="#results">الانتقال إلى النتائج</a>
+  <a class="skip-link" href="#resultsSection">الانتقال إلى النتائج</a>
 
-  <div class="app">
+  <div class="app-shell">
     <header class="topbar">
       <a class="brand" href="#" aria-label="الصفحة الرئيسية">
-        <span class="brand__mark" aria-hidden="true">$_</span>
-        <span>
-          <strong>معجم RHEL العربي</strong>
-          <small>ابحث بالهدف، لا باسم الأمر</small>
+        <span class="brand__terminal" aria-hidden="true">$_</span>
+        <span class="brand__text">
+          <strong>موسوعة RHEL العربية</strong>
+          <small>من الهدف إلى الحل خطوة بخطوة</small>
         </span>
       </a>
 
       <div class="topbar__actions">
-        <button id="favoritesViewButton" class="topbar-button" type="button">
+        <button id="favoritesShortcut" class="toolbar-button" type="button">
           <span aria-hidden="true">★</span>
           <span>المفضلة</span>
           <b id="favoritesCount">0</b>
         </button>
-
-        <button id="themeButton" class="icon-button" type="button"
-                aria-label="تفعيل الوضع الليلي" title="الوضع الليلي">
+        <button id="themeButton" class="icon-button" type="button" aria-label="تفعيل الوضع الليلي" title="الوضع الليلي">
           <span id="themeIcon" aria-hidden="true">☾</span>
         </button>
       </div>
@@ -39,77 +36,63 @@
     <main>
       <section class="hero">
         <div class="hero__content">
-          <span class="eyebrow">Red Hat Enterprise Linux 8 / 9 / 10</span>
-          <h1>ماذا تريد أن تفعل في لينكس؟</h1>
+          <span class="hero__eyebrow">Red Hat Enterprise Linux 8 / 9 / 10</span>
+          <h1>اكتب ما تريد إنجازه، لا اسم الأمر</h1>
           <p>
-            اكتب المهمة بالعربية، مثل: «أريد تثبيت برنامج» أو
-            «أين أجد أخطاء خدمة nginx؟».
+            ابحث بالعربية عن مهمة أو مشكلة، ثم اتبع مساراً واضحاً يحتوي الأوامر،
+            سبب كل خطوة، طريقة التحقق، الأخطاء المحتملة، والتراجع الآمن.
           </p>
 
-          <div class="search-area">
-            <div id="searchBox" class="search-box">
+          <div class="search-wrapper">
+            <div class="search-box">
               <span class="search-box__icon" aria-hidden="true">⌕</span>
-
-              <input id="searchInput"
-                     type="search"
-                     autocomplete="off"
-                     spellcheck="false"
-                     aria-autocomplete="list"
-                     aria-controls="suggestions"
-                     aria-expanded="false"
-                     placeholder="ابحث عن أمر، مهمة، خدمة أو مشكلة...">
-
+              <input id="searchInput" type="search" autocomplete="off" spellcheck="false"
+                     aria-label="البحث في الموسوعة" aria-controls="suggestions" aria-expanded="false"
+                     placeholder="مثال: أريد تثبيت nginx، الخدمة لا تعمل، الهارد ممتلئ...">
               <kbd>Ctrl K</kbd>
-
-              <button id="clearSearchButton" class="clear-button"
-                      type="button" aria-label="مسح البحث" hidden>×</button>
+              <button id="clearSearchButton" class="clear-button" type="button" aria-label="مسح البحث" hidden>×</button>
             </div>
-
-            <div id="suggestions" class="suggestions"
-                 role="listbox" aria-label="اقتراحات البحث" hidden></div>
+            <div id="suggestions" class="suggestions" role="listbox" hidden></div>
           </div>
 
-          <div id="quickSearches" class="quick-searches" aria-label="عمليات بحث مقترحة">
-            <span>أمثلة:</span>
+          <div class="quick-searches" aria-label="أمثلة بحث سريعة">
+            <span>جرّب:</span>
             <button type="button" data-query="تثبيت برنامج">تثبيت برنامج</button>
             <button type="button" data-query="الخدمة لا تعمل">الخدمة لا تعمل</button>
-            <button type="button" data-query="معرفة مساحة القرص">مساحة القرص</button>
+            <button type="button" data-query="الهارد ممتلئ">الهارد ممتلئ</button>
             <button type="button" data-query="فتح منفذ">فتح منفذ</button>
-            <button type="button" data-query="البحث داخل ملف">البحث داخل ملف</button>
+            <button type="button" data-query="SSH لا يعمل">SSH لا يعمل</button>
           </div>
         </div>
 
-        <div class="hero__metrics" aria-label="إحصائيات المعجم">
+        <div class="hero__stats" aria-label="إحصائيات الموسوعة">
           <article>
-            <strong id="commandsMetric">—</strong>
-            <span>أمر وعملية</span>
+            <strong id="tasksMetric">—</strong>
+            <span>مهمة إجمالاً</span>
+          </article>
+          <article>
+            <strong id="workflowsMetric">—</strong>
+            <span>مساراً مطوراً</span>
+          </article>
+          <article>
+            <strong id="stepsMetric">—</strong>
+            <span>خطوة تنفيذ</span>
           </article>
           <article>
             <strong id="categoriesMetric">—</strong>
             <span>تصنيفاً</span>
           </article>
-          <article>
-            <strong>100%</strong>
-            <span>يعمل محلياً</span>
-          </article>
         </div>
       </section>
 
-      <section class="control-panel" aria-label="خيارات عرض النتائج">
-        <div class="view-tabs" role="tablist" aria-label="نوع النتائج">
-          <button id="allViewButton" class="view-tab is-active"
-                  type="button" role="tab" aria-selected="true">
-            كل الأوامر
-          </button>
-          <button id="favoriteTabButton" class="view-tab"
-                  type="button" role="tab" aria-selected="false">
-            المفضلة فقط
-          </button>
-          <button id="recentTabButton" class="view-tab"
-                  type="button" role="tab" aria-selected="false">
-            آخر عمليات البحث
-          </button>
-        </div>
+      <section class="control-panel" aria-label="تصفية النتائج">
+        <nav class="view-tabs" aria-label="نوع المحتوى">
+          <button class="view-tab is-active" type="button" data-view="all" aria-pressed="true">كل الموسوعة</button>
+          <button class="view-tab" type="button" data-view="workflows" aria-pressed="false">المسارات المطورة</button>
+          <button class="view-tab" type="button" data-view="troubleshooting" aria-pressed="false">حل المشكلات</button>
+          <button class="view-tab" type="button" data-view="legacy" aria-pressed="false">الأوامر السريعة</button>
+          <button class="view-tab" type="button" data-view="favorites" aria-pressed="false">المفضلة</button>
+        </nav>
 
         <div class="filters">
           <label>
@@ -118,7 +101,15 @@
               <option value="all">كل التصنيفات</option>
             </select>
           </label>
-
+          <label>
+            <span>المستوى</span>
+            <select id="difficultyFilter">
+              <option value="all">كل المستويات</option>
+              <option value="beginner">مبتدئ</option>
+              <option value="intermediate">متوسط</option>
+              <option value="advanced">متقدم</option>
+            </select>
+          </label>
           <label>
             <span>الخطورة</span>
             <select id="riskFilter">
@@ -129,18 +120,8 @@
               <option value="critical">حرجة</option>
             </select>
           </label>
-
           <label>
-            <span>الصلاحية</span>
-            <select id="sudoFilter">
-              <option value="all">الكل</option>
-              <option value="yes">يحتاج sudo</option>
-              <option value="no">لا يحتاج sudo</option>
-            </select>
-          </label>
-
-          <label>
-            <span>الإصدار</span>
+            <span>إصدار RHEL</span>
             <select id="versionFilter">
               <option value="all">كل الإصدارات</option>
               <option value="8">RHEL 8</option>
@@ -148,49 +129,30 @@
               <option value="10">RHEL 10</option>
             </select>
           </label>
-
           <label>
             <span>الترتيب</span>
             <select id="sortFilter">
               <option value="relevance">الأكثر صلة</option>
               <option value="title">أبجدياً</option>
+              <option value="steps">الأكثر خطوات</option>
               <option value="risk">الأعلى خطورة</option>
-              <option value="category">حسب التصنيف</option>
+              <option value="time">الأقصر وقتاً</option>
             </select>
           </label>
-
-          <button id="resetButton" class="reset-button" type="button">
-            إعادة الضبط
-          </button>
+          <button id="resetFiltersButton" class="reset-button" type="button">إعادة الضبط</button>
         </div>
       </section>
 
-      <section id="recentSearchesPanel" class="recent-panel" hidden>
+      <section id="resultsSection" class="results-section" tabindex="-1">
         <div class="section-heading">
           <div>
-            <span class="eyebrow">محفوظة على هذا الجهاز</span>
-            <h2>آخر عمليات البحث</h2>
+            <span id="resultsEyebrow" class="eyebrow">قاعدة المعرفة</span>
+            <h2 id="resultsTitle">كل المهام</h2>
+            <p id="resultsSummary">جاري تحميل قاعدة المعرفة...</p>
           </div>
-          <button id="clearHistoryButton" class="text-button" type="button">
-            مسح السجل
-          </button>
-        </div>
-        <div id="recentSearchesList" class="history-list"></div>
-      </section>
-
-      <section id="results" class="results-section" tabindex="-1">
-        <div class="section-heading">
-          <div>
-            <span id="resultsEyebrow" class="eyebrow">المعجم الكامل</span>
-            <h2 id="resultsTitle">كل الأوامر</h2>
-            <p id="resultsSummary">جاري تحميل البيانات...</p>
-          </div>
-
-          <div class="result-actions">
-            <button id="compactViewButton" class="icon-button is-active"
-                    type="button" aria-label="عرض شبكي" title="عرض شبكي">▦</button>
-            <button id="listViewButton" class="icon-button"
-                    type="button" aria-label="عرض قائمة" title="عرض قائمة">☷</button>
+          <div class="layout-buttons" aria-label="تغيير طريقة العرض">
+            <button id="gridViewButton" class="icon-button is-active" type="button" aria-label="عرض شبكي" title="عرض شبكي">▦</button>
+            <button id="listViewButton" class="icon-button" type="button" aria-label="عرض قائمة" title="عرض قائمة">☷</button>
           </div>
         </div>
 
@@ -198,82 +160,71 @@
 
         <div id="loadingState" class="state-card">
           <div class="loader" aria-hidden="true"></div>
-          <h3>جاري تجهيز الفهرس</h3>
-          <p>يتم تحميل الأوامر وبناء فهرس البحث العربي.</p>
+          <h3>جاري بناء فهرس المعرفة</h3>
+          <p>يتم تحميل المهام والخطوات والأخطاء الشائعة والروابط الداخلية.</p>
         </div>
 
         <div id="errorState" class="state-card state-card--error" hidden>
           <span class="state-card__icon" aria-hidden="true">!</span>
-          <h3>تعذر تحميل ملف الأوامر</h3>
-          <p>
-            تأكد من وجود <code>commands.json</code> بجانب الصفحة، ثم افتح
-            المشروع بواسطة خادم محلي أو ارفعه على خدمة استضافة.
-          </p>
-          <code class="server-command">python -m http.server 8000</code>
+          <h3>تعذر تحميل knowledge.json</h3>
+          <p>تأكد من وجود الملف بجانب الصفحة، وافتح المشروع بواسطة خادم محلي أو ارفعه إلى Cloudflare Pages.</p>
+          <code>python -m http.server 8000</code>
         </div>
 
         <div id="emptyState" class="state-card" hidden>
           <span class="state-card__icon" aria-hidden="true">⌕</span>
           <h3>لا توجد نتائج مطابقة</h3>
-          <p>جرّب وصف المهمة بكلمات أبسط، مثل: برنامج، ملف، خدمة، شبكة، مستخدم.</p>
-          <button id="emptyResetButton" class="primary-button" type="button">
-            عرض كل الأوامر
-          </button>
+          <p>جرّب وصفاً أقصر مثل: خدمة، مستخدم، قرص، SSH، تثبيت، منفذ.</p>
+          <button id="emptyResetButton" class="primary-button" type="button">عرض كل المهام</button>
         </div>
 
         <div id="resultsGrid" class="results-grid" aria-live="polite"></div>
-
-        <button id="loadMoreButton" class="load-more" type="button" hidden>
-          عرض نتائج إضافية
-        </button>
+        <button id="loadMoreButton" class="load-more-button" type="button" hidden>عرض المزيد</button>
       </section>
     </main>
 
-    <footer>
-      <p>
-        معجم تعليمي. راجع <code>man</code> والتوثيق الرسمي قبل تنفيذ أوامر
-        مرتفعة الخطورة على بيئة إنتاج.
-      </p>
+    <footer class="footer">
+      <p>موسوعة تعليمية. راجع التوثيق الرسمي واختبر الأوامر الحساسة في بيئة تدريبية قبل الإنتاج.</p>
       <span id="schemaVersion"></span>
     </footer>
   </div>
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-  <dialog id="commandDialog" class="command-dialog">
-    <button id="closeDialogButton" class="dialog-close"
-            type="button" aria-label="إغلاق">×</button>
+  <dialog id="taskDialog" class="task-dialog">
+    <div class="dialog-topbar">
+      <button id="closeDialogButton" class="dialog-close" type="button" aria-label="إغلاق">×</button>
+      <div class="dialog-topbar__actions">
+        <button id="dialogFavoriteButton" class="dialog-action" type="button">☆ المفضلة</button>
+        <button id="copyAllButton" class="dialog-action" type="button">نسخ كل الأوامر</button>
+        <button id="shareTaskButton" class="dialog-action" type="button">نسخ الرابط</button>
+      </div>
+    </div>
     <div id="dialogContent"></div>
   </dialog>
 
-  <template id="commandCardTemplate">
-    <article class="command-card">
-      <header class="command-card__header">
-        <div class="command-card__heading">
+  <template id="taskCardTemplate">
+    <article class="task-card">
+      <header class="task-card__header">
+        <div class="task-card__badges">
+          <span class="type-badge"></span>
           <span class="category-badge"></span>
-          <h3 class="command-title"></h3>
         </div>
-        <button class="favorite-button" type="button"
-                aria-label="إضافة إلى المفضلة" title="المفضلة">☆</button>
+        <button class="favorite-button" type="button" aria-label="إضافة إلى المفضلة" title="المفضلة">☆</button>
       </header>
-
-      <p class="command-description"></p>
-
-      <div class="code-box">
-        <code class="command-code"></code>
-        <button class="copy-button" type="button">نسخ</button>
-      </div>
-
-      <div class="command-card__meta">
+      <h3 class="task-title"></h3>
+      <p class="task-goal"></p>
+      <div class="task-meta">
+        <span class="difficulty-badge"></span>
         <span class="risk-badge"></span>
-        <span class="sudo-badge"></span>
-        <span class="version-badge"></span>
+        <span class="time-badge"></span>
+        <span class="steps-badge"></span>
       </div>
-
-      <div class="command-card__footer">
-        <button class="details-button" type="button">عرض التفاصيل</button>
-        <button class="copy-example-button" type="button">نسخ المثال</button>
-      </div>
+      <div class="task-preview"></div>
+      <footer class="task-card__footer">
+        <button class="open-task-button" type="button">فتح المهمة</button>
+        <button class="quick-copy-button" type="button">نسخ أول أمر</button>
+      </footer>
     </article>
   </template>
 
