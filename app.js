@@ -1,10 +1,5 @@
 "use strict";
 
-/**
- * RHEL Arabic Command Dictionary V2
- * No external libraries are required.
- */
-
 class SafeStorage {
   static get(key, fallback) {
     try {
@@ -16,19 +11,7 @@ class SafeStorage {
   }
 
   static set(key, value) {
-    try {
-      localStorage.setItem(key, JSON.stringify(value));
-    } catch {
-      // The app still works when storage is unavailable.
-    }
-  }
-
-  static remove(key) {
-    try {
-      localStorage.removeItem(key);
-    } catch {
-      // Ignore storage restrictions.
-    }
+    try { localStorage.setItem(key, JSON.stringify(value)); } catch { /* optional */ }
   }
 }
 
@@ -64,18 +47,16 @@ class ArabicText {
     "مستخدم": ["حساب", "user"],
     "قروب": ["مجموعه", "group"],
     "مجلد": ["دليل", "directory", "folder"],
-    "ملف": ["file"],
-    "نسخ": ["copy", "cp"],
-    "نقل": ["move", "mv"],
     "بحث": ["find", "grep", "search"],
     "شبكه": ["اتصال", "network", "ip"],
     "انترنت": ["شبكه", "اتصال", "ping"],
     "صلاحيات": ["اذونات", "permission", "chmod", "chown"],
     "ضغط": ["ارشيف", "tar", "zip"],
     "فك": ["استخراج", "extract", "unzip"],
-    "اصدار": ["نسخه", "version"],
     "سيرفر": ["خادم", "server", "host"],
-    "دخول": ["اتصال", "ssh", "login"]
+    "دخول": ["اتصال", "ssh", "login"],
+    "مشكله": ["خطا", "فشل", "troubleshoot", "diagnose"],
+    "لايعمل": ["فشل", "متوقف", "failed"]
   }).map(([key, values]) => [
     ArabicText.normalize(key),
     values.map(value => ArabicText.normalize(value))
@@ -98,280 +79,193 @@ class ArabicText {
   }
 
   static tokenize(value, { expand = true } = {}) {
-    const baseTokens = ArabicText.normalize(value)
+    const tokens = ArabicText.normalize(value)
       .split(" ")
       .filter(token => token.length > 1 && !ArabicText.stopWords.has(token));
 
-    if (!expand) return [...new Set(baseTokens)];
-
-    const expanded = new Set(baseTokens);
-    for (const token of baseTokens) {
-      const alternatives = ArabicText.synonyms.get(token) || [];
-      alternatives.forEach(item => expanded.add(item));
+    if (!expand) return [...new Set(tokens)];
+    const expanded = new Set(tokens);
+    for (const token of tokens) {
+      (ArabicText.synonyms.get(token) || []).forEach(item => expanded.add(item));
     }
     return [...expanded];
   }
 
-  static escapeHtml(value = "") {
+  static escape(value = "") {
     const element = document.createElement("div");
     element.textContent = String(value);
     return element.innerHTML;
   }
 
   static highlight(value, query) {
-    const escaped = ArabicText.escapeHtml(value);
-    const queryTokens = ArabicText.tokenize(query, { expand: false })
-      .sort((a, b) => b.length - a.length);
-
-    if (!queryTokens.length) return escaped;
-
-    let output = escaped;
-    for (const token of queryTokens) {
-      const safeToken = token.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-      const expression = new RegExp(`(${safeToken})`, "giu");
-      output = output.replace(expression, "<mark>$1</mark>");
+    let output = ArabicText.escape(value);
+    const tokens = ArabicText.tokenize(query, { expand: false }).sort((a, b) => b.length - a.length);
+    for (const token of tokens) {
+      const safe = token.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      output = output.replace(new RegExp(`(${safe})`, "giu"), "<mark>$1</mark>");
     }
     return output;
   }
 }
 
-class SearchIndex {
-  constructor(commands, categories) {
-    this.commands = commands;
+class KnowledgeIndex {
+  constructor(tasks, categories) {
+    this.tasks = tasks;
     this.categories = categories;
     this.records = new Map();
-    this.inverted = new Map();
-    this.suggestionPool = [];
     this.build();
   }
 
   build() {
-    for (const command of this.commands) {
-      const categoryName = this.categories[command.category] || command.category;
+    for (const task of this.tasks) {
+      const category = this.categories[task.category] || task.category;
+      const stepCommands = (task.steps || []).map(step => step.command).join(" ");
+      const stepText = (task.steps || []).map(step => `${step.title_ar} ${step.explanation_ar}`).join(" ");
+      const errors = (task.common_errors || []).map(item =>
+        `${item.symptom_ar} ${(item.likely_causes_ar || []).join(" ")} ${(item.fixes_ar || []).join(" ")}`
+      ).join(" ");
+      const files = (task.files || []).join(" ");
+
       const record = {
-        id: command.id,
-        title: ArabicText.normalize(command.title_ar),
-        description: ArabicText.normalize(command.description_ar),
-        keywords: ArabicText.normalize((command.keywords_ar || []).join(" ")),
-        command: ArabicText.normalize(command.command),
-        example: ArabicText.normalize(command.example || ""),
-        category: ArabicText.normalize(categoryName),
-        notes: ArabicText.normalize(command.notes_ar || ""),
-        all: ""
+        title: ArabicText.normalize(task.title_ar),
+        goal: ArabicText.normalize(task.goal_ar),
+        summary: ArabicText.normalize(task.summary_ar),
+        keywords: ArabicText.normalize((task.keywords_ar || []).join(" ")),
+        category: ArabicText.normalize(category),
+        commands: ArabicText.normalize(stepCommands),
+        steps: ArabicText.normalize(stepText),
+        errors: ArabicText.normalize(errors),
+        files: ArabicText.normalize(files)
       };
-
-      record.all = [
-        record.title,
-        record.description,
-        record.keywords,
-        record.command,
-        record.example,
-        record.category,
-        record.notes
-      ].join(" ");
-
-      this.records.set(command.id, record);
-
-      const tokens = ArabicText.tokenize(record.all, { expand: false });
-      for (const token of tokens) {
-        if (!this.inverted.has(token)) this.inverted.set(token, new Set());
-        this.inverted.get(token).add(command.id);
-      }
-
-      this.suggestionPool.push({
-        id: command.id,
-        title: command.title_ar,
-        command: command.command,
-        category: categoryName,
-        normalized: `${record.title} ${record.keywords} ${record.command}`
-      });
+      record.all = Object.values(record).join(" ");
+      this.records.set(task.id, record);
     }
   }
 
-  getCandidates(query) {
-    const tokens = ArabicText.tokenize(query);
-    if (!tokens.length) return this.commands;
-
-    const candidateIds = new Set();
-
-    for (const token of tokens) {
-      const exact = this.inverted.get(token);
-      exact?.forEach(id => candidateIds.add(id));
-
-      if (token.length >= 3) {
-        for (const [indexedToken, ids] of this.inverted) {
-          if (indexedToken.includes(token) || token.includes(indexedToken)) {
-            ids.forEach(id => candidateIds.add(id));
-          }
-        }
-      }
-    }
-
-    if (!candidateIds.size) return this.commands;
-    return this.commands.filter(command => candidateIds.has(command.id));
-  }
-
-  score(command, query) {
+  score(task, query) {
     const normalizedQuery = ArabicText.normalize(query);
     if (!normalizedQuery) return 0;
 
     const rawTokens = ArabicText.tokenize(query, { expand: false });
     const expandedTokens = ArabicText.tokenize(query);
-    const record = this.records.get(command.id);
+    const record = this.records.get(task.id);
     let score = 0;
 
-    if (record.title === normalizedQuery) score += 150;
-    if (record.title.startsWith(normalizedQuery)) score += 80;
-    if (record.title.includes(normalizedQuery)) score += 65;
-    if (record.keywords.includes(normalizedQuery)) score += 55;
-    if (record.command.includes(normalizedQuery)) score += 45;
-    if (record.description.includes(normalizedQuery)) score += 35;
-    if (record.category.includes(normalizedQuery)) score += 22;
+    if (record.title === normalizedQuery) score += 180;
+    if (record.title.startsWith(normalizedQuery)) score += 100;
+    if (record.title.includes(normalizedQuery)) score += 80;
+    if (record.goal.includes(normalizedQuery)) score += 70;
+    if (record.keywords.includes(normalizedQuery)) score += 65;
+    if (record.commands.includes(normalizedQuery)) score += 55;
+    if (record.summary.includes(normalizedQuery)) score += 38;
+    if (record.errors.includes(normalizedQuery)) score += 35;
 
     for (const token of rawTokens) {
-      if (record.title.includes(token)) score += 26;
-      if (record.keywords.includes(token)) score += 21;
-      if (record.command.includes(token)) score += 17;
-      if (record.description.includes(token)) score += 12;
-      if (record.example.includes(token)) score += 9;
+      if (record.title.includes(token)) score += 30;
+      if (record.goal.includes(token)) score += 26;
+      if (record.keywords.includes(token)) score += 22;
+      if (record.commands.includes(token)) score += 18;
+      if (record.steps.includes(token)) score += 14;
+      if (record.summary.includes(token)) score += 11;
+      if (record.errors.includes(token)) score += 10;
       if (record.category.includes(token)) score += 7;
-      if (record.notes.includes(token)) score += 4;
+      if (record.files.includes(token)) score += 5;
     }
 
-    const synonymTokens = expandedTokens.filter(token => !rawTokens.includes(token));
-    for (const token of synonymTokens) {
-      if (record.title.includes(token)) score += 10;
+    const synonyms = expandedTokens.filter(token => !rawTokens.includes(token));
+    for (const token of synonyms) {
+      if (record.title.includes(token)) score += 12;
+      if (record.goal.includes(token)) score += 10;
       if (record.keywords.includes(token)) score += 8;
-      if (record.command.includes(token)) score += 6;
-      if (record.description.includes(token)) score += 4;
+      if (record.commands.includes(token)) score += 6;
+      if (record.all.includes(token)) score += 3;
     }
 
-    const matchedRaw = rawTokens.filter(token => record.all.includes(token)).length;
-    if (rawTokens.length > 1 && matchedRaw === rawTokens.length) score += 45;
-    else score += matchedRaw * 4;
-
+    const matched = rawTokens.filter(token => record.all.includes(token)).length;
+    if (rawTokens.length > 1 && matched === rawTokens.length) score += 50;
     return score;
   }
 
   search(query) {
-    if (!ArabicText.normalize(query)) {
-      return this.commands.map(command => ({ command, score: 0 }));
-    }
-
-    return this.getCandidates(query)
-      .map(command => ({ command, score: this.score(command, query) }))
+    if (!ArabicText.normalize(query)) return this.tasks.map(task => ({ task, score: 0 }));
+    return this.tasks
+      .map(task => ({ task, score: this.score(task, query) }))
       .filter(item => item.score > 0);
   }
 
   suggest(query, limit = 7) {
-    const normalized = ArabicText.normalize(query);
-    if (normalized.length < 2) return [];
-
-    return this.suggestionPool
-      .map(item => {
-        let score = 0;
-        if (ArabicText.normalize(item.title).startsWith(normalized)) score += 60;
-        if (ArabicText.normalize(item.title).includes(normalized)) score += 40;
-        if (item.normalized.includes(normalized)) score += 25;
-
-        for (const token of ArabicText.tokenize(query)) {
-          if (item.normalized.includes(token)) score += 8;
-        }
-
-        return { ...item, score };
-      })
-      .filter(item => item.score > 0)
-      .sort((a, b) => b.score - a.score || a.title.localeCompare(b.title, "ar"))
-      .slice(0, limit);
+    if (ArabicText.normalize(query).length < 2) return [];
+    return this.search(query)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, limit)
+      .map(item => item.task);
   }
 }
 
-class RhelDictionaryApp {
+class RhelKnowledgeApp {
   constructor() {
     this.data = null;
-    this.commands = [];
+    this.tasks = [];
+    this.taskById = new Map();
     this.index = null;
-    this.favorites = new Set(SafeStorage.get("rhel:favorites", []));
-    this.history = SafeStorage.get("rhel:history", []);
-    this.mode = "all";
-    this.layout = SafeStorage.get("rhel:layout", "grid");
+    this.view = "all";
+    this.layout = SafeStorage.get("rhel-kb:layout", "grid");
+    this.theme = SafeStorage.get("rhel-kb:theme", null) ||
+      (window.matchMedia?.("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    this.favorites = new Set(SafeStorage.get("rhel-kb:favorites", []));
+    this.progress = SafeStorage.get("rhel-kb:progress", {});
     this.visibleLimit = 24;
+    this.currentTask = null;
+    this.currentVariables = {};
     this.suggestions = [];
     this.activeSuggestion = -1;
-    this.toastTimer = null;
     this.searchTimer = null;
+    this.toastTimer = null;
 
-    this.riskLabels = {
-      low: "منخفضة",
-      medium: "متوسطة",
-      high: "عالية",
-      critical: "حرجة"
-    };
+    this.riskLabels = { low: "منخفضة", medium: "متوسطة", high: "عالية", critical: "حرجة" };
+    this.riskOrder = { critical: 4, high: 3, medium: 2, low: 1 };
+    this.difficultyLabels = { beginner: "مبتدئ", intermediate: "متوسط", advanced: "متقدم" };
+    this.typeLabels = { workflow: "مسار عملي", troubleshooting: "حل مشكلة", legacy: "أمر سريع" };
 
-    this.riskOrder = {
-      critical: 4,
-      high: 3,
-      medium: 2,
-      low: 1
-    };
-
-    this.elements = this.collectElements();
-    this.initializeTheme();
-    this.attachStaticEvents();
+    this.e = this.collectElements();
+    this.applyTheme();
+    this.attachEvents();
     this.loadData();
   }
 
   collectElements() {
     const ids = [
-      "searchBox", "searchInput", "clearSearchButton", "suggestions",
-      "quickSearches", "commandsMetric", "categoriesMetric",
-      "favoritesViewButton", "favoritesCount", "themeButton", "themeIcon",
-      "allViewButton", "favoriteTabButton", "recentTabButton",
-      "categoryFilter", "riskFilter", "sudoFilter", "versionFilter",
-      "sortFilter", "resetButton", "recentSearchesPanel",
-      "recentSearchesList", "clearHistoryButton", "results",
-      "resultsEyebrow", "resultsTitle", "resultsSummary",
-      "compactViewButton", "listViewButton", "activeFilters",
+      "favoritesShortcut", "favoritesCount", "themeButton", "themeIcon",
+      "searchInput", "clearSearchButton", "suggestions", "categoryFilter",
+      "difficultyFilter", "riskFilter", "versionFilter", "sortFilter",
+      "resetFiltersButton", "resultsSection", "resultsEyebrow", "resultsTitle",
+      "resultsSummary", "gridViewButton", "listViewButton", "activeFilters",
       "loadingState", "errorState", "emptyState", "emptyResetButton",
-      "resultsGrid", "loadMoreButton", "toast", "schemaVersion",
-      "commandDialog", "closeDialogButton", "dialogContent",
-      "commandCardTemplate"
+      "resultsGrid", "loadMoreButton", "tasksMetric", "workflowsMetric",
+      "stepsMetric", "categoriesMetric", "schemaVersion", "toast", "taskDialog",
+      "closeDialogButton", "dialogFavoriteButton", "copyAllButton", "shareTaskButton",
+      "dialogContent", "taskCardTemplate"
     ];
-
     return Object.fromEntries(ids.map(id => [id, document.getElementById(id)]));
-  }
-
-  initializeTheme() {
-    const stored = SafeStorage.get("rhel:theme", null);
-    const preferredDark = window.matchMedia?.("(prefers-color-scheme: dark)").matches;
-    this.theme = stored || (preferredDark ? "dark" : "light");
-    this.applyTheme();
   }
 
   applyTheme() {
     document.documentElement.dataset.theme = this.theme;
-    const isDark = this.theme === "dark";
-    this.elements.themeIcon.textContent = isDark ? "☀" : "☾";
-    this.elements.themeButton.setAttribute(
-      "aria-label",
-      isDark ? "تفعيل الوضع النهاري" : "تفعيل الوضع الليلي"
-    );
-    this.elements.themeButton.title =
-      isDark ? "الوضع النهاري" : "الوضع الليلي";
-    document.querySelector('meta[name="theme-color"]')
-      ?.setAttribute("content", isDark ? "#0d1714" : "#0b6b50");
+    const dark = this.theme === "dark";
+    this.e.themeIcon.textContent = dark ? "☀" : "☾";
+    this.e.themeButton.title = dark ? "الوضع النهاري" : "الوضع الليلي";
+    this.e.themeButton.setAttribute("aria-label", dark ? "تفعيل الوضع النهاري" : "تفعيل الوضع الليلي");
+    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", dark ? "#0d1714" : "#0c6b50");
   }
 
-  attachStaticEvents() {
-    const e = this.elements;
-
-    e.themeButton.addEventListener("click", () => {
+  attachEvents() {
+    this.e.themeButton.addEventListener("click", () => {
       this.theme = this.theme === "dark" ? "light" : "dark";
-      SafeStorage.set("rhel:theme", this.theme);
+      SafeStorage.set("rhel-kb:theme", this.theme);
       this.applyTheme();
     });
 
-    e.searchInput.addEventListener("input", () => {
+    this.e.searchInput.addEventListener("input", () => {
       clearTimeout(this.searchTimer);
       this.searchTimer = setTimeout(() => {
         this.visibleLimit = 24;
@@ -379,401 +273,274 @@ class RhelDictionaryApp {
         this.render();
       }, 90);
     });
+    this.e.searchInput.addEventListener("focus", () => this.updateSuggestions());
+    this.e.searchInput.addEventListener("keydown", event => this.handleSearchKeyboard(event));
 
-    e.searchInput.addEventListener("focus", () => this.updateSuggestions());
-
-    e.searchInput.addEventListener("keydown", event => {
-      if (event.key === "ArrowDown") {
-        event.preventDefault();
-        this.moveSuggestion(1);
-      } else if (event.key === "ArrowUp") {
-        event.preventDefault();
-        this.moveSuggestion(-1);
-      } else if (event.key === "Enter") {
-        event.preventDefault();
-        if (this.activeSuggestion >= 0) {
-          this.selectSuggestion(this.activeSuggestion);
-        } else {
-          this.commitSearch();
-        }
-      } else if (event.key === "Escape") {
-        this.closeSuggestions();
-        if (e.searchInput.value) {
-          e.searchInput.value = "";
-          this.render();
-        }
-      }
-    });
-
-    e.clearSearchButton.addEventListener("click", () => {
-      e.searchInput.value = "";
+    this.e.clearSearchButton.addEventListener("click", () => {
+      this.e.searchInput.value = "";
       this.closeSuggestions();
       this.render();
-      e.searchInput.focus();
-    });
-
-    document.addEventListener("click", event => {
-      if (!e.searchBox.contains(event.target) && !e.suggestions.contains(event.target)) {
-        this.closeSuggestions();
-      }
+      this.e.searchInput.focus();
     });
 
     document.addEventListener("keydown", event => {
       if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") {
         event.preventDefault();
-        e.searchInput.focus();
-        e.searchInput.select();
+        this.e.searchInput.focus();
+        this.e.searchInput.select();
       }
     });
 
-    e.quickSearches.addEventListener("click", event => {
+    document.addEventListener("click", event => {
+      if (!event.target.closest(".search-wrapper")) this.closeSuggestions();
+    });
+
+    document.querySelector(".quick-searches").addEventListener("click", event => {
       const button = event.target.closest("[data-query]");
-      if (!button) return;
-      this.useQuery(button.dataset.query);
+      if (button) this.useQuery(button.dataset.query);
     });
 
-    [
-      e.categoryFilter,
-      e.riskFilter,
-      e.sudoFilter,
-      e.versionFilter,
-      e.sortFilter
-    ].forEach(select => select.addEventListener("change", () => {
-      this.visibleLimit = 24;
-      this.render();
-    }));
-
-    e.resetButton.addEventListener("click", () => this.reset());
-    e.emptyResetButton.addEventListener("click", () => this.reset());
-
-    e.allViewButton.addEventListener("click", () => this.setMode("all"));
-    e.favoriteTabButton.addEventListener("click", () => this.setMode("favorites"));
-    e.favoritesViewButton.addEventListener("click", () => this.setMode("favorites"));
-    e.recentTabButton.addEventListener("click", () => this.setMode("history"));
-
-    e.compactViewButton.addEventListener("click", () => this.setLayout("grid"));
-    e.listViewButton.addEventListener("click", () => this.setLayout("list"));
-
-    e.clearHistoryButton.addEventListener("click", () => {
-      this.history = [];
-      SafeStorage.remove("rhel:history");
-      this.renderHistory();
-      this.showToast("تم مسح سجل البحث");
+    document.querySelector(".view-tabs").addEventListener("click", event => {
+      const button = event.target.closest("[data-view]");
+      if (button) this.setView(button.dataset.view);
     });
 
-    e.recentSearchesList.addEventListener("click", event => {
-      const item = event.target.closest("[data-history-query]");
-      if (!item) return;
-      this.useQuery(item.dataset.historyQuery);
-    });
+    this.e.favoritesShortcut.addEventListener("click", () => this.setView("favorites"));
 
-    e.loadMoreButton.addEventListener("click", () => {
+    [this.e.categoryFilter, this.e.difficultyFilter, this.e.riskFilter, this.e.versionFilter, this.e.sortFilter]
+      .forEach(select => select.addEventListener("change", () => {
+        this.visibleLimit = 24;
+        this.render();
+      }));
+
+    this.e.resetFiltersButton.addEventListener("click", () => this.reset());
+    this.e.emptyResetButton.addEventListener("click", () => this.reset());
+    this.e.gridViewButton.addEventListener("click", () => this.setLayout("grid"));
+    this.e.listViewButton.addEventListener("click", () => this.setLayout("list"));
+    this.e.loadMoreButton.addEventListener("click", () => {
       this.visibleLimit += 24;
       this.renderResults();
     });
 
-    e.activeFilters.addEventListener("click", event => {
+    this.e.activeFilters.addEventListener("click", event => {
       const button = event.target.closest("[data-remove-filter]");
-      if (!button) return;
-      this.removeFilter(button.dataset.removeFilter);
+      if (button) this.removeFilter(button.dataset.removeFilter);
     });
 
-    e.resultsGrid.addEventListener("click", event => {
-      const card = event.target.closest(".command-card");
+    this.e.resultsGrid.addEventListener("click", event => {
+      const card = event.target.closest(".task-card");
       if (!card) return;
-      const command = this.commands.find(item => item.id === card.dataset.id);
-      if (!command) return;
+      const task = this.taskById.get(card.dataset.id);
+      if (!task) return;
 
-      if (event.target.closest(".copy-button")) {
-        this.copy(command.command, "تم نسخ الأمر");
-      } else if (event.target.closest(".copy-example-button")) {
-        this.copy(command.example || command.command, "تم نسخ المثال");
-      } else if (event.target.closest(".favorite-button")) {
-        this.toggleFavorite(command.id);
-      } else if (event.target.closest(".details-button")) {
-        this.openDetails(command);
-      }
+      if (event.target.closest(".favorite-button")) this.toggleFavorite(task.id);
+      else if (event.target.closest(".quick-copy-button")) this.copy(this.resolveCommand(task.steps?.[0]?.command || ""), "تم نسخ أول أمر");
+      else if (event.target.closest(".open-task-button")) this.openTask(task);
     });
 
-    e.closeDialogButton.addEventListener("click", () => e.commandDialog.close());
-    e.commandDialog.addEventListener("click", event => {
-      const rect = e.commandDialog.getBoundingClientRect();
-      const inside =
-        event.clientX >= rect.left &&
-        event.clientX <= rect.right &&
-        event.clientY >= rect.top &&
-        event.clientY <= rect.bottom;
-      if (!inside) e.commandDialog.close();
+    this.e.closeDialogButton.addEventListener("click", () => this.closeTask());
+    this.e.dialogFavoriteButton.addEventListener("click", () => {
+      if (this.currentTask) this.toggleFavorite(this.currentTask.id, true);
     });
+    this.e.copyAllButton.addEventListener("click", () => this.copyAllCommands());
+    this.e.shareTaskButton.addEventListener("click", () => this.copyTaskLink());
+
+    this.e.taskDialog.addEventListener("click", event => {
+      const rect = this.e.taskDialog.getBoundingClientRect();
+      const inside = event.clientX >= rect.left && event.clientX <= rect.right && event.clientY >= rect.top && event.clientY <= rect.bottom;
+      if (!inside) this.closeTask();
+    });
+
+    this.e.dialogContent.addEventListener("click", event => this.handleDialogClick(event));
+    this.e.dialogContent.addEventListener("input", event => this.handleDialogInput(event));
+    this.e.dialogContent.addEventListener("change", event => this.handleDialogChange(event));
+
+    window.addEventListener("hashchange", () => this.openTaskFromHash());
   }
 
   async loadData() {
     try {
-      const response = await fetch("commands.json", { cache: "no-store" });
+      const response = await fetch("knowledge.json", { cache: "no-store" });
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
-
       this.data = await response.json();
-      if (!Array.isArray(this.data.commands)) {
-        throw new Error("Invalid commands.json schema");
-      }
+      if (!Array.isArray(this.data.tasks)) throw new Error("Invalid knowledge schema");
 
-      this.commands = this.data.commands;
-      this.index = new SearchIndex(this.commands, this.data.categories || {});
-
+      this.tasks = this.data.tasks;
+      this.taskById = new Map(this.tasks.map(task => [task.id, task]));
+      this.index = new KnowledgeIndex(this.tasks, this.data.categories || {});
       this.populateCategories();
-      this.elements.commandsMetric.textContent = this.commands.length;
-      this.elements.categoriesMetric.textContent =
-        Object.keys(this.data.categories || {}).length;
-      this.elements.schemaVersion.textContent =
-        `Schema ${this.data.schema_version || "—"}`;
-
-      this.elements.loadingState.hidden = true;
+      this.updateMetrics();
       this.updateFavoriteCount();
       this.setLayout(this.layout, false);
-      this.renderHistory();
+      this.e.schemaVersion.textContent = `Schema ${this.data.schema_version || "—"}`;
+      this.e.loadingState.hidden = true;
       this.render();
+      this.openTaskFromHash();
     } catch (error) {
-      console.error("Unable to load commands.json:", error);
-      this.elements.loadingState.hidden = true;
-      this.elements.errorState.hidden = false;
+      console.error(error);
+      this.e.loadingState.hidden = true;
+      this.e.errorState.hidden = false;
     }
   }
 
   populateCategories() {
-    const categories = Object.entries(this.data.categories || {})
-      .sort((a, b) => a[1].localeCompare(b[1], "ar"));
-
-    for (const [value, label] of categories) {
-      const option = document.createElement("option");
-      option.value = value;
-      option.textContent = label;
-      this.elements.categoryFilter.appendChild(option);
-    }
+    Object.entries(this.data.categories || {})
+      .sort((a, b) => a[1].localeCompare(b[1], "ar"))
+      .forEach(([value, label]) => {
+        const option = document.createElement("option");
+        option.value = value;
+        option.textContent = label;
+        this.e.categoryFilter.appendChild(option);
+      });
   }
 
-  setMode(mode) {
-    this.mode = mode;
+  updateMetrics() {
+    const developed = this.tasks.filter(task => task.content_level !== "legacy").length;
+    const steps = this.tasks.reduce((sum, task) => sum + (task.steps?.length || 0), 0);
+    this.e.tasksMetric.textContent = this.tasks.length;
+    this.e.workflowsMetric.textContent = developed;
+    this.e.stepsMetric.textContent = steps;
+    this.e.categoriesMetric.textContent = Object.keys(this.data.categories || {}).length;
+  }
+
+  setView(view) {
+    this.view = view;
     this.visibleLimit = 24;
-
-    const states = {
-      allViewButton: mode === "all",
-      favoriteTabButton: mode === "favorites",
-      recentTabButton: mode === "history"
-    };
-
-    for (const [key, active] of Object.entries(states)) {
-      this.elements[key].classList.toggle("is-active", active);
-      this.elements[key].setAttribute("aria-selected", String(active));
-    }
-
-    this.elements.recentSearchesPanel.hidden = mode !== "history";
-    this.elements.results.hidden = mode === "history";
-
-    if (mode === "history") {
-      this.renderHistory();
-      this.elements.recentSearchesPanel.scrollIntoView({ behavior: "smooth", block: "start" });
-      return;
-    }
-
+    document.querySelectorAll("[data-view]").forEach(button => {
+      const active = button.dataset.view === view;
+      button.classList.toggle("is-active", active);
+      button.setAttribute("aria-pressed", String(active));
+    });
     this.render();
-    this.elements.results.scrollIntoView({ behavior: "smooth", block: "start" });
+    this.e.resultsSection.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
   setLayout(layout, persist = true) {
     this.layout = layout;
-    this.elements.resultsGrid.classList.toggle("list-view", layout === "list");
-    this.elements.compactViewButton.classList.toggle("is-active", layout === "grid");
-    this.elements.listViewButton.classList.toggle("is-active", layout === "list");
-    if (persist) SafeStorage.set("rhel:layout", layout);
+    this.e.resultsGrid.classList.toggle("list-view", layout === "list");
+    this.e.gridViewButton.classList.toggle("is-active", layout === "grid");
+    this.e.listViewButton.classList.toggle("is-active", layout === "list");
+    if (persist) SafeStorage.set("rhel-kb:layout", layout);
   }
 
   reset() {
-    const e = this.elements;
-    e.searchInput.value = "";
-    e.categoryFilter.value = "all";
-    e.riskFilter.value = "all";
-    e.sudoFilter.value = "all";
-    e.versionFilter.value = "all";
-    e.sortFilter.value = "relevance";
-    this.mode = "all";
+    this.view = "all";
+    this.e.searchInput.value = "";
+    this.e.categoryFilter.value = "all";
+    this.e.difficultyFilter.value = "all";
+    this.e.riskFilter.value = "all";
+    this.e.versionFilter.value = "all";
+    this.e.sortFilter.value = "relevance";
     this.visibleLimit = 24;
     this.closeSuggestions();
-    this.setMode("all");
-    e.searchInput.focus();
+    this.setView("all");
+    this.e.searchInput.focus();
   }
 
   useQuery(query) {
-    this.elements.searchInput.value = query;
-    this.mode = "all";
-    this.addHistory(query);
+    this.e.searchInput.value = query;
     this.closeSuggestions();
-    this.setMode("all");
-    this.render();
+    this.view = "all";
+    this.setView("all");
   }
 
-  commitSearch() {
-    const query = this.elements.searchInput.value.trim();
-    if (!query) return;
-    this.addHistory(query);
-    this.closeSuggestions();
-    this.render();
-    this.elements.results.scrollIntoView({ behavior: "smooth", block: "start" });
-  }
-
-  addHistory(query) {
-    const clean = query.trim();
-    if (clean.length < 2) return;
-
-    this.history = [
-      { query: clean, at: new Date().toISOString() },
-      ...this.history.filter(item =>
-        ArabicText.normalize(item.query) !== ArabicText.normalize(clean)
-      )
-    ].slice(0, 12);
-
-    SafeStorage.set("rhel:history", this.history);
-    this.renderHistory();
-  }
-
-  renderHistory() {
-    const container = this.elements.recentSearchesList;
-    container.innerHTML = "";
-
-    if (!this.history.length) {
-      container.innerHTML = '<p class="dialog-description">لا توجد عمليات بحث محفوظة حتى الآن.</p>';
-      return;
+  handleSearchKeyboard(event) {
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      this.moveSuggestion(1);
+    } else if (event.key === "ArrowUp") {
+      event.preventDefault();
+      this.moveSuggestion(-1);
+    } else if (event.key === "Enter") {
+      event.preventDefault();
+      if (this.activeSuggestion >= 0) this.selectSuggestion(this.activeSuggestion);
+      else {
+        this.closeSuggestions();
+        this.render();
+        this.e.resultsSection.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    } else if (event.key === "Escape") {
+      this.closeSuggestions();
     }
-
-    const fragment = document.createDocumentFragment();
-
-    for (const item of this.history) {
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className = "history-item";
-      button.dataset.historyQuery = item.query;
-
-      const text = document.createElement("span");
-      text.textContent = item.query;
-
-      const time = document.createElement("time");
-      time.dateTime = item.at;
-      time.textContent = this.formatRelativeDate(item.at);
-
-      button.append(text, time);
-      fragment.appendChild(button);
-    }
-
-    container.appendChild(fragment);
-  }
-
-  formatRelativeDate(isoDate) {
-    const date = new Date(isoDate);
-    const diffMinutes = Math.round((Date.now() - date.getTime()) / 60000);
-
-    if (diffMinutes < 1) return "الآن";
-    if (diffMinutes < 60) return `قبل ${diffMinutes} د`;
-    const hours = Math.round(diffMinutes / 60);
-    if (hours < 24) return `قبل ${hours} س`;
-    return date.toLocaleDateString("ar-SA", { month: "short", day: "numeric" });
   }
 
   updateSuggestions() {
     if (!this.index) return;
-
-    const query = this.elements.searchInput.value;
-    this.suggestions = this.index.suggest(query);
+    this.suggestions = this.index.suggest(this.e.searchInput.value);
     this.activeSuggestion = -1;
     this.renderSuggestions();
   }
 
   renderSuggestions() {
-    const container = this.elements.suggestions;
+    const container = this.e.suggestions;
     container.innerHTML = "";
-
-    if (!this.suggestions.length) {
-      this.closeSuggestions();
-      return;
-    }
+    if (!this.suggestions.length) return this.closeSuggestions();
 
     const fragment = document.createDocumentFragment();
-
-    this.suggestions.forEach((suggestion, index) => {
+    this.suggestions.forEach((task, index) => {
       const button = document.createElement("button");
       button.type = "button";
       button.className = "suggestion";
       button.role = "option";
-      button.dataset.suggestionIndex = String(index);
-
-      const main = document.createElement("span");
-      main.innerHTML = `
-        <strong>${ArabicText.highlight(suggestion.title, this.elements.searchInput.value)}</strong>
-        <small>${ArabicText.escapeHtml(suggestion.category)}</small>
+      button.innerHTML = `
+        <span>
+          <strong>${ArabicText.highlight(task.title_ar, this.e.searchInput.value)}</strong>
+          <small>${ArabicText.escape(task.goal_ar)}</small>
+        </span>
+        <code>${ArabicText.escape(task.steps?.[0]?.command || "")}</code>
       `;
-
-      const code = document.createElement("code");
-      code.textContent = suggestion.command;
-
-      button.append(main, code);
       button.addEventListener("mousedown", event => {
         event.preventDefault();
         this.selectSuggestion(index);
       });
-
       fragment.appendChild(button);
     });
-
     container.appendChild(fragment);
     container.hidden = false;
-    this.elements.searchInput.setAttribute("aria-expanded", "true");
+    this.e.searchInput.setAttribute("aria-expanded", "true");
   }
 
   moveSuggestion(direction) {
     if (!this.suggestions.length) return;
-
-    this.activeSuggestion =
-      (this.activeSuggestion + direction + this.suggestions.length) %
-      this.suggestions.length;
-
-    this.elements.suggestions
-      .querySelectorAll(".suggestion")
-      .forEach((item, index) => {
-        const active = index === this.activeSuggestion;
-        item.classList.toggle("is-active", active);
-        item.setAttribute("aria-selected", String(active));
-        if (active) item.scrollIntoView({ block: "nearest" });
-      });
+    this.activeSuggestion = (this.activeSuggestion + direction + this.suggestions.length) % this.suggestions.length;
+    this.e.suggestions.querySelectorAll(".suggestion").forEach((item, index) => {
+      const active = index === this.activeSuggestion;
+      item.classList.toggle("is-active", active);
+      item.setAttribute("aria-selected", String(active));
+      if (active) item.scrollIntoView({ block: "nearest" });
+    });
   }
 
   selectSuggestion(index) {
-    const suggestion = this.suggestions[index];
-    if (!suggestion) return;
-    this.useQuery(suggestion.title);
+    const task = this.suggestions[index];
+    if (!task) return;
+    this.e.searchInput.value = task.title_ar;
+    this.closeSuggestions();
+    this.render();
+    this.openTask(task);
   }
 
   closeSuggestions() {
     this.suggestions = [];
     this.activeSuggestion = -1;
-    this.elements.suggestions.hidden = true;
-    this.elements.suggestions.innerHTML = "";
-    this.elements.searchInput.setAttribute("aria-expanded", "false");
+    this.e.suggestions.hidden = true;
+    this.e.suggestions.innerHTML = "";
+    this.e.searchInput.setAttribute("aria-expanded", "false");
   }
 
   getResults() {
-    const e = this.elements;
-    const query = e.searchInput.value.trim();
-
+    const query = this.e.searchInput.value.trim();
     let items = this.index.search(query);
 
-    items = items.filter(({ command }) => {
-      if (this.mode === "favorites" && !this.favorites.has(command.id)) return false;
-      if (e.categoryFilter.value !== "all" &&
-          command.category !== e.categoryFilter.value) return false;
-      if (e.riskFilter.value !== "all" &&
-          command.risk !== e.riskFilter.value) return false;
-      if (e.sudoFilter.value === "yes" && !command.requires_sudo) return false;
-      if (e.sudoFilter.value === "no" && command.requires_sudo) return false;
-      if (e.versionFilter.value !== "all" &&
-          !(command.rhel_versions || []).includes(e.versionFilter.value)) return false;
+    items = items.filter(({ task }) => {
+      if (this.view === "workflows" && task.content_level !== "workflow") return false;
+      if (this.view === "troubleshooting" && task.content_level !== "troubleshooting") return false;
+      if (this.view === "legacy" && task.content_level !== "legacy") return false;
+      if (this.view === "favorites" && !this.favorites.has(task.id)) return false;
+      if (this.e.categoryFilter.value !== "all" && task.category !== this.e.categoryFilter.value) return false;
+      if (this.e.difficultyFilter.value !== "all" && task.difficulty !== this.e.difficultyFilter.value) return false;
+      if (this.e.riskFilter.value !== "all" && task.risk !== this.e.riskFilter.value) return false;
+      if (this.e.versionFilter.value !== "all" && !(task.supported_versions || []).includes(this.e.versionFilter.value)) return false;
       return true;
     });
 
@@ -781,174 +548,109 @@ class RhelDictionaryApp {
   }
 
   sortResults(items, query) {
-    const sort = this.elements.sortFilter.value;
-
+    const mode = this.e.sortFilter.value;
     return items.sort((a, b) => {
-      if (sort === "title") {
-        return a.command.title_ar.localeCompare(b.command.title_ar, "ar");
-      }
-
-      if (sort === "risk") {
-        return this.riskOrder[b.command.risk] - this.riskOrder[a.command.risk] ||
-          a.command.title_ar.localeCompare(b.command.title_ar, "ar");
-      }
-
-      if (sort === "category") {
-        const categoryA = this.data.categories[a.command.category] || "";
-        const categoryB = this.data.categories[b.command.category] || "";
-        return categoryA.localeCompare(categoryB, "ar") ||
-          a.command.title_ar.localeCompare(b.command.title_ar, "ar");
-      }
-
-      if (query) {
-        return b.score - a.score ||
-          a.command.title_ar.localeCompare(b.command.title_ar, "ar");
-      }
-
-      return a.command.title_ar.localeCompare(b.command.title_ar, "ar");
+      if (mode === "title") return a.task.title_ar.localeCompare(b.task.title_ar, "ar");
+      if (mode === "steps") return (b.task.steps?.length || 0) - (a.task.steps?.length || 0) || a.task.title_ar.localeCompare(b.task.title_ar, "ar");
+      if (mode === "risk") return this.riskOrder[b.task.risk] - this.riskOrder[a.task.risk] || a.task.title_ar.localeCompare(b.task.title_ar, "ar");
+      if (mode === "time") return a.task.estimated_minutes - b.task.estimated_minutes || a.task.title_ar.localeCompare(b.task.title_ar, "ar");
+      if (query) return b.score - a.score || a.task.title_ar.localeCompare(b.task.title_ar, "ar");
+      const levelPriority = { workflow: 1, troubleshooting: 2, legacy: 3 };
+      return levelPriority[a.task.content_level] - levelPriority[b.task.content_level] || a.task.title_ar.localeCompare(b.task.title_ar, "ar");
     });
   }
 
   render() {
-    if (!this.index || this.mode === "history") return;
-
-    this.elements.clearSearchButton.hidden = !this.elements.searchInput.value;
+    if (!this.index) return;
+    this.e.clearSearchButton.hidden = !this.e.searchInput.value;
     this.renderActiveFilters();
     this.renderResults();
   }
 
   renderResults() {
     const allResults = this.getResults();
-    const visibleResults = allResults.slice(0, this.visibleLimit);
-    const query = this.elements.searchInput.value.trim();
+    const visible = allResults.slice(0, this.visibleLimit);
+    const query = this.e.searchInput.value.trim();
+    this.e.resultsGrid.innerHTML = "";
+    this.e.emptyState.hidden = allResults.length !== 0;
+    this.e.resultsGrid.hidden = allResults.length === 0;
 
-    this.elements.resultsGrid.innerHTML = "";
-    this.elements.emptyState.hidden = allResults.length !== 0;
-    this.elements.resultsGrid.hidden = allResults.length === 0;
-
-    const modeTitle = this.mode === "favorites" ? "الأوامر المفضلة" : "كل الأوامر";
-    this.elements.resultsEyebrow.textContent =
-      this.mode === "favorites" ? "محفوظة على هذا الجهاز" :
-      query ? "نتائج البحث" : "المعجم الكامل";
-
-    this.elements.resultsTitle.textContent =
-      query ? `نتائج: ${query}` : modeTitle;
-
-    this.elements.resultsSummary.textContent =
-      allResults.length === this.commands.length && this.mode === "all"
-        ? `يعرض المعجم الكامل: ${allResults.length} أمراً وعملية`
-        : `تم العثور على ${allResults.length} نتيجة`;
+    const viewTitles = {
+      all: "كل المهام",
+      workflows: "المسارات العملية المطورة",
+      troubleshooting: "مسارات حل المشكلات",
+      legacy: "الأوامر السريعة",
+      favorites: "المهام المفضلة"
+    };
+    this.e.resultsEyebrow.textContent = query ? "نتائج البحث" : "قاعدة المعرفة";
+    this.e.resultsTitle.textContent = query ? `نتائج: ${query}` : viewTitles[this.view];
+    this.e.resultsSummary.textContent = `تم العثور على ${allResults.length} نتيجة من أصل ${this.tasks.length}`;
 
     const fragment = document.createDocumentFragment();
-    for (const item of visibleResults) {
-      fragment.appendChild(this.createCard(item.command, query));
-    }
+    visible.forEach(item => fragment.appendChild(this.createTaskCard(item.task, query)));
+    this.e.resultsGrid.appendChild(fragment);
 
-    this.elements.resultsGrid.appendChild(fragment);
-    this.elements.loadMoreButton.hidden = visibleResults.length >= allResults.length;
-    if (!this.elements.loadMoreButton.hidden) {
-      this.elements.loadMoreButton.textContent =
-        `عرض المزيد (${allResults.length - visibleResults.length} متبقية)`;
-    }
+    this.e.loadMoreButton.hidden = visible.length >= allResults.length;
+    if (!this.e.loadMoreButton.hidden) this.e.loadMoreButton.textContent = `عرض المزيد (${allResults.length - visible.length} متبقية)`;
   }
 
-  createCard(command, query) {
-    const node = this.elements.commandCardTemplate.content.cloneNode(true);
-    const card = node.querySelector(".command-card");
-    card.dataset.id = command.id;
+  createTaskCard(task, query) {
+    const node = this.e.taskCardTemplate.content.cloneNode(true);
+    const card = node.querySelector(".task-card");
+    card.dataset.id = task.id;
 
-    node.querySelector(".category-badge").textContent =
-      this.data.categories[command.category] || command.category;
+    const type = node.querySelector(".type-badge");
+    type.textContent = this.typeLabels[task.content_level] || task.content_level;
+    type.classList.add(`type-${task.content_level}`);
+    node.querySelector(".category-badge").textContent = this.data.categories[task.category] || task.category;
+    node.querySelector(".task-title").innerHTML = ArabicText.highlight(task.title_ar, query);
+    node.querySelector(".task-goal").innerHTML = ArabicText.highlight(task.goal_ar, query);
+    node.querySelector(".difficulty-badge").textContent = this.difficultyLabels[task.difficulty] || task.difficulty;
 
-    node.querySelector(".command-title").innerHTML =
-      ArabicText.highlight(command.title_ar, query);
+    const risk = node.querySelector(".risk-badge");
+    risk.textContent = `الخطورة: ${this.riskLabels[task.risk] || task.risk}`;
+    risk.classList.add(`risk-${task.risk}`);
+    node.querySelector(".time-badge").textContent = `${task.estimated_minutes} د`;
+    node.querySelector(".steps-badge").textContent = `${task.steps?.length || 0} خطوة`;
 
-    node.querySelector(".command-description").innerHTML =
-      ArabicText.highlight(command.description_ar, query);
+    const firstStep = task.steps?.[0];
+    node.querySelector(".task-preview").innerHTML = firstStep
+      ? `<code>${ArabicText.escape(firstStep.command)}</code><small>${ArabicText.escape(firstStep.title_ar)}</small>`
+      : `<small>لا توجد خطوات</small>`;
 
-    node.querySelector(".command-code").textContent = command.command;
-
-    const riskBadge = node.querySelector(".risk-badge");
-    riskBadge.textContent = `الخطورة: ${this.riskLabels[command.risk] || command.risk}`;
-    riskBadge.classList.add(`risk-${command.risk}`);
-
-    const sudoBadge = node.querySelector(".sudo-badge");
-    sudoBadge.textContent = command.requires_sudo ? "يحتاج sudo" : "بدون sudo";
-    if (command.requires_sudo) sudoBadge.classList.add("requires-sudo");
-
-    node.querySelector(".version-badge").textContent =
-      `RHEL ${(command.rhel_versions || []).join(" / ")}`;
-
-    const favoriteButton = node.querySelector(".favorite-button");
-    const isFavorite = this.favorites.has(command.id);
-    favoriteButton.classList.toggle("is-favorite", isFavorite);
-    favoriteButton.textContent = isFavorite ? "★" : "☆";
-    favoriteButton.setAttribute(
-      "aria-label",
-      isFavorite ? "إزالة من المفضلة" : "إضافة إلى المفضلة"
-    );
-
+    const favorite = node.querySelector(".favorite-button");
+    const isFavorite = this.favorites.has(task.id);
+    favorite.classList.toggle("is-favorite", isFavorite);
+    favorite.textContent = isFavorite ? "★" : "☆";
+    favorite.setAttribute("aria-label", isFavorite ? "إزالة من المفضلة" : "إضافة إلى المفضلة");
     return node;
   }
 
   renderActiveFilters() {
-    const e = this.elements;
     const chips = [];
-
-    if (e.searchInput.value.trim()) {
-      chips.push({ key: "search", label: `بحث: ${e.searchInput.value.trim()}` });
+    if (this.e.searchInput.value.trim()) chips.push({ key: "search", label: `بحث: ${this.e.searchInput.value.trim()}` });
+    if (this.view !== "all") chips.push({ key: "view", label: document.querySelector(`[data-view="${this.view}"]`)?.textContent || this.view });
+    for (const [key, element] of [["category", this.e.categoryFilter], ["difficulty", this.e.difficultyFilter], ["risk", this.e.riskFilter], ["version", this.e.versionFilter]]) {
+      if (element.value !== "all") chips.push({ key, label: element.options[element.selectedIndex].text });
     }
-    if (e.categoryFilter.value !== "all") {
-      chips.push({
-        key: "category",
-        label: e.categoryFilter.options[e.categoryFilter.selectedIndex].text
-      });
-    }
-    if (e.riskFilter.value !== "all") {
-      chips.push({
-        key: "risk",
-        label: `الخطورة: ${e.riskFilter.options[e.riskFilter.selectedIndex].text}`
-      });
-    }
-    if (e.sudoFilter.value !== "all") {
-      chips.push({
-        key: "sudo",
-        label: e.sudoFilter.options[e.sudoFilter.selectedIndex].text
-      });
-    }
-    if (e.versionFilter.value !== "all") {
-      chips.push({
-        key: "version",
-        label: e.versionFilter.options[e.versionFilter.selectedIndex].text
-      });
-    }
-    if (this.mode === "favorites") {
-      chips.push({ key: "mode", label: "المفضلة فقط" });
-    }
-
-    e.activeFilters.hidden = chips.length === 0;
-    e.activeFilters.innerHTML = chips.map(chip => `
-      <span class="filter-chip">
-        ${ArabicText.escapeHtml(chip.label)}
-        <button type="button" data-remove-filter="${chip.key}" aria-label="إزالة الفلتر">×</button>
-      </span>
+    this.e.activeFilters.hidden = chips.length === 0;
+    this.e.activeFilters.innerHTML = chips.map(chip => `
+      <span class="filter-chip">${ArabicText.escape(chip.label)}<button type="button" data-remove-filter="${chip.key}" aria-label="إزالة الفلتر">×</button></span>
     `).join("");
   }
 
   removeFilter(key) {
-    const e = this.elements;
-    if (key === "search") e.searchInput.value = "";
-    if (key === "category") e.categoryFilter.value = "all";
-    if (key === "risk") e.riskFilter.value = "all";
-    if (key === "sudo") e.sudoFilter.value = "all";
-    if (key === "version") e.versionFilter.value = "all";
-    if (key === "mode") this.mode = "all";
-
+    if (key === "search") this.e.searchInput.value = "";
+    if (key === "view") this.setView("all");
+    if (key === "category") this.e.categoryFilter.value = "all";
+    if (key === "difficulty") this.e.difficultyFilter.value = "all";
+    if (key === "risk") this.e.riskFilter.value = "all";
+    if (key === "version") this.e.versionFilter.value = "all";
     this.visibleLimit = 24;
     this.render();
   }
 
-  toggleFavorite(id) {
+  toggleFavorite(id, fromDialog = false) {
     if (this.favorites.has(id)) {
       this.favorites.delete(id);
       this.showToast("تمت الإزالة من المفضلة");
@@ -956,14 +658,321 @@ class RhelDictionaryApp {
       this.favorites.add(id);
       this.showToast("تمت الإضافة إلى المفضلة");
     }
-
-    SafeStorage.set("rhel:favorites", [...this.favorites]);
+    SafeStorage.set("rhel-kb:favorites", [...this.favorites]);
     this.updateFavoriteCount();
+    if (fromDialog && this.currentTask) this.updateDialogFavoriteButton();
     this.render();
   }
 
-  updateFavoriteCount() {
-    this.elements.favoritesCount.textContent = this.favorites.size;
+  updateFavoriteCount() { this.e.favoritesCount.textContent = this.favorites.size; }
+
+  openTask(task, { updateHash = true } = {}) {
+    this.currentTask = task;
+    this.currentVariables = Object.fromEntries((task.variables || []).map(variable => [variable.name, ""]));
+    this.renderTaskDialog();
+    if (typeof this.e.taskDialog.showModal === "function" && !this.e.taskDialog.open) this.e.taskDialog.showModal();
+    if (updateHash) history.replaceState(null, "", `#task=${encodeURIComponent(task.id)}`);
+  }
+
+  closeTask() {
+    if (this.e.taskDialog.open) this.e.taskDialog.close();
+    this.currentTask = null;
+    this.currentVariables = {};
+    if (location.hash.startsWith("#task=")) history.replaceState(null, "", location.pathname + location.search);
+  }
+
+  openTaskFromHash() {
+    const match = location.hash.match(/^#task=(.+)$/);
+    if (!match || !this.taskById.size) return;
+    const task = this.taskById.get(decodeURIComponent(match[1]));
+    if (task && this.currentTask?.id !== task.id) this.openTask(task, { updateHash: false });
+  }
+
+  renderTaskDialog() {
+    const task = this.currentTask;
+    if (!task) return;
+    const category = this.data.categories[task.category] || task.category;
+    const completed = this.getCompletedSteps(task.id);
+    const requiredSteps = (task.steps || []).filter(step => !step.optional);
+    const completedRequired = requiredSteps.filter(step => completed.has(step.id)).length;
+    const progressPercent = requiredSteps.length ? Math.round((completedRequired / requiredSteps.length) * 100) : 0;
+
+    this.e.dialogContent.innerHTML = `
+      <div class="dialog-body">
+        <section class="dialog-hero">
+          <div class="dialog-hero__badges">
+            <span class="type-badge type-${task.content_level}">${ArabicText.escape(this.typeLabels[task.content_level] || task.content_level)}</span>
+            <span class="category-badge">${ArabicText.escape(category)}</span>
+            <span class="risk-badge risk-${task.risk}">الخطورة: ${ArabicText.escape(this.riskLabels[task.risk] || task.risk)}</span>
+          </div>
+          <h2>${ArabicText.escape(task.title_ar)}</h2>
+          <p class="dialog-goal">${ArabicText.escape(task.goal_ar)}</p>
+          <p class="dialog-summary">${ArabicText.escape(task.summary_ar)}</p>
+          <div class="dialog-meta">
+            <span class="difficulty-badge">${ArabicText.escape(this.difficultyLabels[task.difficulty] || task.difficulty)}</span>
+            <span class="time-badge">الوقت المتوقع: ${task.estimated_minutes} دقيقة</span>
+            <span class="steps-badge">${task.steps?.length || 0} خطوة</span>
+            <span class="steps-badge">RHEL ${(task.supported_versions || []).join(" / ")}</span>
+            <span class="steps-badge">الحالة: ${this.statusLabel(task.status)}</span>
+          </div>
+          <div class="progress-panel">
+            <div class="progress-panel__header"><span>تقدم التنفيذ</span><span id="progressText">${completedRequired} من ${requiredSteps.length} — ${progressPercent}%</span></div>
+            <div class="progress-track"><div id="progressBar" class="progress-bar" style="width:${progressPercent}%"></div></div>
+          </div>
+        </section>
+
+        ${this.renderSafety(task)}
+        ${this.renderPrerequisites(task)}
+        ${this.renderVariables(task)}
+        ${this.renderSteps(task, completed)}
+        ${this.renderVerification(task)}
+        ${this.renderErrors(task)}
+        ${this.renderResources(task)}
+        ${this.renderRollback(task)}
+        ${this.renderRelated(task)}
+      </div>
+    `;
+    this.updateDialogFavoriteButton();
+  }
+
+  renderSafety(task) {
+    if (!(task.safety_notes_ar || []).length) return "";
+    return `
+      <section class="dialog-section safety-box">
+        <h3>تنبيهات السلامة</h3>
+        <ul class="safety-list">${task.safety_notes_ar.map(item => `<li>${ArabicText.escape(item)}</li>`).join("")}</ul>
+      </section>`;
+  }
+
+  renderPrerequisites(task) {
+    if (!(task.prerequisites_ar || []).length) return "";
+    return `
+      <section class="dialog-section">
+        <div class="dialog-section__heading"><div><h3>قبل أن تبدأ</h3><p class="section-help">تأكد من هذه المتطلبات قبل التنفيذ.</p></div></div>
+        <ul class="prerequisites-list">${task.prerequisites_ar.map(item => `<li>${ArabicText.escape(item)}</li>`).join("")}</ul>
+      </section>`;
+  }
+
+  renderVariables(task) {
+    if (!(task.variables || []).length) return "";
+    return `
+      <section class="dialog-section">
+        <div class="dialog-section__heading"><div><h3>بيانات المهمة</h3><p class="section-help">أدخل القيم وسيتم تحديث جميع الأوامر تلقائياً.</p></div></div>
+        <div class="variables-grid">
+          ${task.variables.map(variable => `
+            <div class="variable-field">
+              <label for="var-${ArabicText.escape(variable.name)}">${ArabicText.escape(variable.label_ar)} ${variable.required ? "*" : ""}</label>
+              <input id="var-${ArabicText.escape(variable.name)}" data-variable="${ArabicText.escape(variable.name)}" type="text" placeholder="مثال: ${ArabicText.escape(variable.example)}" value="${ArabicText.escape(this.currentVariables[variable.name] || "")}">
+            </div>`).join("")}
+        </div>
+      </section>`;
+  }
+
+  renderSteps(task, completed) {
+    return `
+      <section class="dialog-section">
+        <div class="dialog-section__heading"><div><h3>خطوات التنفيذ</h3><p class="section-help">نفّذها بالترتيب، ثم ضع علامة عند اكتمال كل خطوة.</p></div></div>
+        <div class="steps-list">
+          ${(task.steps || []).map((step, index) => {
+            const isComplete = completed.has(step.id);
+            const resolved = this.resolveCommand(step.command);
+            return `
+              <article class="step-card ${isComplete ? "is-complete" : ""}" data-step-id="${ArabicText.escape(step.id)}">
+                <input class="step-check" type="checkbox" data-step-check="${ArabicText.escape(step.id)}" ${isComplete ? "checked" : ""} aria-label="تحديد الخطوة كمكتملة">
+                <div class="step-content">
+                  <div class="step-heading">
+                    <div>
+                      <span class="step-number">الخطوة ${index + 1} ${step.optional ? '<span class="optional-badge">اختيارية</span>' : ""}</span>
+                      <h4>${ArabicText.escape(step.title_ar)}</h4>
+                    </div>
+                    <span class="risk-badge risk-${step.risk}">${ArabicText.escape(this.riskLabels[step.risk] || step.risk)}</span>
+                  </div>
+                  <p class="step-explanation">${ArabicText.escape(step.explanation_ar)}</p>
+                  <div class="command-box">
+                    <code data-command-template="${ArabicText.escape(step.command)}">${ArabicText.escape(resolved)}</code>
+                    <button class="command-copy" type="button" data-copy-step="${ArabicText.escape(step.id)}">نسخ</button>
+                  </div>
+                  ${step.expected_result_ar ? `<div class="expected-result"><strong>النتيجة المتوقعة:</strong> ${ArabicText.escape(step.expected_result_ar)}</div>` : ""}
+                  ${step.notes_ar ? `<div class="expected-result"><strong>ملاحظة:</strong> ${ArabicText.escape(step.notes_ar)}</div>` : ""}
+                </div>
+              </article>`;
+          }).join("")}
+        </div>
+      </section>`;
+  }
+
+  renderVerification(task) {
+    if (!(task.verification || []).length) return "";
+    return `
+      <section class="dialog-section">
+        <div class="dialog-section__heading"><div><h3>التحقق بعد التنفيذ</h3><p class="section-help">لا تعتبر المهمة مكتملة قبل التأكد من النتيجة.</p></div></div>
+        <div class="check-grid">
+          ${task.verification.map((item, index) => `
+            <article class="check-card">
+              <strong>${ArabicText.escape(item.title_ar)}</strong>
+              <code data-verification-template="${ArabicText.escape(item.command)}">${ArabicText.escape(this.resolveCommand(item.command))}</code>
+              <p>${ArabicText.escape(item.expected_result_ar)}</p>
+              <button class="quick-copy-button" type="button" data-copy-verification="${index}">نسخ أمر التحقق</button>
+            </article>`).join("")}
+        </div>
+      </section>`;
+  }
+
+  renderErrors(task) {
+    if (!(task.common_errors || []).length) return "";
+    return `
+      <section class="dialog-section">
+        <div class="dialog-section__heading"><div><h3>الأخطاء الشائعة</h3><p class="section-help">افتح العَرَض المطابق لتشخيص السبب.</p></div></div>
+        <div class="error-list">
+          ${task.common_errors.map(error => `
+            <details class="error-case">
+              <summary>${ArabicText.escape(error.symptom_ar)}</summary>
+              <div class="error-case__body">
+                <h5>الأسباب المحتملة</h5>
+                <ul>${(error.likely_causes_ar || []).map(item => `<li>${ArabicText.escape(item)}</li>`).join("")}</ul>
+                <h5>خطوات الفحص</h5>
+                ${(error.checks || []).map(check => `
+                  <div class="error-check">
+                    <strong>${ArabicText.escape(check.title_ar)}</strong>
+                    <code>${ArabicText.escape(this.resolveCommand(check.command))}</code>
+                    <small>${ArabicText.escape(check.expected_result_ar)}</small>
+                  </div>`).join("")}
+                ${(error.fixes_ar || []).length ? `<h5>الإصلاحات المقترحة</h5><ul>${error.fixes_ar.map(item => `<li>${ArabicText.escape(item)}</li>`).join("")}</ul>` : ""}
+              </div>
+            </details>`).join("")}
+        </div>
+      </section>`;
+  }
+
+  renderResources(task) {
+    const files = task.files || [];
+    const ports = task.ports || [];
+    if (!files.length && !ports.length) return "";
+    return `
+      <section class="dialog-section">
+        <div class="dialog-section__heading"><div><h3>الموارد المرتبطة</h3><p class="section-help">ملفات الإعداد والمنافذ المهمة لهذه المهمة.</p></div></div>
+        <div class="resource-grid">
+          ${files.map(file => `<article class="resource-card"><strong>ملف أو مسار</strong><code>${ArabicText.escape(file)}</code></article>`).join("")}
+          ${ports.map(port => `<article class="resource-card"><strong>منفذ ${port.port}/${ArabicText.escape(port.protocol)}</strong><p>${ArabicText.escape(port.purpose_ar)}</p></article>`).join("")}
+        </div>
+      </section>`;
+  }
+
+  renderRollback(task) {
+    if (!(task.rollback_ar || []).length) return "";
+    return `
+      <section class="dialog-section">
+        <div class="dialog-section__heading"><div><h3>التراجع أو الإلغاء</h3><p class="section-help">استخدمها لإعادة الوضع السابق عند الحاجة.</p></div></div>
+        <ul class="rollback-list">${task.rollback_ar.map(item => `<li>${ArabicText.escape(item)}</li>`).join("")}</ul>
+      </section>`;
+  }
+
+  renderRelated(task) {
+    if (!(task.related_tasks || []).length) return "";
+    const related = task.related_tasks.map(id => this.taskById.get(id)).filter(Boolean);
+    if (!related.length) return "";
+    return `
+      <section class="dialog-section">
+        <div class="dialog-section__heading"><div><h3>مهام مرتبطة</h3><p class="section-help">انتقل إلى المسار التالي دون العودة للبحث.</p></div></div>
+        <div class="related-list">${related.map(item => `<button class="related-button" type="button" data-related-task="${ArabicText.escape(item.id)}">${ArabicText.escape(item.title_ar)}</button>`).join("")}</div>
+      </section>`;
+  }
+
+  statusLabel(status) {
+    return ({ draft: "مسودة", reviewed: "مراجعة أولية", verified: "موثقة" })[status] || status;
+  }
+
+  resolveCommand(command) {
+    let result = String(command || "");
+    for (const [name, value] of Object.entries(this.currentVariables)) {
+      if (value.trim()) result = result.replaceAll(`<${name}>`, value.trim());
+    }
+    return result;
+  }
+
+  handleDialogInput(event) {
+    const input = event.target.closest("[data-variable]");
+    if (!input || !this.currentTask) return;
+    this.currentVariables[input.dataset.variable] = input.value;
+    this.refreshResolvedCommands();
+  }
+
+  refreshResolvedCommands() {
+    this.e.dialogContent.querySelectorAll("[data-command-template]").forEach(code => {
+      code.textContent = this.resolveCommand(code.dataset.commandTemplate);
+    });
+    this.e.dialogContent.querySelectorAll("[data-verification-template]").forEach(code => {
+      code.textContent = this.resolveCommand(code.dataset.verificationTemplate);
+    });
+  }
+
+  handleDialogChange(event) {
+    const checkbox = event.target.closest("[data-step-check]");
+    if (!checkbox || !this.currentTask) return;
+    const set = this.getCompletedSteps(this.currentTask.id);
+    if (checkbox.checked) set.add(checkbox.dataset.stepCheck);
+    else set.delete(checkbox.dataset.stepCheck);
+    this.progress[this.currentTask.id] = [...set];
+    SafeStorage.set("rhel-kb:progress", this.progress);
+    checkbox.closest(".step-card")?.classList.toggle("is-complete", checkbox.checked);
+    this.updateProgressDisplay();
+  }
+
+  handleDialogClick(event) {
+    const copyStep = event.target.closest("[data-copy-step]");
+    if (copyStep && this.currentTask) {
+      const step = this.currentTask.steps.find(item => item.id === copyStep.dataset.copyStep);
+      if (step) this.copy(this.resolveCommand(step.command), "تم نسخ الأمر");
+      return;
+    }
+
+    const copyVerification = event.target.closest("[data-copy-verification]");
+    if (copyVerification && this.currentTask) {
+      const item = this.currentTask.verification[Number(copyVerification.dataset.copyVerification)];
+      if (item) this.copy(this.resolveCommand(item.command), "تم نسخ أمر التحقق");
+      return;
+    }
+
+    const related = event.target.closest("[data-related-task]");
+    if (related) {
+      const task = this.taskById.get(related.dataset.relatedTask);
+      if (task) this.openTask(task);
+    }
+  }
+
+  getCompletedSteps(taskId) { return new Set(this.progress[taskId] || []); }
+
+  updateProgressDisplay() {
+    if (!this.currentTask) return;
+    const required = this.currentTask.steps.filter(step => !step.optional);
+    const completed = this.getCompletedSteps(this.currentTask.id);
+    const count = required.filter(step => completed.has(step.id)).length;
+    const percent = required.length ? Math.round((count / required.length) * 100) : 0;
+    const text = this.e.dialogContent.querySelector("#progressText");
+    const bar = this.e.dialogContent.querySelector("#progressBar");
+    if (text) text.textContent = `${count} من ${required.length} — ${percent}%`;
+    if (bar) bar.style.width = `${percent}%`;
+  }
+
+  updateDialogFavoriteButton() {
+    if (!this.currentTask) return;
+    const favorite = this.favorites.has(this.currentTask.id);
+    this.e.dialogFavoriteButton.textContent = favorite ? "★ إزالة من المفضلة" : "☆ المفضلة";
+  }
+
+  copyAllCommands() {
+    if (!this.currentTask) return;
+    const text = this.currentTask.steps.map((step, index) =>
+      `# ${index + 1}. ${step.title_ar}\n${this.resolveCommand(step.command)}`
+    ).join("\n\n");
+    this.copy(text, "تم نسخ جميع أوامر المهمة");
+  }
+
+  copyTaskLink() {
+    if (!this.currentTask) return;
+    const url = new URL(location.href);
+    url.hash = `task=${encodeURIComponent(this.currentTask.id)}`;
+    this.copy(url.toString(), "تم نسخ رابط المهمة");
   }
 
   async copy(text, message) {
@@ -984,85 +993,10 @@ class RhelDictionaryApp {
 
   showToast(message) {
     clearTimeout(this.toastTimer);
-    this.elements.toast.textContent = message;
-    this.elements.toast.classList.add("is-visible");
-
-    this.toastTimer = setTimeout(() => {
-      this.elements.toast.classList.remove("is-visible");
-    }, 1800);
-  }
-
-  openDetails(command) {
-    const category = this.data.categories[command.category] || command.category;
-    const packages = command.required_packages?.length
-      ? command.required_packages.join("، ")
-      : "لا توجد حزمة إضافية محددة";
-
-    const parts = command.parts_ar?.length
-      ? `
-        <h3>شرح أجزاء الأمر</h3>
-        <ul class="detail-parts">
-          ${command.parts_ar.map(part =>
-            `<li>${ArabicText.escapeHtml(
-              typeof part === "string" ? part : JSON.stringify(part)
-            )}</li>`
-          ).join("")}
-        </ul>
-      `
-      : "";
-
-    const note = command.notes_ar
-      ? `<div class="detail-note"><strong>ملاحظة:</strong> ${ArabicText.escapeHtml(command.notes_ar)}</div>`
-      : "";
-
-    this.elements.dialogContent.innerHTML = `
-      <div class="dialog-body">
-        <span class="category-badge">${ArabicText.escapeHtml(category)}</span>
-        <h2>${ArabicText.escapeHtml(command.title_ar)}</h2>
-        <p class="dialog-description">${ArabicText.escapeHtml(command.description_ar)}</p>
-
-        <code class="dialog-code">${ArabicText.escapeHtml(command.command)}</code>
-
-        <div class="detail-grid">
-          <div class="detail-item">
-            <strong>مثال عملي</strong>
-            <span><code>${ArabicText.escapeHtml(command.example || command.command)}</code></span>
-          </div>
-          <div class="detail-item">
-            <strong>مستوى الخطورة</strong>
-            <span>${ArabicText.escapeHtml(this.riskLabels[command.risk] || command.risk)}</span>
-          </div>
-          <div class="detail-item">
-            <strong>الصلاحية</strong>
-            <span>${command.requires_sudo ? "يتطلب sudo" : "لا يتطلب sudo"}</span>
-          </div>
-          <div class="detail-item">
-            <strong>الإصدارات</strong>
-            <span>RHEL ${ArabicText.escapeHtml((command.rhel_versions || []).join(" / "))}</span>
-          </div>
-          <div class="detail-item">
-            <strong>الحزم المطلوبة</strong>
-            <span>${ArabicText.escapeHtml(packages)}</span>
-          </div>
-          <div class="detail-item">
-            <strong>معرّف العملية</strong>
-            <span><code>${ArabicText.escapeHtml(command.id)}</code></span>
-          </div>
-        </div>
-
-        ${note}
-        ${parts}
-      </div>
-    `;
-
-    if (typeof this.elements.commandDialog.showModal === "function") {
-      this.elements.commandDialog.showModal();
-    } else {
-      this.elements.commandDialog.setAttribute("open", "");
-    }
+    this.e.toast.textContent = message;
+    this.e.toast.classList.add("is-visible");
+    this.toastTimer = setTimeout(() => this.e.toast.classList.remove("is-visible"), 1800);
   }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  new RhelDictionaryApp();
-});
+document.addEventListener("DOMContentLoaded", () => new RhelKnowledgeApp());
