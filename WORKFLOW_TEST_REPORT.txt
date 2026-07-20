@@ -1,0 +1,12 @@
+GUIDED WORKFLOW PHASE 5 TEST REPORT
+===================================
+Workflows: 184
+Steps: 211
+Verification checks: 9
+Common error groups: 8
+Rollback items: 9
+Variables inferred automatically: 153
+Errors: 0
+Warnings: 0
+
+All workflow structures are valid.

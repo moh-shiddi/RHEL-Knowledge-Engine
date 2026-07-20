@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="محرك معرفة وتشخيص تفاعلي عربي لمهام وأوامر ومشكلات Red Hat Enterprise Linux">
+  <meta name="description" content="محرك معرفة عربي ومسارات تنفيذ موجهة وتشخيص تفاعلي لمهام Red Hat Enterprise Linux">
   <meta name="theme-color" content="#0b6b50">
-  <title>محرك معرفة RHEL العربي | Linux Doctor</title>
+  <title>محرك معرفة RHEL العربي | Guided Workflows</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -22,6 +22,9 @@
       </a>
 
       <div class="topbar__actions">
+        <button id="workflowShortcut" class="toolbar-button toolbar-button--workflow" type="button">
+          <span aria-hidden="true">▶</span><span>مسارات التنفيذ</span><b id="activeWorkflowCount">0</b>
+        </button>
         <button id="doctorShortcut" class="toolbar-button toolbar-button--doctor" type="button">
           <span aria-hidden="true">⚕</span>
           <span>Linux Doctor</span>
@@ -41,11 +44,11 @@
     <main>
       <section class="hero">
         <div class="hero__content">
-          <span class="hero__eyebrow">المرحلة الرابعة — Linux Doctor</span>
-          <h1>ابحث عن المعرفة أو شخّص المشكلة خطوة بخطوة</h1>
+          <span class="hero__eyebrow">المرحلة الخامسة — Guided Workflows</span>
+          <h1>تعلّم، نفّذ، وتحقق عبر مسار موجه خطوة بخطوة</h1>
           <p>
-            استخدم البحث الذكي للوصول إلى المعرفة، أو افتح Linux Doctor ليتابع معك الفحوصات
-            ويغيّر المسار حسب النتائج التي تظهر على جهازك.
+            افتح أي مهمة كمسار تنفيذي موجه يبدأ بالاستعداد، ثم يعرض كل أمر ونتيجته المتوقعة،
+            وينقلك إلى التحقق والأخطاء الشائعة والتراجع مع حفظ تقدمك تلقائياً.
           </p>
 
           <div class="search-wrapper">
@@ -69,6 +72,13 @@
             <button type="button" data-query="SSH لا يعمل">SSH لا يعمل</button>
           </div>
 
+          <div class="hero__primary-actions">
+            <button id="startWorkflowButton" class="hero-workflow-button" type="button">
+              <span aria-hidden="true">▶</span>
+              <span><strong>ابدأ مسار تنفيذ موجهاً</strong><small>اختر مهمة وسيتابع النظام تقدمك</small></span>
+              <b aria-hidden="true">←</b>
+            </button>
+          </div>
           <div class="hero__doctor-action">
             <button id="startDoctorButton" type="button">
               <span aria-hidden="true">⚕</span>
@@ -85,6 +95,7 @@
           <article><strong id="conceptsMetric">—</strong><span>مفهوماً</span></article>
           <article><strong id="pathsMetric">—</strong><span>مسارات تعلم</span></article>
           <article><strong id="intentsMetric">—</strong><span>نية بحث</span></article>
+          <article><strong id="workflowMetric">—</strong><span>مسارات تنفيذ موجهة</span></article>
           <article><strong id="doctorMetric">—</strong><span>مسارات تشخيص</span></article>
         </div>
       </section>
@@ -92,6 +103,31 @@
 
       <section id="intentPanel" class="intent-panel" aria-live="polite" hidden>
         <div id="intentPanelContent"></div>
+      </section>
+
+      <section class="workflow-launch" aria-labelledby="workflowLaunchTitle">
+        <div class="workflow-launch__content">
+          <span class="eyebrow">Guided Workflow Runner</span>
+          <h2 id="workflowLaunchTitle">نفّذ المهمة كمسار متكامل بدل قراءة الأوامر فقط</h2>
+          <p>راجع المتطلبات، عبّئ المتغيرات، نفّذ خطوة واحدة في كل مرة، ثم تحقق من النتيجة واحفظ تقرير الجلسة.</p>
+          <div class="workflow-launch__features">
+            <span>✓ استعداد قبل التنفيذ</span><span>✓ أوامر جاهزة</span>
+            <span>✓ نجاح أو مشكلة لكل خطوة</span><span>✓ حفظ واستكمال</span><span>✓ تقرير TXT</span>
+          </div>
+          <div class="workflow-launch__actions">
+            <button id="browseWorkflowsButton" type="button">استعراض كل المسارات</button>
+            <button id="resumeWorkflowButton" class="workflow-secondary-action" type="button" hidden>استكمال آخر مسار</button>
+          </div>
+        </div>
+        <div class="workflow-launch__dashboard">
+          <article><span>المسارات</span><strong id="workflowAvailableCount">0</strong></article>
+          <article><span>قيد التنفيذ</span><strong id="workflowActiveCount">0</strong></article>
+          <article><span>المكتملة</span><strong id="workflowCompletedCount">0</strong></article>
+          <div id="workflowResumeSummary" class="workflow-resume-summary">
+            <strong>لم تبدأ أي جلسة بعد</strong><span>اختر مهمة عملية لبدء أول مسار.</span>
+          </div>
+        </div>
+        <div id="workflowExamples" class="workflow-launch__examples"></div>
       </section>
 
       <section class="doctor-launch" aria-labelledby="doctorLaunchTitle">
@@ -225,6 +261,29 @@
     <div id="doctorContent" class="doctor-dialog__content"></div>
   </dialog>
 
+  <dialog id="workflowDialog" class="workflow-dialog">
+    <div class="workflow-dialog__topbar">
+      <div class="workflow-dialog__identity"><span>▶</span><div><small>RHEL Guided Workflow</small><strong id="workflowDialogTitle">مسارات التنفيذ</strong></div></div>
+      <div class="workflow-dialog__actions">
+        <button id="workflowLibraryButton" type="button">المسارات</button>
+        <button id="workflowReportButton" type="button" hidden>التقرير</button>
+        <button id="workflowPauseButton" type="button" hidden>حفظ وإيقاف</button>
+        <button id="workflowCloseButton" class="workflow-dialog__close" type="button" aria-label="إغلاق">×</button>
+      </div>
+    </div>
+    <div class="workflow-dialog__shell">
+      <aside id="workflowSidebar" class="workflow-sidebar"></aside>
+      <main class="workflow-main">
+        <div id="workflowContent" class="workflow-content"></div>
+        <footer id="workflowFooter" class="workflow-footer" hidden>
+          <button id="workflowPreviousButton" type="button">السابق</button>
+          <div id="workflowFooterStatus"></div>
+          <button id="workflowNextButton" class="primary" type="button">التالي</button>
+        </footer>
+      </main>
+    </div>
+  </dialog>
+
   <dialog id="entityDialog" class="entity-dialog">
     <div class="dialog-topbar">
       <button id="closeDialogButton" class="dialog-close" type="button" aria-label="إغلاق">×</button>
@@ -253,6 +312,7 @@
 
   <script src="intent-engine.js"></script>
   <script src="doctor-engine.js"></script>
+  <script src="workflow-engine.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

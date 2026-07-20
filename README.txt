@@ -1,3 +1,6 @@
+المرحلة الخامسة — Guided Workflow Runner
+راجع README_PHASE5.md للتفاصيل.
+
 محرك معرفة RHEL العربي — المرحلة الرابعة
 Linux Doctor V1
 

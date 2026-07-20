@@ -224,6 +224,7 @@ class KnowledgeEngineApp {
     this.intentEngine = null;
     this.doctorData = null;
     this.doctor = null;
+    this.workflowRunner = null;
     this.searchAnalysis = null;
     this.dismissedIntentQuery = "";
     this.intentInputValues = {};
@@ -269,7 +270,7 @@ class KnowledgeEngineApp {
       "gridViewButton", "listViewButton", "activeFilters", "loadingState",
       "errorState", "emptyState", "emptyResetButton", "resultsGrid",
       "loadMoreButton", "entitiesMetric", "tasksMetric", "commandsMetric",
-      "conceptsMetric", "pathsMetric", "intentsMetric", "intentPanel", "intentPanelContent", "taskTileCount", "troubleTileCount",
+      "conceptsMetric", "pathsMetric", "intentsMetric", "workflowMetric", "intentPanel", "intentPanelContent", "taskTileCount", "troubleTileCount",
       "commandTileCount", "conceptTileCount", "pathTileCount", "schemaVersion",
       "toast", "entityDialog", "closeDialogButton", "dialogFavoriteButton",
       "dialogPrimaryCopyButton", "shareEntityButton", "dialogContent",
@@ -405,9 +406,11 @@ class KnowledgeEngineApp {
       this.index = new KnowledgeIndex(this.entities, this.data.categories || {}, this.data.entity_types || this.typeLabels, this.entityById);
       this.intentEngine = new RhelIntentEngine(this.intentData, this.entities);
       this.doctor = new LinuxDoctor(this.doctorData, this);
+      this.workflowRunner = new GuidedWorkflowRunner(this);
 
       this.populateCategories();
       this.updateMetrics();
+      this.workflowRunner.updateDashboard();
       this.updateFavoriteCount();
       this.setLayout(this.layout, false);
       this.e.schemaVersion.textContent = `Schema ${this.data.schema_version || "—"}`;
@@ -730,7 +733,7 @@ class KnowledgeEngineApp {
   }
 
   quickActionLabel(entity) {
-    if (["task", "troubleshooting"].includes(entity.entity_type)) return "نسخ أول أمر";
+    if (["task", "troubleshooting"].includes(entity.entity_type)) return "ابدأ المسار";
     if (entity.entity_type === "command") return "نسخ الصيغة";
     return "";
   }
@@ -747,7 +750,7 @@ class KnowledgeEngineApp {
   }
 
   quickAction(entity) {
-    if (["task", "troubleshooting"].includes(entity.entity_type)) this.copy(this.resolveCommand(entity.steps?.[0]?.command || ""), "تم نسخ أول أمر");
+    if (["task", "troubleshooting"].includes(entity.entity_type)) this.workflowRunner?.start(entity, { variables: {}, resume: true });
     else if (entity.entity_type === "command") this.copy(entity.syntax || entity.command_name, "تم نسخ الصيغة");
   }
 
@@ -862,7 +865,23 @@ class KnowledgeEngineApp {
   }
 
   renderTask(task) {
+    const workflowSession = this.workflowRunner?.sessions?.[task.id];
+    const workflowProgress = workflowSession && this.workflowRunner
+      ? this.workflowRunner.progress(task, workflowSession)
+      : 0;
+    const workflowLabel = workflowSession
+      ? (workflowSession.state === "completed" ? "إعادة المسار" : "استكمال المسار")
+      : "ابدأ المسار الموجه";
     return `
+      <section class="guided-workflow-entry">
+        <div>
+          <span class="eyebrow">Guided Workflow</span>
+          <h3>نفّذ هذه المهمة عبر وضع موجه</h3>
+          <p>يراجع المتطلبات، يعرض خطوة واحدة في كل مرة، ويحفظ التحقق والتقرير النهائي.</p>
+          ${workflowSession ? `<div class="guided-workflow-entry__progress"><span>التقدم المحفوظ</span><div><i style="width:${workflowProgress}%"></i></div><b>${workflowProgress}%</b></div>` : ""}
+        </div>
+        <button type="button" data-start-guided-workflow>${workflowLabel}</button>
+      </section>
       ${task.goal_ar ? `<section class="dialog-section"><div class="callout"><strong>الهدف:</strong> ${ArabicText.escape(task.goal_ar)}</div></section>` : ""}
       ${this.renderPrerequisites(task)}
       ${this.renderVariables(task)}
@@ -1042,6 +1061,13 @@ class KnowledgeEngineApp {
 
   handleDialogClick(event) {
     if (!this.currentEntity) return;
+    if (event.target.closest("[data-start-guided-workflow]")) {
+      const entity = this.currentEntity;
+      const variables = { ...this.currentVariables };
+      this.closeDialog();
+      this.workflowRunner?.start(entity, { variables, resume: true });
+      return;
+    }
     const open = event.target.closest("[data-open-entity]");
     if (open) {
       const target = this.entityById.get(open.dataset.openEntity);
