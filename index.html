@@ -1,295 +1,319 @@
 <!doctype html>
-<!DOCTYPE html>
-
-<html data-theme="light" dir="rtl" lang="ar">
+<html lang="ar" dir="rtl" data-theme="light">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1" name="viewport"/>
-<meta content="محرك معرفة عربي ومسارات تنفيذ موجهة وتشخيص تفاعلي لمهام Red Hat Enterprise Linux" name="description"/>
-<meta content="#0b6b50" name="theme-color"/>
-<title>محرك معرفة RHEL العربي | Execution Diagnostic Engine</title>
-<link href="style.css" rel="stylesheet"/>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="محرك معرفة عربي ومسارات تنفيذ موجهة وتشخيص تفاعلي لمهام Red Hat Enterprise Linux">
+  <meta name="theme-color" content="#0b6b50">
+  <title>محرك معرفة RHEL العربي | Execution Diagnostic Engine</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<a class="skip-link" href="#resultsSection">الانتقال إلى النتائج</a>
-<div class="app-shell">
-<header class="topbar">
-<a aria-label="الصفحة الرئيسية" class="brand" href="#">
-<span aria-hidden="true" class="brand__terminal">$_</span>
-<span class="brand__text">
-<strong>محرك معرفة RHEL</strong>
-<small>مهمة، أمر، مفهوم، مشكلة، ومسار تعلم</small>
-</span>
-</a>
-<div class="topbar__actions"><a aria-label="English interface" class="language-switch" href="en.html" title="English">EN</a>
-<button class="toolbar-button toolbar-button--workflow" id="workflowShortcut" type="button">
-<span aria-hidden="true">▶</span><span>مسارات التنفيذ</span><b id="activeWorkflowCount">0</b>
-</button>
-<button class="toolbar-button toolbar-button--doctor" id="doctorShortcut" type="button">
-<span aria-hidden="true">⚕</span>
-<span>Linux Doctor</span>
-<b id="doctorCasesCount">0</b>
-</button>
-<button class="toolbar-button" id="favoritesShortcut" type="button">
-<span aria-hidden="true">★</span>
-<span>المفضلة</span>
-<b id="favoritesCount">0</b>
-</button>
-<button aria-label="تفعيل الوضع الليلي" class="icon-button" id="themeButton" title="الوضع الليلي" type="button">
-<span aria-hidden="true" id="themeIcon">☾</span>
-</button>
-</div>
-</header>
-<main>
-<section class="hero">
-<div class="hero__content">
-<span class="hero__eyebrow">المرحلة الخامسة — Execution Diagnostic Engine</span>
-<h1>نفّذ الأمر والصق الناتج ليكشف النظام سبب المشكلة</h1>
-<p>
+  <a class="skip-link" href="#resultsSection">الانتقال إلى النتائج</a>
+
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="الصفحة الرئيسية">
+        <span class="brand__terminal" aria-hidden="true">$_</span>
+        <span class="brand__text">
+          <strong>محرك معرفة RHEL</strong>
+          <small>مهمة، أمر، مفهوم، مشكلة، ومسار تعلم</small>
+        </span>
+      </a>
+
+      <div class="topbar__actions">
+        <button id="workflowShortcut" class="toolbar-button toolbar-button--workflow" type="button">
+          <span aria-hidden="true">▶</span><span>مسارات التنفيذ</span><b id="activeWorkflowCount">0</b>
+        </button>
+        <button id="doctorShortcut" class="toolbar-button toolbar-button--doctor" type="button">
+          <span aria-hidden="true">⚕</span>
+          <span>Linux Doctor</span>
+          <b id="doctorCasesCount">0</b>
+        </button>
+        <button id="favoritesShortcut" class="toolbar-button" type="button">
+          <span aria-hidden="true">★</span>
+          <span>المفضلة</span>
+          <b id="favoritesCount">0</b>
+        </button>
+        <button id="themeButton" class="icon-button" type="button" aria-label="تفعيل الوضع الليلي" title="الوضع الليلي">
+          <span id="themeIcon" aria-hidden="true">☾</span>
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero__content">
+          <span class="hero__eyebrow">المرحلة الخامسة — Execution Diagnostic Engine</span>
+          <h1>نفّذ الأمر والصق الناتج ليكشف النظام سبب المشكلة</h1>
+          <p>
             ينظم الموقع خطوات المهمة، ثم يحلل مخرجات الطرفية محلياً: يحدد نمط الخطأ،
             ويعرض الفحص التالي والعلاج وطريقة إثبات نجاحه دون إرسال البيانات إلى أي خادم.
           </p>
-<div class="search-wrapper">
-<div class="search-box">
-<span aria-hidden="true" class="search-box__icon">⌕</span>
-<input aria-controls="suggestions" aria-expanded="false" aria-label="البحث في محرك المعرفة" autocomplete="off" id="searchInput" placeholder="مثال: السيرفس failed، افتح بورت 8080، أبي أثبت ngnix..." spellcheck="false" type="search"/>
-<kbd>Ctrl K</kbd>
-<button aria-label="مسح البحث" class="clear-button" hidden="" id="clearSearchButton" type="button">×</button>
-</div>
-<div class="suggestions" hidden="" id="suggestions" role="listbox"></div>
-</div>
-<div aria-label="أمثلة بحث سريعة" class="quick-searches">
-<span>جرّب:</span>
-<button data-query="الخدمة لا تعمل" type="button">الخدمة لا تعمل</button>
-<button data-query="ما هو SELinux" type="button">ما هو SELinux؟</button>
-<button data-query="dnf" type="button">مرجع dnf</button>
-<button data-query="مسار المبتدئ" type="button">مسار المبتدئ</button>
-<button data-query="SSH لا يعمل" type="button">SSH لا يعمل</button>
-</div>
-<div class="hero__primary-actions">
-<button class="hero-workflow-button" id="startWorkflowButton" type="button">
-<span aria-hidden="true">▶</span>
-<span><strong>ابدأ مسار تنفيذ موجهاً</strong><small>اختر مهمة وسيتابع النظام تقدمك</small></span>
-<b aria-hidden="true">←</b>
-</button>
-</div>
-<div class="hero__doctor-action">
-<button id="startDoctorButton" type="button">
-<span aria-hidden="true">⚕</span>
-<span><strong>ابدأ Linux Doctor</strong><small>تشخيص تفاعلي لا ينفذ أي أمر</small></span>
-<b aria-hidden="true">←</b>
-</button>
-</div>
-</div>
-<div aria-label="إحصائيات محرك المعرفة" class="hero__stats">
-<article><strong id="entitiesMetric">—</strong><span>كيان معرفة</span></article>
-<article><strong id="tasksMetric">—</strong><span>مهمة وحل مشكلة</span></article>
-<article><strong id="commandsMetric">—</strong><span>مرجع أمر</span></article>
-<article><strong id="conceptsMetric">—</strong><span>مفهوماً</span></article>
-<article><strong id="pathsMetric">—</strong><span>مسارات تعلم</span></article>
-<article><strong id="intentsMetric">—</strong><span>نية بحث</span></article>
-<article><strong id="workflowMetric">—</strong><span>مسارات تنفيذ موجهة</span></article>
-<article><strong id="doctorMetric">—</strong><span>مسارات تشخيص</span></article>
-</div>
-</section>
-<section aria-live="polite" class="intent-panel" hidden="" id="intentPanel">
-<div id="intentPanelContent"></div>
-</section>
-<section aria-labelledby="workflowLaunchTitle" class="workflow-launch">
-<div class="workflow-launch__content">
-<span class="eyebrow">Execution Diagnostic Engine</span>
-<h2 id="workflowLaunchTitle">نفّذ الأمر ثم الصق الناتج ليتم تشخيصه</h2>
-<p>يحلل النظام مخرجات الطرفية، ويحدد نمط الخطأ والدليل والفحص التالي والعلاج، ثم يحفظ سلسلة التشخيص داخل التقرير.</p>
-<div class="workflow-launch__features">
-<span>✓ تحليل مخرجات الطرفية</span><span>✓ تحديد سبب الخطأ</span>
-<span>✓ فحوصات متتابعة</span><span>✓ علاج وإثبات نجاح</span><span>✓ تقرير TXT</span>
-</div>
-<div class="workflow-launch__actions">
-<button id="browseWorkflowsButton" type="button">استعراض كل المسارات</button>
-<button class="workflow-secondary-action" hidden="" id="resumeWorkflowButton" type="button">استكمال آخر مسار</button>
-</div>
-</div>
-<div class="workflow-launch__dashboard">
-<article><span>المسارات</span><strong id="workflowAvailableCount">0</strong></article>
-<article><span>قيد التنفيذ</span><strong id="workflowActiveCount">0</strong></article>
-<article><span>المكتملة</span><strong id="workflowCompletedCount">0</strong></article>
-<div class="workflow-resume-summary" id="workflowResumeSummary">
-<strong>لم تبدأ أي جلسة بعد</strong><span>اختر مهمة عملية لبدء أول مسار.</span>
-</div>
-</div>
-<div class="workflow-launch__examples" id="workflowExamples"></div>
-</section>
-<section aria-labelledby="doctorLaunchTitle" class="doctor-launch">
-<div class="doctor-launch__content">
-<span class="eyebrow">Linux Doctor</span>
-<h2 id="doctorLaunchTitle">لا تعرف من أين تبدأ التشخيص؟</h2>
-<p>اختر العَرَض، نفّذ فحوصات القراءة، ثم أخبر الطبيب بما ظهر لديك. سيقودك إلى السبب الأقرب والخطوة التالية.</p>
-<div class="doctor-launch__features">
-<span>✓ تفرعات حسب النتيجة</span>
-<span>✓ أوامر مجهزة بالمتغيرات</span>
-<span>✓ تقرير تشخيص قابل للتنزيل</span>
-<span>✓ يعمل محلياً دون API</span>
-</div>
-<button data-doctor-launch="" type="button">فتح الطبيب التفاعلي</button>
-</div>
-<div class="doctor-launch__visual">
-<div class="doctor-orbit doctor-orbit--one"></div>
-<div class="doctor-orbit doctor-orbit--two"></div>
-<div class="doctor-launch__mark">⚕</div>
-<strong><span id="doctorCasesCountInline">9</span> حالات رئيسية</strong>
-<small>خدمة، SSH، قرص، شبكة، DNF، أداء، صلاحيات، منافذ، SELinux</small>
-</div>
-<div class="doctor-launch__examples" id="doctorLaunchExamples"></div>
-</section>
-<section aria-labelledby="explorerTitle" class="type-explorer">
-<div class="section-heading section-heading--compact">
-<div>
-<span class="eyebrow">بوابات المعرفة</span>
-<h2 id="explorerTitle">اختر طريقة الدخول</h2>
-</div>
-</div>
-<div class="type-grid">
-<button class="type-tile" data-type-view="task" type="button">
-<span aria-hidden="true" class="type-tile__icon">✓</span>
-<strong>المهام العملية</strong>
-<small>من الهدف إلى التحقق والتراجع</small>
-<b id="taskTileCount">0</b>
-</button>
-<button class="type-tile" data-type-view="troubleshooting" type="button">
-<span aria-hidden="true" class="type-tile__icon">⚕</span>
-<strong>حل المشكلات</strong>
-<small>أعراض، أسباب، فحوصات، وإصلاحات</small>
-<b id="troubleTileCount">0</b>
-</button>
-<button class="type-tile" data-type-view="command" type="button">
-<span aria-hidden="true" class="type-tile__icon">&gt;_</span>
-<strong>مرجع الأوامر</strong>
-<small>الصيغة والخيارات والأمثلة</small>
-<b id="commandTileCount">0</b>
-</button>
-<button class="type-tile" data-type-view="concept" type="button">
-<span aria-hidden="true" class="type-tile__icon">◎</span>
-<strong>المفاهيم</strong>
-<small>افهم لماذا يعمل النظام بهذه الطريقة</small>
-<b id="conceptTileCount">0</b>
-</button>
-<button class="type-tile" data-type-view="learning_path" type="button">
-<span aria-hidden="true" class="type-tile__icon">↗</span>
-<strong>مسارات التعلم</strong>
-<small>ترتيب مقترح من البداية إلى الاحتراف</small>
-<b id="pathTileCount">0</b>
-</button>
-</div>
-</section>
-<section aria-label="تصفية النتائج" class="control-panel">
-<nav aria-label="نوع المحتوى" class="view-tabs">
-<button aria-pressed="true" class="view-tab is-active" data-view="all" type="button">الكل</button>
-<button aria-pressed="false" class="view-tab" data-view="task" type="button">المهام</button>
-<button aria-pressed="false" class="view-tab" data-view="troubleshooting" type="button">حل المشكلات</button>
-<button aria-pressed="false" class="view-tab" data-view="command" type="button">الأوامر</button>
-<button aria-pressed="false" class="view-tab" data-view="concept" type="button">المفاهيم</button>
-<button aria-pressed="false" class="view-tab" data-view="learning_path" type="button">مسارات التعلم</button>
-<button aria-pressed="false" class="view-tab" data-view="favorites" type="button">المفضلة</button>
-</nav>
-<div class="filters">
-<label><span>التصنيف</span><select id="categoryFilter"><option value="all">كل التصنيفات</option></select></label>
-<label><span>المستوى</span><select id="difficultyFilter"><option value="all">كل المستويات</option><option value="beginner">مبتدئ</option><option value="intermediate">متوسط</option><option value="advanced">متقدم</option></select></label>
-<label><span>إصدار RHEL</span><select id="versionFilter"><option value="all">كل الإصدارات</option><option value="8">RHEL 8</option><option value="9">RHEL 9</option><option value="10">RHEL 10</option></select></label>
-<label><span>الترتيب</span><select id="sortFilter"><option value="relevance">الأكثر صلة</option><option value="title">أبجدياً</option><option value="type">حسب النوع</option><option value="difficulty">حسب المستوى</option><option value="relations">الأكثر ارتباطاً</option></select></label>
-<button class="reset-button" id="resetFiltersButton" type="button">إعادة الضبط</button>
-</div>
-</section>
-<section class="results-section" id="resultsSection" tabindex="-1">
-<div class="section-heading">
-<div>
-<span class="eyebrow" id="resultsEyebrow">شبكة المعرفة</span>
-<h2 id="resultsTitle">كل المحتوى</h2>
-<p id="resultsSummary">جاري تحميل قاعدة المعرفة...</p>
-</div>
-<div aria-label="تغيير طريقة العرض" class="layout-buttons">
-<button aria-label="عرض شبكي" class="icon-button is-active" id="gridViewButton" title="عرض شبكي" type="button">▦</button>
-<button aria-label="عرض قائمة" class="icon-button" id="listViewButton" title="عرض قائمة" type="button">☷</button>
-</div>
-</div>
-<div class="active-filters" hidden="" id="activeFilters"></div>
-<div class="state-card" id="loadingState"><div aria-hidden="true" class="loader"></div><h3>جاري بناء محرك المعرفة</h3><p>يتم فهرسة المهام والأوامر والمفاهيم والعلاقات ومسارات التعلم.</p></div>
-<div class="state-card state-card--error" hidden="" id="errorState"><span class="state-card__icon">!</span><h3>تعذر تحميل knowledge.json</h3><p>تأكد من وجود الملف بجانب الصفحة، ثم ارفع الملفات إلى Cloudflare Pages أو شغّل خادماً محلياً.</p><code>python -m http.server 8000</code></div>
-<div class="state-card" hidden="" id="emptyState"><span class="state-card__icon">⌕</span><h3>لا توجد نتائج مطابقة</h3><p>جرّب عبارة أقصر أو انتقل إلى أحد أنواع المحتوى.</p><button class="primary-button" id="emptyResetButton" type="button">عرض كل المحتوى</button></div>
-<div aria-live="polite" class="results-grid" id="resultsGrid"></div>
-<button class="load-more-button" hidden="" id="loadMoreButton" type="button">عرض المزيد</button>
-</section>
-</main>
-<footer class="footer">
-<p>موسوعة تعليمية. راجع التوثيق الرسمي واختبر الأوامر الحساسة في بيئة تدريبية قبل الإنتاج.</p>
-<span id="schemaVersion"></span>
-</footer>
-</div>
-<div aria-live="polite" class="toast" id="toast" role="status"></div>
-<dialog class="doctor-dialog" id="doctorDialog">
-<div class="doctor-dialog__topbar">
-<div class="doctor-dialog__identity">
-<span aria-hidden="true">⚕</span>
-<div><small>RHEL Interactive Diagnostics</small><strong id="doctorDialogTitle">Linux Doctor</strong></div>
-</div>
-<div class="doctor-dialog__actions">
-<button hidden="" id="doctorHomeButton" type="button">الحالات</button>
-<button hidden="" id="doctorBackButton" type="button">رجوع</button>
-<button hidden="" id="doctorResetButton" type="button">إعادة</button>
-<button aria-label="إغلاق" class="doctor-dialog__close" id="doctorCloseButton" type="button">×</button>
-</div>
-</div>
-<div class="doctor-dialog__content" id="doctorContent"></div>
-</dialog>
-<dialog class="workflow-dialog" id="workflowDialog">
-<div class="workflow-dialog__topbar">
-<div class="workflow-dialog__identity"><span>▶</span><div><small>RHEL Execution Diagnostic</small><strong id="workflowDialogTitle">مسارات التنفيذ</strong></div></div>
-<div class="workflow-dialog__actions">
-<button id="workflowLibraryButton" type="button">المسارات</button>
-<button hidden="" id="workflowReportButton" type="button">التقرير</button>
-<button hidden="" id="workflowPauseButton" type="button">حفظ وإيقاف</button>
-<button aria-label="إغلاق" class="workflow-dialog__close" id="workflowCloseButton" type="button">×</button>
-</div>
-</div>
-<div class="workflow-dialog__shell">
-<aside class="workflow-sidebar" id="workflowSidebar"></aside>
-<main class="workflow-main">
-<div class="workflow-content" id="workflowContent"></div>
-<footer class="workflow-footer" hidden="" id="workflowFooter">
-<button id="workflowPreviousButton" type="button">السابق</button>
-<div id="workflowFooterStatus"></div>
-<button class="primary" id="workflowNextButton" type="button">التالي</button>
-</footer>
-</main>
-</div>
-</dialog>
-<dialog class="entity-dialog" id="entityDialog">
-<div class="dialog-topbar">
-<button aria-label="إغلاق" class="dialog-close" id="closeDialogButton" type="button">×</button>
-<div class="dialog-topbar__actions">
-<button class="dialog-action" id="dialogFavoriteButton" type="button">☆ المفضلة</button>
-<button class="dialog-action" hidden="" id="dialogPrimaryCopyButton" type="button">نسخ الأوامر</button>
-<button class="dialog-action" id="shareEntityButton" type="button">نسخ الرابط</button>
-</div>
-</div>
-<div id="dialogContent"></div>
-</dialog>
-<template id="entityCardTemplate">
-<article class="entity-card">
-<header class="entity-card__header">
-<div class="entity-card__badges"><span class="type-badge"></span><span class="category-badge"></span></div>
-<button aria-label="إضافة إلى المفضلة" class="favorite-button" title="المفضلة" type="button">☆</button>
-</header>
-<h3 class="entity-title"></h3>
-<p class="entity-summary"></p>
-<div class="entity-meta"></div>
-<div class="entity-preview"></div>
-<footer class="entity-card__footer"><button class="open-entity-button" type="button">فتح</button><button class="quick-action-button" type="button">إجراء سريع</button></footer>
-</article>
-</template>
-<script src="intent-engine.js"></script>
-<script src="doctor-engine.js"></script>
-<script src="execution-diagnostics.js"></script>
-<script src="workflow-engine.js"></script>
-<script src="app.js"></script>
+
+          <div class="search-wrapper">
+            <div class="search-box">
+              <span class="search-box__icon" aria-hidden="true">⌕</span>
+              <input id="searchInput" type="search" autocomplete="off" spellcheck="false"
+                     aria-label="البحث في محرك المعرفة" aria-controls="suggestions" aria-expanded="false"
+                     placeholder="مثال: السيرفس failed، افتح بورت 8080، أبي أثبت ngnix...">
+              <kbd>Ctrl K</kbd>
+              <button id="clearSearchButton" class="clear-button" type="button" aria-label="مسح البحث" hidden>×</button>
+            </div>
+            <div id="suggestions" class="suggestions" role="listbox" hidden></div>
+          </div>
+
+          <div class="quick-searches" aria-label="أمثلة بحث سريعة">
+            <span>جرّب:</span>
+            <button type="button" data-query="الخدمة لا تعمل">الخدمة لا تعمل</button>
+            <button type="button" data-query="ما هو SELinux">ما هو SELinux؟</button>
+            <button type="button" data-query="dnf">مرجع dnf</button>
+            <button type="button" data-query="مسار المبتدئ">مسار المبتدئ</button>
+            <button type="button" data-query="SSH لا يعمل">SSH لا يعمل</button>
+          </div>
+
+          <div class="hero__primary-actions">
+            <button id="startWorkflowButton" class="hero-workflow-button" type="button">
+              <span aria-hidden="true">▶</span>
+              <span><strong>ابدأ مسار تنفيذ موجهاً</strong><small>اختر مهمة وسيتابع النظام تقدمك</small></span>
+              <b aria-hidden="true">←</b>
+            </button>
+          </div>
+          <div class="hero__doctor-action">
+            <button id="startDoctorButton" type="button">
+              <span aria-hidden="true">⚕</span>
+              <span><strong>ابدأ Linux Doctor</strong><small>تشخيص تفاعلي لا ينفذ أي أمر</small></span>
+              <b aria-hidden="true">←</b>
+            </button>
+          </div>
+        </div>
+
+        <div class="hero__stats" aria-label="إحصائيات محرك المعرفة">
+          <article><strong id="entitiesMetric">—</strong><span>كيان معرفة</span></article>
+          <article><strong id="tasksMetric">—</strong><span>مهمة وحل مشكلة</span></article>
+          <article><strong id="commandsMetric">—</strong><span>مرجع أمر</span></article>
+          <article><strong id="conceptsMetric">—</strong><span>مفهوماً</span></article>
+          <article><strong id="pathsMetric">—</strong><span>مسارات تعلم</span></article>
+          <article><strong id="intentsMetric">—</strong><span>نية بحث</span></article>
+          <article><strong id="workflowMetric">—</strong><span>مسارات تنفيذ موجهة</span></article>
+          <article><strong id="doctorMetric">—</strong><span>مسارات تشخيص</span></article>
+        </div>
+      </section>
+
+
+      <section id="intentPanel" class="intent-panel" aria-live="polite" hidden>
+        <div id="intentPanelContent"></div>
+      </section>
+
+      <section class="workflow-launch" aria-labelledby="workflowLaunchTitle">
+        <div class="workflow-launch__content">
+          <span class="eyebrow">Execution Diagnostic Engine</span>
+          <h2 id="workflowLaunchTitle">نفّذ الأمر ثم الصق الناتج ليتم تشخيصه</h2>
+          <p>يحلل النظام مخرجات الطرفية، ويحدد نمط الخطأ والدليل والفحص التالي والعلاج، ثم يحفظ سلسلة التشخيص داخل التقرير.</p>
+          <div class="workflow-launch__features">
+            <span>✓ تحليل مخرجات الطرفية</span><span>✓ تحديد سبب الخطأ</span>
+            <span>✓ فحوصات متتابعة</span><span>✓ علاج وإثبات نجاح</span><span>✓ تقرير TXT</span>
+          </div>
+          <div class="workflow-launch__actions">
+            <button id="browseWorkflowsButton" type="button">استعراض كل المسارات</button>
+            <button id="resumeWorkflowButton" class="workflow-secondary-action" type="button" hidden>استكمال آخر مسار</button>
+          </div>
+        </div>
+        <div class="workflow-launch__dashboard">
+          <article><span>المسارات</span><strong id="workflowAvailableCount">0</strong></article>
+          <article><span>قيد التنفيذ</span><strong id="workflowActiveCount">0</strong></article>
+          <article><span>المكتملة</span><strong id="workflowCompletedCount">0</strong></article>
+          <div id="workflowResumeSummary" class="workflow-resume-summary">
+            <strong>لم تبدأ أي جلسة بعد</strong><span>اختر مهمة عملية لبدء أول مسار.</span>
+          </div>
+        </div>
+        <div id="workflowExamples" class="workflow-launch__examples"></div>
+      </section>
+
+      <section class="doctor-launch" aria-labelledby="doctorLaunchTitle">
+        <div class="doctor-launch__content">
+          <span class="eyebrow">Linux Doctor</span>
+          <h2 id="doctorLaunchTitle">لا تعرف من أين تبدأ التشخيص؟</h2>
+          <p>اختر العَرَض، نفّذ فحوصات القراءة، ثم أخبر الطبيب بما ظهر لديك. سيقودك إلى السبب الأقرب والخطوة التالية.</p>
+          <div class="doctor-launch__features">
+            <span>✓ تفرعات حسب النتيجة</span>
+            <span>✓ أوامر مجهزة بالمتغيرات</span>
+            <span>✓ تقرير تشخيص قابل للتنزيل</span>
+            <span>✓ يعمل محلياً دون API</span>
+          </div>
+          <button type="button" data-doctor-launch>فتح الطبيب التفاعلي</button>
+        </div>
+        <div class="doctor-launch__visual">
+          <div class="doctor-orbit doctor-orbit--one"></div>
+          <div class="doctor-orbit doctor-orbit--two"></div>
+          <div class="doctor-launch__mark">⚕</div>
+          <strong><span id="doctorCasesCountInline">9</span> حالات رئيسية</strong>
+          <small>خدمة، SSH، قرص، شبكة، DNF، أداء، صلاحيات، منافذ، SELinux</small>
+        </div>
+        <div id="doctorLaunchExamples" class="doctor-launch__examples"></div>
+      </section>
+
+      <section class="type-explorer" aria-labelledby="explorerTitle">
+        <div class="section-heading section-heading--compact">
+          <div>
+            <span class="eyebrow">بوابات المعرفة</span>
+            <h2 id="explorerTitle">اختر طريقة الدخول</h2>
+          </div>
+        </div>
+        <div class="type-grid">
+          <button class="type-tile" type="button" data-type-view="task">
+            <span class="type-tile__icon" aria-hidden="true">✓</span>
+            <strong>المهام العملية</strong>
+            <small>من الهدف إلى التحقق والتراجع</small>
+            <b id="taskTileCount">0</b>
+          </button>
+          <button class="type-tile" type="button" data-type-view="troubleshooting">
+            <span class="type-tile__icon" aria-hidden="true">⚕</span>
+            <strong>حل المشكلات</strong>
+            <small>أعراض، أسباب، فحوصات، وإصلاحات</small>
+            <b id="troubleTileCount">0</b>
+          </button>
+          <button class="type-tile" type="button" data-type-view="command">
+            <span class="type-tile__icon" aria-hidden="true">&gt;_</span>
+            <strong>مرجع الأوامر</strong>
+            <small>الصيغة والخيارات والأمثلة</small>
+            <b id="commandTileCount">0</b>
+          </button>
+          <button class="type-tile" type="button" data-type-view="concept">
+            <span class="type-tile__icon" aria-hidden="true">◎</span>
+            <strong>المفاهيم</strong>
+            <small>افهم لماذا يعمل النظام بهذه الطريقة</small>
+            <b id="conceptTileCount">0</b>
+          </button>
+          <button class="type-tile" type="button" data-type-view="learning_path">
+            <span class="type-tile__icon" aria-hidden="true">↗</span>
+            <strong>مسارات التعلم</strong>
+            <small>ترتيب مقترح من البداية إلى الاحتراف</small>
+            <b id="pathTileCount">0</b>
+          </button>
+        </div>
+      </section>
+
+      <section class="control-panel" aria-label="تصفية النتائج">
+        <nav class="view-tabs" aria-label="نوع المحتوى">
+          <button class="view-tab is-active" type="button" data-view="all" aria-pressed="true">الكل</button>
+          <button class="view-tab" type="button" data-view="task" aria-pressed="false">المهام</button>
+          <button class="view-tab" type="button" data-view="troubleshooting" aria-pressed="false">حل المشكلات</button>
+          <button class="view-tab" type="button" data-view="command" aria-pressed="false">الأوامر</button>
+          <button class="view-tab" type="button" data-view="concept" aria-pressed="false">المفاهيم</button>
+          <button class="view-tab" type="button" data-view="learning_path" aria-pressed="false">مسارات التعلم</button>
+          <button class="view-tab" type="button" data-view="favorites" aria-pressed="false">المفضلة</button>
+        </nav>
+
+        <div class="filters">
+          <label><span>التصنيف</span><select id="categoryFilter"><option value="all">كل التصنيفات</option></select></label>
+          <label><span>المستوى</span><select id="difficultyFilter"><option value="all">كل المستويات</option><option value="beginner">مبتدئ</option><option value="intermediate">متوسط</option><option value="advanced">متقدم</option></select></label>
+          <label><span>إصدار RHEL</span><select id="versionFilter"><option value="all">كل الإصدارات</option><option value="8">RHEL 8</option><option value="9">RHEL 9</option><option value="10">RHEL 10</option></select></label>
+          <label><span>الترتيب</span><select id="sortFilter"><option value="relevance">الأكثر صلة</option><option value="title">أبجدياً</option><option value="type">حسب النوع</option><option value="difficulty">حسب المستوى</option><option value="relations">الأكثر ارتباطاً</option></select></label>
+          <button id="resetFiltersButton" class="reset-button" type="button">إعادة الضبط</button>
+        </div>
+      </section>
+
+      <section id="resultsSection" class="results-section" tabindex="-1">
+        <div class="section-heading">
+          <div>
+            <span id="resultsEyebrow" class="eyebrow">شبكة المعرفة</span>
+            <h2 id="resultsTitle">كل المحتوى</h2>
+            <p id="resultsSummary">جاري تحميل قاعدة المعرفة...</p>
+          </div>
+          <div class="layout-buttons" aria-label="تغيير طريقة العرض">
+            <button id="gridViewButton" class="icon-button is-active" type="button" aria-label="عرض شبكي" title="عرض شبكي">▦</button>
+            <button id="listViewButton" class="icon-button" type="button" aria-label="عرض قائمة" title="عرض قائمة">☷</button>
+          </div>
+        </div>
+
+        <div id="activeFilters" class="active-filters" hidden></div>
+        <div id="loadingState" class="state-card"><div class="loader" aria-hidden="true"></div><h3>جاري بناء محرك المعرفة</h3><p>يتم فهرسة المهام والأوامر والمفاهيم والعلاقات ومسارات التعلم.</p></div>
+        <div id="errorState" class="state-card state-card--error" hidden><span class="state-card__icon">!</span><h3>تعذر تحميل knowledge.json</h3><p>تأكد من وجود الملف بجانب الصفحة، ثم ارفع الملفات إلى Cloudflare Pages أو شغّل خادماً محلياً.</p><code>python -m http.server 8000</code></div>
+        <div id="emptyState" class="state-card" hidden><span class="state-card__icon">⌕</span><h3>لا توجد نتائج مطابقة</h3><p>جرّب عبارة أقصر أو انتقل إلى أحد أنواع المحتوى.</p><button id="emptyResetButton" class="primary-button" type="button">عرض كل المحتوى</button></div>
+
+        <div id="resultsGrid" class="results-grid" aria-live="polite"></div>
+        <button id="loadMoreButton" class="load-more-button" type="button" hidden>عرض المزيد</button>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>موسوعة تعليمية. راجع التوثيق الرسمي واختبر الأوامر الحساسة في بيئة تدريبية قبل الإنتاج.</p>
+      <span id="schemaVersion"></span>
+    </footer>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <dialog id="doctorDialog" class="doctor-dialog">
+    <div class="doctor-dialog__topbar">
+      <div class="doctor-dialog__identity">
+        <span aria-hidden="true">⚕</span>
+        <div><small>RHEL Interactive Diagnostics</small><strong id="doctorDialogTitle">Linux Doctor</strong></div>
+      </div>
+      <div class="doctor-dialog__actions">
+        <button id="doctorHomeButton" type="button" hidden>الحالات</button>
+        <button id="doctorBackButton" type="button" hidden>رجوع</button>
+        <button id="doctorResetButton" type="button" hidden>إعادة</button>
+        <button id="doctorCloseButton" class="doctor-dialog__close" type="button" aria-label="إغلاق">×</button>
+      </div>
+    </div>
+    <div id="doctorContent" class="doctor-dialog__content"></div>
+  </dialog>
+
+  <dialog id="workflowDialog" class="workflow-dialog">
+    <div class="workflow-dialog__topbar">
+      <div class="workflow-dialog__identity"><span>▶</span><div><small>RHEL Execution Diagnostic</small><strong id="workflowDialogTitle">مسارات التنفيذ</strong></div></div>
+      <div class="workflow-dialog__actions">
+        <button id="workflowLibraryButton" type="button">المسارات</button>
+        <button id="workflowReportButton" type="button" hidden>التقرير</button>
+        <button id="workflowPauseButton" type="button" hidden>حفظ وإيقاف</button>
+        <button id="workflowCloseButton" class="workflow-dialog__close" type="button" aria-label="إغلاق">×</button>
+      </div>
+    </div>
+    <div class="workflow-dialog__shell">
+      <aside id="workflowSidebar" class="workflow-sidebar"></aside>
+      <main class="workflow-main">
+        <div id="workflowContent" class="workflow-content"></div>
+        <footer id="workflowFooter" class="workflow-footer" hidden>
+          <button id="workflowPreviousButton" type="button">السابق</button>
+          <div id="workflowFooterStatus"></div>
+          <button id="workflowNextButton" class="primary" type="button">التالي</button>
+        </footer>
+      </main>
+    </div>
+  </dialog>
+
+  <dialog id="entityDialog" class="entity-dialog">
+    <div class="dialog-topbar">
+      <button id="closeDialogButton" class="dialog-close" type="button" aria-label="إغلاق">×</button>
+      <div class="dialog-topbar__actions">
+        <button id="dialogFavoriteButton" class="dialog-action" type="button">☆ المفضلة</button>
+        <button id="dialogPrimaryCopyButton" class="dialog-action" type="button" hidden>نسخ الأوامر</button>
+        <button id="shareEntityButton" class="dialog-action" type="button">نسخ الرابط</button>
+      </div>
+    </div>
+    <div id="dialogContent"></div>
+  </dialog>
+
+  <template id="entityCardTemplate">
+    <article class="entity-card">
+      <header class="entity-card__header">
+        <div class="entity-card__badges"><span class="type-badge"></span><span class="category-badge"></span></div>
+        <button class="favorite-button" type="button" aria-label="إضافة إلى المفضلة" title="المفضلة">☆</button>
+      </header>
+      <h3 class="entity-title"></h3>
+      <p class="entity-summary"></p>
+      <div class="entity-meta"></div>
+      <div class="entity-preview"></div>
+      <footer class="entity-card__footer"><button class="open-entity-button" type="button">فتح</button><button class="quick-action-button" type="button">إجراء سريع</button></footer>
+    </article>
+  </template>
+
+  <script src="intent-engine.js"></script>
+  <script src="doctor-engine.js"></script>
+  <script src="execution-diagnostics.js"></script>
+  <script src="workflow-engine.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
