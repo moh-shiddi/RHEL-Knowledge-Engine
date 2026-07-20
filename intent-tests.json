@@ -1,0 +1,691 @@
+{
+  "schema_version": "1.0.0",
+  "tests": [
+    {
+      "query": "ابي اثبت nginx",
+      "expected_intent": "install_nginx",
+      "expected_entities": {
+        "PACKAGE": "nginx"
+      }
+    },
+    {
+      "query": "نزل ngnix عندي",
+      "expected_intent": "install_nginx",
+      "expected_entities": {
+        "PACKAGE": "nginx"
+      }
+    },
+    {
+      "query": "ابي احمل برنامج vim",
+      "expected_intent": "install_package",
+      "expected_entities": {
+        "PACKAGE": "vim"
+      }
+    },
+    {
+      "query": "كيف اثبت git",
+      "expected_intent": "install_package",
+      "expected_entities": {
+        "PACKAGE": "git"
+      }
+    },
+    {
+      "query": "احذف برنامج nginx",
+      "expected_intent": "remove_package",
+      "expected_entities": {
+        "PACKAGE": "nginx"
+      }
+    },
+    {
+      "query": "شيل البكج curl",
+      "expected_intent": "remove_package",
+      "expected_entities": {
+        "PACKAGE": "curl"
+      }
+    },
+    {
+      "query": "حدث النظام كله",
+      "expected_intent": "update_system"
+    },
+    {
+      "query": "ابي اسوي ابديت لريد هات",
+      "expected_intent": "update_system"
+    },
+    {
+      "query": "دور لي على باكج tree",
+      "expected_intent": "search_package",
+      "expected_entities": {
+        "PACKAGE": "tree"
+      }
+    },
+    {
+      "query": "هل برنامج rsync موجود",
+      "expected_intent": "search_package",
+      "expected_entities": {
+        "PACKAGE": "rsync"
+      }
+    },
+    {
+      "query": "الخدمة failed",
+      "expected_intent": "service_failed"
+    },
+    {
+      "query": "ليش nginx ما يشتغل",
+      "expected_intent": "service_failed",
+      "expected_entities": {
+        "SERVICE": "nginx"
+      }
+    },
+    {
+      "query": "السيرفس طافي httpd",
+      "expected_intent": "service_failed",
+      "expected_entities": {
+        "SERVICE": "httpd"
+      }
+    },
+    {
+      "query": "شغل خدمة nginx",
+      "expected_intent": "service_start",
+      "expected_entities": {
+        "SERVICE": "nginx"
+      }
+    },
+    {
+      "query": "وقف السيرفس httpd",
+      "expected_intent": "service_stop",
+      "expected_entities": {
+        "SERVICE": "httpd"
+      }
+    },
+    {
+      "query": "سوي ريستارت nginx",
+      "expected_intent": "service_restart",
+      "expected_entities": {
+        "SERVICE": "nginx"
+      }
+    },
+    {
+      "query": "خلي sshd يشتغل مع الاقلاع",
+      "expected_intent": "service_enable",
+      "expected_entities": {
+        "SERVICE": "sshd"
+      }
+    },
+    {
+      "query": "وين لوقات nginx",
+      "expected_intent": "service_logs",
+      "expected_entities": {
+        "SERVICE": "nginx"
+      }
+    },
+    {
+      "query": "الهارد فل",
+      "expected_intent": "disk_full"
+    },
+    {
+      "query": "المساحة خلصت في /var",
+      "expected_intent": "disk_full",
+      "expected_entities": {
+        "PATH": "/var"
+      }
+    },
+    {
+      "query": "كم باقي في القرص",
+      "expected_intent": "disk_usage"
+    },
+    {
+      "query": "حجم مجلد /var/log",
+      "expected_intent": "disk_usage",
+      "expected_entities": {
+        "PATH": "/var/log"
+      }
+    },
+    {
+      "query": "ما اقدر ادخل ssh 192.168.1.10",
+      "expected_intent": "ssh_failed",
+      "expected_entities": {
+        "HOST": "192.168.1.10",
+        "PORT": "22"
+      }
+    },
+    {
+      "query": "ssh connection refused",
+      "expected_intent": "ssh_failed"
+    },
+    {
+      "query": "ادخل السيرفر admin@example.com ssh",
+      "expected_intent": "ssh_connect",
+      "expected_entities": {
+        "HOST": "example.com"
+      }
+    },
+    {
+      "query": "ابغى مفتاح ssh بدون باسورد",
+      "expected_intent": "ssh_key"
+    },
+    {
+      "query": "افتح بورت 8080 tcp",
+      "expected_intent": "open_port",
+      "expected_entities": {
+        "PORT": "8080",
+        "PROTOCOL": "tcp"
+      }
+    },
+    {
+      "query": "اسمح بمنفذ 53 udp",
+      "expected_intent": "open_port",
+      "expected_entities": {
+        "PORT": "53",
+        "PROTOCOL": "udp"
+      }
+    },
+    {
+      "query": "اقفل بورت 3306",
+      "expected_intent": "close_port",
+      "expected_entities": {
+        "PORT": "3306"
+      }
+    },
+    {
+      "query": "وش البورتات المسموحة في الفايروول",
+      "expected_intent": "firewall_status"
+    },
+    {
+      "query": "سيلنكس مانع nginx",
+      "expected_intent": "selinux_denied"
+    },
+    {
+      "query": "avc denied في /var/www/html",
+      "expected_intent": "selinux_denied",
+      "expected_entities": {
+        "PATH": "/var/www/html"
+      }
+    },
+    {
+      "query": "permission denied على /srv/app",
+      "expected_intent": "permission_denied",
+      "expected_entities": {
+        "PATH": "/srv/app"
+      }
+    },
+    {
+      "query": "غير صلاحية /tmp/test الى 755",
+      "expected_intent": "change_permissions",
+      "expected_entities": {
+        "PATH": "/tmp/test"
+      }
+    },
+    {
+      "query": "chmod للسكربت",
+      "expected_intent": "change_permissions"
+    },
+    {
+      "query": "غير مالك /srv/app للمستخدم ahmed",
+      "expected_intent": "change_owner",
+      "expected_entities": {
+        "PATH": "/srv/app"
+      }
+    },
+    {
+      "query": "سوي يوزر ahmed",
+      "expected_intent": "create_user",
+      "expected_entities": {
+        "USER": "ahmed"
+      }
+    },
+    {
+      "query": "احذف المستخدم testuser",
+      "expected_intent": "delete_user",
+      "expected_entities": {
+        "USER": "testuser"
+      }
+    },
+    {
+      "query": "غير باسورد ahmed",
+      "expected_intent": "change_password",
+      "expected_entities": {
+        "USER": "ahmed"
+      }
+    },
+    {
+      "query": "حط احمد في مجموعة wheel",
+      "expected_intent": "add_user_group",
+      "expected_entities": {
+        "GROUP": "wheel"
+      }
+    },
+    {
+      "query": "وين ملف sshd_config",
+      "expected_intent": "find_file"
+    },
+    {
+      "query": "ابحث عن ملف nginx.conf",
+      "expected_intent": "find_file"
+    },
+    {
+      "query": "ابحث عن كلمة error داخل /var/log",
+      "expected_intent": "search_text",
+      "expected_entities": {
+        "PATH": "/var/log"
+      }
+    },
+    {
+      "query": "انسخ ملف من /tmp/a الى /tmp/b",
+      "expected_intent": "copy_file"
+    },
+    {
+      "query": "غير اسم الملف",
+      "expected_intent": "move_file"
+    },
+    {
+      "query": "احذف مجلد /tmp/old",
+      "expected_intent": "delete_file",
+      "expected_entities": {
+        "PATH": "/tmp/old"
+      }
+    },
+    {
+      "query": "اضغط مجلد /srv/app",
+      "expected_intent": "compress_archive",
+      "expected_entities": {
+        "PATH": "/srv/app"
+      }
+    },
+    {
+      "query": "فك zip /tmp/a.zip",
+      "expected_intent": "extract_archive",
+      "expected_entities": {
+        "PATH": "/tmp/a.zip"
+      }
+    },
+    {
+      "query": "الانترنت ما يشتغل",
+      "expected_intent": "network_unreachable"
+    },
+    {
+      "query": "السيرفر 10.0.0.5 ما يرد ping",
+      "expected_intent": "network_unreachable",
+      "expected_entities": {
+        "HOST": "10.0.0.5"
+      }
+    },
+    {
+      "query": "وش ip الجهاز",
+      "expected_intent": "show_ip"
+    },
+    {
+      "query": "dns لا يحل example.com",
+      "expected_intent": "dns_problem",
+      "expected_entities": {
+        "HOST": "example.com"
+      }
+    },
+    {
+      "query": "من يستخدم بورت 80",
+      "expected_intent": "port_in_use",
+      "expected_entities": {
+        "PORT": "80"
+      }
+    },
+    {
+      "query": "شغل النسخة الاحتياطية كل يوم",
+      "expected_intent": "schedule_task"
+    },
+    {
+      "query": "السيرفر بطيء والرام فل",
+      "expected_intent": "system_slow"
+    },
+    {
+      "query": "شرح امر systmctl",
+      "expected_intent": "command_reference"
+    },
+    {
+      "query": "ما هو systemd",
+      "expected_intent": "explain_concept"
+    },
+    {
+      "query": "ابدأ مسار المبتدئ",
+      "expected_intent": "learning_path"
+    },
+    {
+      "query": "تثبيت nginx",
+      "expected_intent": "install_nginx"
+    },
+    {
+      "query": "نزل nginx",
+      "expected_intent": "install_nginx"
+    },
+    {
+      "query": "تثبيت برنامج",
+      "expected_intent": "install_package"
+    },
+    {
+      "query": "تحميل تطبيق",
+      "expected_intent": "install_package"
+    },
+    {
+      "query": "حذف برنامج",
+      "expected_intent": "remove_package"
+    },
+    {
+      "query": "ازالة حزمة",
+      "expected_intent": "remove_package"
+    },
+    {
+      "query": "تحديث النظام",
+      "expected_intent": "update_system"
+    },
+    {
+      "query": "حدث كل البرامج",
+      "expected_intent": "update_system"
+    },
+    {
+      "query": "ابحث عن برنامج",
+      "expected_intent": "search_package"
+    },
+    {
+      "query": "هل الحزمة موجودة",
+      "expected_intent": "search_package"
+    },
+    {
+      "query": "الخدمة لا تعمل",
+      "expected_intent": "service_failed"
+    },
+    {
+      "query": "السيرفس failed",
+      "expected_intent": "service_failed"
+    },
+    {
+      "query": "تشغيل خدمة",
+      "expected_intent": "service_start"
+    },
+    {
+      "query": "شغل السيرفس",
+      "expected_intent": "service_start"
+    },
+    {
+      "query": "ايقاف خدمة",
+      "expected_intent": "service_stop"
+    },
+    {
+      "query": "وقف السيرفس",
+      "expected_intent": "service_stop"
+    },
+    {
+      "query": "اعادة تشغيل خدمة",
+      "expected_intent": "service_restart"
+    },
+    {
+      "query": "ريستارت السيرفس",
+      "expected_intent": "service_restart"
+    },
+    {
+      "query": "تشغيل الخدمة مع الاقلاع",
+      "expected_intent": "service_enable"
+    },
+    {
+      "query": "فعل السيرفس تلقائي",
+      "expected_intent": "service_enable"
+    },
+    {
+      "query": "سجل الخدمة",
+      "expected_intent": "service_logs"
+    },
+    {
+      "query": "لوق السيرفس",
+      "expected_intent": "service_logs"
+    },
+    {
+      "query": "الهارد ممتلئ",
+      "expected_intent": "disk_full"
+    },
+    {
+      "query": "المساحة خلصت",
+      "expected_intent": "disk_full"
+    },
+    {
+      "query": "مساحة القرص",
+      "expected_intent": "disk_usage"
+    },
+    {
+      "query": "كم باقي في الهارد",
+      "expected_intent": "disk_usage"
+    },
+    {
+      "query": "ssh لا يعمل",
+      "expected_intent": "ssh_failed"
+    },
+    {
+      "query": "ما اقدر ادخل ssh",
+      "expected_intent": "ssh_failed"
+    },
+    {
+      "query": "ادخل السيرفر ssh",
+      "expected_intent": "ssh_connect"
+    },
+    {
+      "query": "اتصل بسيرفر",
+      "expected_intent": "ssh_connect"
+    },
+    {
+      "query": "انشاء مفتاح ssh",
+      "expected_intent": "ssh_key"
+    },
+    {
+      "query": "دخول بدون كلمة مرور",
+      "expected_intent": "ssh_key"
+    },
+    {
+      "query": "فتح بورت",
+      "expected_intent": "open_port"
+    },
+    {
+      "query": "افتح منفذ",
+      "expected_intent": "open_port"
+    },
+    {
+      "query": "اغلاق بورت",
+      "expected_intent": "close_port"
+    },
+    {
+      "query": "اقفل منفذ",
+      "expected_intent": "close_port"
+    },
+    {
+      "query": "حالة الفايروول",
+      "expected_intent": "firewall_status"
+    },
+    {
+      "query": "قواعد الجدار الناري",
+      "expected_intent": "firewall_status"
+    },
+    {
+      "query": "selinux يمنع",
+      "expected_intent": "selinux_denied"
+    },
+    {
+      "query": "avc denied",
+      "expected_intent": "selinux_denied"
+    },
+    {
+      "query": "permission denied",
+      "expected_intent": "permission_denied"
+    },
+    {
+      "query": "ممنوع الوصول",
+      "expected_intent": "permission_denied"
+    },
+    {
+      "query": "غير صلاحيات الملف",
+      "expected_intent": "change_permissions"
+    },
+    {
+      "query": "chmod 755",
+      "expected_intent": "change_permissions"
+    },
+    {
+      "query": "غير مالك الملف",
+      "expected_intent": "change_owner"
+    },
+    {
+      "query": "تغيير المالك",
+      "expected_intent": "change_owner"
+    },
+    {
+      "query": "انشاء مستخدم",
+      "expected_intent": "create_user"
+    },
+    {
+      "query": "اضافة يوزر",
+      "expected_intent": "create_user"
+    },
+    {
+      "query": "حذف مستخدم",
+      "expected_intent": "delete_user"
+    },
+    {
+      "query": "احذف اليوزر",
+      "expected_intent": "delete_user"
+    },
+    {
+      "query": "غير كلمة المرور",
+      "expected_intent": "change_password"
+    },
+    {
+      "query": "تغيير باسورد المستخدم",
+      "expected_intent": "change_password"
+    },
+    {
+      "query": "اضف المستخدم للمجموعة",
+      "expected_intent": "add_user_group"
+    },
+    {
+      "query": "حط اليوزر في wheel",
+      "expected_intent": "add_user_group"
+    },
+    {
+      "query": "البحث عن ملف",
+      "expected_intent": "find_file"
+    },
+    {
+      "query": "وين الملف",
+      "expected_intent": "find_file"
+    },
+    {
+      "query": "بحث داخل ملف",
+      "expected_intent": "search_text"
+    },
+    {
+      "query": "ابحث عن كلمة في الملفات",
+      "expected_intent": "search_text"
+    },
+    {
+      "query": "نسخ ملف",
+      "expected_intent": "copy_file"
+    },
+    {
+      "query": "انسخ مجلد",
+      "expected_intent": "copy_file"
+    },
+    {
+      "query": "نقل ملف",
+      "expected_intent": "move_file"
+    },
+    {
+      "query": "حذف ملف",
+      "expected_intent": "delete_file"
+    },
+    {
+      "query": "امسح مجلد",
+      "expected_intent": "delete_file"
+    },
+    {
+      "query": "ضغط مجلد",
+      "expected_intent": "compress_archive"
+    },
+    {
+      "query": "سوي zip",
+      "expected_intent": "compress_archive"
+    },
+    {
+      "query": "فك ضغط",
+      "expected_intent": "extract_archive"
+    },
+    {
+      "query": "استخراج zip",
+      "expected_intent": "extract_archive"
+    },
+    {
+      "query": "الانترنت لا يعمل",
+      "expected_intent": "network_unreachable"
+    },
+    {
+      "query": "السيرفر ما يرد",
+      "expected_intent": "network_unreachable"
+    },
+    {
+      "query": "ماهو الاي بي",
+      "expected_intent": "show_ip"
+    },
+    {
+      "query": "عرض ip",
+      "expected_intent": "show_ip"
+    },
+    {
+      "query": "dns لا يعمل",
+      "expected_intent": "dns_problem"
+    },
+    {
+      "query": "الدومين ما يتحول",
+      "expected_intent": "dns_problem"
+    },
+    {
+      "query": "البورت مستخدم",
+      "expected_intent": "port_in_use"
+    },
+    {
+      "query": "port already in use",
+      "expected_intent": "port_in_use"
+    },
+    {
+      "query": "جدولة امر",
+      "expected_intent": "schedule_task"
+    },
+    {
+      "query": "تشغيل يومي",
+      "expected_intent": "schedule_task"
+    },
+    {
+      "query": "النظام بطيء",
+      "expected_intent": "system_slow"
+    },
+    {
+      "query": "السيرفر ثقيل",
+      "expected_intent": "system_slow"
+    },
+    {
+      "query": "شرح امر",
+      "expected_intent": "command_reference"
+    },
+    {
+      "query": "مرجع الامر",
+      "expected_intent": "command_reference"
+    },
+    {
+      "query": "ما هو",
+      "expected_intent": "explain_concept"
+    },
+    {
+      "query": "اشرح لي",
+      "expected_intent": "explain_concept"
+    },
+    {
+      "query": "ابدأ تعلم ريد هات",
+      "expected_intent": "learning_path"
+    },
+    {
+      "query": "مسار المبتدئ",
+      "expected_intent": "learning_path"
+    }
+  ]
+}

@@ -220,6 +220,11 @@ class KnowledgeEngineApp {
     this.entities = [];
     this.entityById = new Map();
     this.index = null;
+    this.intentData = null;
+    this.intentEngine = null;
+    this.searchAnalysis = null;
+    this.dismissedIntentQuery = "";
+    this.intentInputValues = {};
     this.view = "all";
     this.layout = SafeStorage.get("rhel-ke:layout", "grid");
     this.theme = SafeStorage.get("rhel-ke:theme", null) ||
@@ -262,7 +267,7 @@ class KnowledgeEngineApp {
       "gridViewButton", "listViewButton", "activeFilters", "loadingState",
       "errorState", "emptyState", "emptyResetButton", "resultsGrid",
       "loadMoreButton", "entitiesMetric", "tasksMetric", "commandsMetric",
-      "conceptsMetric", "pathsMetric", "taskTileCount", "troubleTileCount",
+      "conceptsMetric", "pathsMetric", "intentsMetric", "intentPanel", "intentPanelContent", "taskTileCount", "troubleTileCount",
       "commandTileCount", "conceptTileCount", "pathTileCount", "schemaVersion",
       "toast", "entityDialog", "closeDialogButton", "dialogFavoriteButton",
       "dialogPrimaryCopyButton", "shareEntityButton", "dialogContent",
@@ -288,6 +293,8 @@ class KnowledgeEngineApp {
     });
 
     this.e.searchInput.addEventListener("input", () => {
+      this.intentInputValues = {};
+      this.dismissedIntentQuery = "";
       clearTimeout(this.searchTimer);
       this.searchTimer = setTimeout(() => {
         this.visibleLimit = 24;
@@ -300,6 +307,8 @@ class KnowledgeEngineApp {
 
     this.e.clearSearchButton.addEventListener("click", () => {
       this.e.searchInput.value = "";
+      this.intentInputValues = {};
+      this.dismissedIntentQuery = "";
       this.closeSuggestions();
       this.render();
       this.e.searchInput.focus();
@@ -349,6 +358,12 @@ class KnowledgeEngineApp {
       if (button) this.removeFilter(button.dataset.removeFilter);
     });
 
+    this.e.intentPanel.addEventListener("input", event => {
+      const input = event.target.closest("[data-intent-variable]");
+      if (input) this.intentInputValues[input.dataset.intentVariable] = input.value.trim();
+    });
+    this.e.intentPanel.addEventListener("click", event => this.handleIntentPanelClick(event));
+
     this.e.resultsGrid.addEventListener("click", event => this.handleCardClick(event));
     this.e.closeDialogButton.addEventListener("click", () => this.closeDialog());
     this.e.dialogFavoriteButton.addEventListener("click", () => {
@@ -370,14 +385,20 @@ class KnowledgeEngineApp {
 
   async loadData() {
     try {
-      const response = await fetch("knowledge.json", { cache: "no-store" });
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      this.data = await response.json();
+      const [knowledgeResponse, intentResponse] = await Promise.all([
+        fetch("knowledge.json", { cache: "no-store" }),
+        fetch("intents.json", { cache: "no-store" })
+      ]);
+      if (!knowledgeResponse.ok) throw new Error(`knowledge.json HTTP ${knowledgeResponse.status}`);
+      if (!intentResponse.ok) throw new Error(`intents.json HTTP ${intentResponse.status}`);
+      this.data = await knowledgeResponse.json();
+      this.intentData = await intentResponse.json();
       if (!Array.isArray(this.data.entities)) throw new Error("Invalid knowledge schema");
 
       this.entities = this.data.entities;
       this.entityById = new Map(this.entities.map(entity => [entity.id, entity]));
       this.index = new KnowledgeIndex(this.entities, this.data.categories || {}, this.data.entity_types || this.typeLabels, this.entityById);
+      this.intentEngine = new RhelIntentEngine(this.intentData, this.entities);
 
       this.populateCategories();
       this.updateMetrics();
@@ -412,6 +433,7 @@ class KnowledgeEngineApp {
     this.e.commandsMetric.textContent = counts.command || 0;
     this.e.conceptsMetric.textContent = counts.concept || 0;
     this.e.pathsMetric.textContent = counts.learning_path || 0;
+    this.e.intentsMetric.textContent = this.intentData?.intents?.length || 0;
     this.e.taskTileCount.textContent = counts.task || 0;
     this.e.troubleTileCount.textContent = counts.troubleshooting || 0;
     this.e.commandTileCount.textContent = counts.command || 0;
@@ -452,6 +474,8 @@ class KnowledgeEngineApp {
     this.e.difficultyFilter.value = "all";
     this.e.versionFilter.value = "all";
     this.e.sortFilter.value = "relevance";
+    this.intentInputValues = {};
+    this.dismissedIntentQuery = "";
     this.closeSuggestions();
     this.setView("all");
     this.e.searchInput.focus();
@@ -459,6 +483,8 @@ class KnowledgeEngineApp {
 
   useQuery(query) {
     this.e.searchInput.value = query;
+    this.intentInputValues = {};
+    this.dismissedIntentQuery = "";
     this.closeSuggestions();
     this.setView("all");
     this.e.resultsSection.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -466,7 +492,12 @@ class KnowledgeEngineApp {
 
   updateSuggestions() {
     if (!this.index) return;
-    this.suggestions = this.index.suggest(this.e.searchInput.value);
+    const query = this.e.searchInput.value;
+    const analysis = this.intentEngine?.analyze(query);
+    const entitySuggestions = this.index.suggest(analysis?.searchQuery || query).map(entity => ({ kind: "entity", entity }));
+    this.suggestions = [];
+    if (analysis?.intent && analysis.confidence !== "low") this.suggestions.push({ kind: "intent", analysis });
+    this.suggestions.push(...entitySuggestions.slice(0, Math.max(0, 8 - this.suggestions.length)));
     this.activeSuggestion = -1;
     this.renderSuggestions();
   }
@@ -479,15 +510,25 @@ class KnowledgeEngineApp {
     }
 
     const fragment = document.createDocumentFragment();
-    this.suggestions.forEach((entity, index) => {
+    this.suggestions.forEach((item, index) => {
       const button = document.createElement("button");
       button.type = "button";
-      button.className = "suggestion";
+      button.className = `suggestion ${item.kind === "intent" ? "intent-suggestion" : ""}`;
       button.dataset.suggestionIndex = String(index);
-      button.innerHTML = `
-        <span><strong>${ArabicText.highlight(entity.title_ar, this.e.searchInput.value)}</strong><small>${ArabicText.escape(entity.summary_ar)}</small></span>
-        <span class="suggestion-type">${ArabicText.escape(this.typeLabels[entity.entity_type] || entity.entity_type)}</span>
-      `;
+      if (item.kind === "intent") {
+        const analysis = item.analysis;
+        const targetTitle = analysis.target?.title_ar || "عرض النتائج المقترحة";
+        button.innerHTML = `
+          <span><strong>${ArabicText.escape(analysis.intent.icon || "⌁")} فهمت أنك تريد: ${ArabicText.escape(analysis.intent.title_ar)}</strong><small>${ArabicText.escape(targetTitle)}</small></span>
+          <span class="suggestion-type">نية ذكية</span>
+        `;
+      } else {
+        const entity = item.entity;
+        button.innerHTML = `
+          <span><strong>${ArabicText.highlight(entity.title_ar, this.e.searchInput.value)}</strong><small>${ArabicText.escape(entity.summary_ar)}</small></span>
+          <span class="suggestion-type">${ArabicText.escape(this.typeLabels[entity.entity_type] || entity.entity_type)}</span>
+        `;
+      }
       button.addEventListener("mousedown", event => {
         event.preventDefault();
         this.selectSuggestion(index);
@@ -529,10 +570,17 @@ class KnowledgeEngineApp {
   }
 
   selectSuggestion(index) {
-    const entity = this.suggestions[index];
-    if (!entity) return;
-    this.e.searchInput.value = entity.title_ar;
+    const item = this.suggestions[index];
+    if (!item) return;
     this.closeSuggestions();
+    if (item.kind === "intent") {
+      this.searchAnalysis = item.analysis;
+      this.openIntentTarget(item.analysis);
+      this.render();
+      return;
+    }
+    const entity = item.entity;
+    this.e.searchInput.value = entity.title_ar;
     this.openEntity(entity);
     this.render();
   }
@@ -547,7 +595,22 @@ class KnowledgeEngineApp {
 
   getResults() {
     const query = this.e.searchInput.value.trim();
-    let items = this.index.search(query);
+    this.searchAnalysis = this.intentEngine?.analyze(query) || null;
+    const effectiveQuery = this.searchAnalysis?.searchQuery || query;
+    let items = this.index.search(effectiveQuery);
+
+    if (this.searchAnalysis?.intent) {
+      const itemMap = new Map(items.map(item => [item.entity.id, item]));
+      for (const id of this.searchAnalysis.intent.target_entities || []) {
+        const entity = this.entityById.get(id);
+        if (entity && !itemMap.has(id)) {
+          const item = { entity, score: 0 };
+          items.push(item);
+          itemMap.set(id, item);
+        }
+      }
+      for (const item of items) item.score += this.intentEngine.scoreEntity(item.entity, this.searchAnalysis);
+    }
 
     items = items.filter(({ entity }) => {
       if (this.view === "favorites" && !this.favorites.has(entity.id)) return false;
@@ -579,6 +642,7 @@ class KnowledgeEngineApp {
     this.e.clearSearchButton.hidden = !this.e.searchInput.value;
     this.renderActiveFilters();
     this.renderResults();
+    this.renderIntentPanel();
   }
 
   renderResults() {
@@ -591,9 +655,10 @@ class KnowledgeEngineApp {
     this.e.resultsGrid.hidden = all.length === 0;
 
     const viewTitle = this.view === "all" ? "كل المحتوى" : this.view === "favorites" ? "المفضلة" : this.typeLabels[this.view];
-    this.e.resultsEyebrow.textContent = query ? "نتائج البحث الموحّد" : "شبكة المعرفة";
+    this.e.resultsEyebrow.textContent = query ? (this.searchAnalysis?.intent ? "نتائج مرتبة حسب النية" : "نتائج البحث الموحّد") : "شبكة المعرفة";
     this.e.resultsTitle.textContent = query ? `نتائج: ${query}` : viewTitle;
-    this.e.resultsSummary.textContent = `تم العثور على ${all.length} نتيجة من أصل ${this.entities.length}`;
+    const intentSummary = this.searchAnalysis?.intent ? ` — فهمت النية: ${this.searchAnalysis.intent.title_ar}` : "";
+    this.e.resultsSummary.textContent = `تم العثور على ${all.length} نتيجة من أصل ${this.entities.length}${intentSummary}`;
 
     const fragment = document.createDocumentFragment();
     visible.forEach(({ entity }) => fragment.appendChild(this.createCard(entity, query)));
@@ -718,9 +783,12 @@ class KnowledgeEngineApp {
 
   updateFavoriteCount() { this.e.favoritesCount.textContent = this.favorites.size; }
 
-  openEntity(entity, { updateHash = true } = {}) {
+  openEntity(entity, { updateHash = true, initialVariables = {} } = {}) {
     this.currentEntity = entity;
-    this.currentVariables = Object.fromEntries((entity.variables || []).map(variable => [variable.name, ""]));
+    this.currentVariables = {
+      ...initialVariables,
+      ...Object.fromEntries((entity.variables || []).map(variable => [variable.name, initialVariables[variable.name] || ""]))
+    };
     this.e.dialogContent.innerHTML = this.renderEntity(entity);
     this.configureDialogActions(entity);
     this.updateDialogFavoriteButton();
@@ -813,7 +881,7 @@ class KnowledgeEngineApp {
       <section class="dialog-section">
         <div class="dialog-section__heading"><h3>بيانات المهمة</h3><span class="section-note">تتغير الأوامر تلقائياً عند إدخال القيم</span></div>
         <div class="variables-grid">${task.variables.map(variable => `
-          <label class="variable-field"><span>${ArabicText.escape(variable.label_ar)}</span><input type="text" data-variable="${ArabicText.escape(variable.name)}" placeholder="مثال: ${ArabicText.escape(variable.example || "")}" autocomplete="off"></label>
+          <label class="variable-field"><span>${ArabicText.escape(variable.label_ar)}</span><input type="text" data-variable="${ArabicText.escape(variable.name)}" placeholder="مثال: ${ArabicText.escape(variable.example || "")}" value="${ArabicText.escape(this.currentVariables[variable.name] || "")}" autocomplete="off"></label>
         `).join("")}</div>
       </section>
     `;
@@ -1013,6 +1081,97 @@ class KnowledgeEngineApp {
     this.e.dialogContent.querySelectorAll("[data-verification-template]").forEach(code => {
       code.textContent = this.resolveCommand(code.dataset.verificationTemplate);
     });
+  }
+
+
+  renderIntentPanel() {
+    const analysis = this.searchAnalysis;
+    const query = this.e.searchInput.value.trim();
+    if (!query || !analysis?.intent || this.dismissedIntentQuery === query) {
+      this.e.intentPanel.hidden = true;
+      this.e.intentPanelContent.innerHTML = "";
+      return;
+    }
+
+    const confidenceLabels = { high: "ثقة عالية", medium: "ثقة متوسطة", low: "اقتراح محتمل" };
+    const values = { ...this.intentEngine.variableDefaults(analysis, analysis.target), ...this.intentInputValues };
+    const required = analysis.intent.required_variables || [];
+    const prompts = this.intentData.variable_prompts || {};
+    const fields = required.map(name => {
+      const prompt = prompts[name] || { label_ar: name, example: "" };
+      return `<label class="intent-field"><span>${ArabicText.escape(prompt.label_ar || name)}</span><input type="text" data-intent-variable="${ArabicText.escape(name)}" value="${ArabicText.escape(values[name] || "")}" placeholder="مثال: ${ArabicText.escape(prompt.example || "")}" autocomplete="off"></label>`;
+    }).join("");
+
+    const extracted = Object.entries(analysis.extracted?.values || {}).map(([name, value]) => {
+      const label = prompts[name]?.label_ar || name;
+      return `<span class="analysis-chip"><strong>${ArabicText.escape(label)}:</strong> ${ArabicText.escape(value)}</span>`;
+    }).join("");
+
+    const corrections = (analysis.corrected?.corrections || []).map(item => `${item.from} ← ${item.to}`).join("، ");
+    const alternatives = (analysis.alternatives || []).filter(item => item.intent?.id !== analysis.intent.id).slice(0, 3);
+    const target = analysis.target;
+
+    this.e.intentPanelContent.innerHTML = `
+      <div class="intent-panel__inner">
+        <div class="intent-panel__header">
+          <div class="intent-panel__identity">
+            <span class="intent-panel__icon" aria-hidden="true">${ArabicText.escape(analysis.intent.icon || "⌁")}</span>
+            <div><span class="eyebrow">تحليل اللغة الطبيعية</span><h2>فهمت أنك تريد: ${ArabicText.escape(analysis.intent.title_ar)}</h2><p>${ArabicText.escape(analysis.intent.summary_ar || "")}</p></div>
+          </div>
+          <span class="intent-confidence intent-confidence--${analysis.confidence}">${confidenceLabels[analysis.confidence] || "اقتراح"}</span>
+        </div>
+        ${corrections ? `<div class="correction-note"><strong>تصحيح تقني:</strong> ${ArabicText.escape(corrections)}</div>` : ""}
+        ${extracted ? `<div class="intent-analysis-row">${extracted}</div>` : ""}
+        <div class="intent-target">
+          <div class="intent-target__top"><div><h3>${target ? `المسار المقترح: ${ArabicText.escape(target.title_ar)}` : "نتائج البحث المقترحة"}</h3><p>${target ? ArabicText.escape(target.summary_ar) : "رتبت النتائج حسب النية المكتشفة."}</p></div></div>
+          ${fields ? `<div class="intent-fields">${fields}</div>` : ""}
+          <div class="intent-actions">
+            ${target ? `<button class="intent-primary" type="button" data-intent-open>فتح المسار وتجهيز الأوامر</button>` : ""}
+            <button class="intent-secondary" type="button" data-intent-scroll>عرض النتائج المرتبة</button>
+            <button class="intent-secondary" type="button" data-intent-dismiss>استخدام البحث العادي</button>
+          </div>
+        </div>
+        ${alternatives.length ? `<div class="intent-alternatives"><span>ربما تقصد أيضاً:</span>${alternatives.map(item => `<button class="intent-alt" type="button" data-intent-alt="${ArabicText.escape(item.intent.id)}">${ArabicText.escape(item.intent.title_ar)}</button>`).join("")}</div>` : ""}
+        ${analysis.reasons?.length ? `<div class="intent-reasons">سبب الاختيار: ${ArabicText.escape(analysis.reasons.join("، "))}</div>` : ""}
+      </div>`;
+    this.e.intentPanel.hidden = false;
+  }
+
+  handleIntentPanelClick(event) {
+    if (event.target.closest("[data-intent-open]")) {
+      this.openIntentTarget(this.searchAnalysis);
+      return;
+    }
+    if (event.target.closest("[data-intent-scroll]")) {
+      this.e.resultsSection.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+    if (event.target.closest("[data-intent-dismiss]")) {
+      this.dismissedIntentQuery = this.e.searchInput.value.trim();
+      this.renderIntentPanel();
+      return;
+    }
+    const alternative = event.target.closest("[data-intent-alt]");
+    if (alternative) {
+      const intent = this.intentData.intents.find(item => item.id === alternative.dataset.intentAlt);
+      if (!intent) return;
+      const analysis = { ...this.searchAnalysis, intent, target: (intent.target_entities || []).map(id => this.entityById.get(id)).find(Boolean) || null };
+      this.searchAnalysis = analysis;
+      this.openIntentTarget(analysis);
+    }
+  }
+
+  openIntentTarget(analysis) {
+    if (!analysis?.intent) return;
+    const target = analysis.target || (analysis.intent.target_entities || []).map(id => this.entityById.get(id)).find(Boolean);
+    if (!target) {
+      this.e.resultsSection.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+    const panelValues = {};
+    this.e.intentPanel.querySelectorAll("[data-intent-variable]").forEach(input => { if (input.value.trim()) panelValues[input.dataset.intentVariable] = input.value.trim(); });
+    const initialVariables = { ...this.intentEngine.variableDefaults(analysis, target), ...this.intentInputValues, ...panelValues };
+    this.openEntity(target, { initialVariables });
   }
 
   getTaskProgress(id) { return new Set(this.taskProgress[id] || []); }

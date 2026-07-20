@@ -1,0 +1,2305 @@
+{
+  "schema_version": "1.0.0",
+  "engine": "RHEL Arabic Intent Engine",
+  "language": "ar",
+  "minimum_score": 17,
+  "high_confidence_score": 58,
+  "medium_confidence_score": 34,
+  "canonical_terms": {
+    "nginx": [
+      "ngnix",
+      "nignx",
+      "انجنكس",
+      "انجينكس"
+    ],
+    "systemctl": [
+      "systmctl",
+      "systemct1",
+      "سيستم كنترول",
+      "سيستمكتل"
+    ],
+    "journalctl": [
+      "journlctl",
+      "journalct1",
+      "جورنال",
+      "جورنالكتل"
+    ],
+    "firewalld": [
+      "firewall",
+      "فايروول",
+      "فيروول",
+      "جدار ناري"
+    ],
+    "firewall-cmd": [
+      "firewallcmd",
+      "firewal-cmd",
+      "فايروول كمد"
+    ],
+    "selinux": [
+      "سيلنكس",
+      "سي لينكس",
+      "selnux",
+      "selnix"
+    ],
+    "sshd": [
+      "ssh service",
+      "خدمة ssh",
+      "سيرفس ssh"
+    ],
+    "dnf": [
+      "دي ان اف",
+      "yum",
+      "يم"
+    ],
+    "rpm": [
+      "ار بي ام"
+    ],
+    "podman": [
+      "بودمان",
+      "pod man"
+    ],
+    "httpd": [
+      "apache",
+      "اباتشي",
+      "اباشي"
+    ],
+    "mariadb": [
+      "mysql",
+      "ماريا دي بي",
+      "ماي اس كيو ال"
+    ],
+    "postgresql": [
+      "postgres",
+      "بوستقرس",
+      "بوستجريس"
+    ],
+    "chronyd": [
+      "chrony",
+      "كروني"
+    ],
+    "NetworkManager": [
+      "network manager",
+      "نتورك مانجر",
+      "نيتورك مانجر"
+    ],
+    "permission": [
+      "برمشن",
+      "بيرمشن",
+      "اذن",
+      "اذونات"
+    ],
+    "package": [
+      "بكج",
+      "باكج",
+      "حزمه",
+      "حزمة"
+    ],
+    "service": [
+      "سيرفس",
+      "خدمه",
+      "خدمة",
+      "daemon"
+    ],
+    "port": [
+      "بورت",
+      "منفذ"
+    ],
+    "user": [
+      "يوزر",
+      "مستخدم",
+      "حساب"
+    ],
+    "directory": [
+      "فولدر",
+      "مجلد",
+      "دليل"
+    ],
+    "log": [
+      "لوق",
+      "لوقات",
+      "سجل",
+      "سجلات"
+    ],
+    "disk": [
+      "هارد",
+      "قرص",
+      "تخزين"
+    ],
+    "memory": [
+      "رام",
+      "ذاكره",
+      "ذاكرة"
+    ],
+    "network": [
+      "نتورك",
+      "شبكه",
+      "شبكة"
+    ],
+    "install": [
+      "ثبت",
+      "اثبت",
+      "تثبيت",
+      "تنصيب",
+      "نصب",
+      "حمل",
+      "تحميل",
+      "نزل",
+      "تنزيل",
+      "احمل",
+      "أحمل",
+      "ابي اثبت",
+      "أبي أثبت"
+    ],
+    "remove": [
+      "حذف",
+      "احذف",
+      "ازاله",
+      "إزالة",
+      "شيل",
+      "الغاء تثبيت"
+    ],
+    "failed": [
+      "فشل",
+      "فاشل",
+      "failed",
+      "ما يشتغل",
+      "لا يعمل",
+      "متوقف",
+      "طافي"
+    ],
+    "open": [
+      "افتح",
+      "فتح",
+      "اسمح"
+    ],
+    "close": [
+      "اغلق",
+      "اقفل",
+      "إغلاق",
+      "منع"
+    ],
+    "restart": [
+      "ريستارت",
+      "اعاده تشغيل",
+      "إعادة تشغيل"
+    ],
+    "start": [
+      "شغل",
+      "تشغيل",
+      "ابدأ",
+      "بدء"
+    ],
+    "stop": [
+      "وقف",
+      "ايقاف",
+      "إيقاف",
+      "طفي"
+    ],
+    "update": [
+      "حدث",
+      "تحديث",
+      "ترقيه",
+      "ترقية",
+      "ابديت"
+    ],
+    "search": [
+      "ابحث",
+      "بحث",
+      "دور",
+      "find"
+    ],
+    "explain": [
+      "اشرح",
+      "شرح",
+      "ماهو",
+      "ما هو",
+      "وش هو",
+      "فهمني"
+    ],
+    "full": [
+      "فل",
+      "ممتلئ",
+      "امتلاء",
+      "خلصت",
+      "انتهت"
+    ],
+    "create": [
+      "انشاء",
+      "أنشئ",
+      "سوي",
+      "اضف",
+      "إضافة",
+      "اضافه"
+    ],
+    "enable": [
+      "فعل",
+      "تفعيل",
+      "مع الاقلاع",
+      "تلقائي"
+    ],
+    "system": [
+      "نظام",
+      "النظام",
+      "ريد هات",
+      "rhel"
+    ],
+    "daily": [
+      "يومي",
+      "كل يوم",
+      "يوميا"
+    ],
+    "password": [
+      "باسورد",
+      "كلمه مرور",
+      "كلمة مرور"
+    ],
+    "owner": [
+      "مالك",
+      "ملكيه",
+      "ملكية"
+    ],
+    "size": [
+      "حجم",
+      "مساحه",
+      "مساحة",
+      "باقي"
+    ],
+    "used": [
+      "يستخدم",
+      "مستخدم",
+      "مشغول"
+    ],
+    "enter": [
+      "ادخل",
+      "أدخل",
+      "دخول",
+      "اتصل"
+    ],
+    "available": [
+      "موجود",
+      "متوفر",
+      "available"
+    ],
+    "extract": [
+      "فك",
+      "استخراج",
+      "unzip",
+      "extract"
+    ]
+  },
+  "known_services": [
+    "nginx",
+    "httpd",
+    "sshd",
+    "firewalld",
+    "chronyd",
+    "NetworkManager",
+    "mariadb",
+    "postgresql",
+    "cockpit",
+    "podman",
+    "crond"
+  ],
+  "known_packages": [
+    "nginx",
+    "httpd",
+    "openssh-server",
+    "firewalld",
+    "chrony",
+    "mariadb-server",
+    "postgresql-server",
+    "cockpit",
+    "podman",
+    "vim",
+    "nano",
+    "git",
+    "curl",
+    "wget",
+    "tree",
+    "rsync",
+    "bind-utils",
+    "lsof",
+    "zip",
+    "unzip"
+  ],
+  "variable_prompts": {
+    "PACKAGE": {
+      "label_ar": "اسم الحزمة أو البرنامج",
+      "example": "nginx"
+    },
+    "SERVICE": {
+      "label_ar": "اسم الخدمة",
+      "example": "nginx"
+    },
+    "USER": {
+      "label_ar": "اسم المستخدم",
+      "example": "ahmed"
+    },
+    "GROUP": {
+      "label_ar": "اسم المجموعة",
+      "example": "wheel"
+    },
+    "PORT": {
+      "label_ar": "رقم المنفذ",
+      "example": "8080"
+    },
+    "PROTOCOL": {
+      "label_ar": "البروتوكول",
+      "example": "tcp",
+      "default": "tcp"
+    },
+    "ZONE": {
+      "label_ar": "منطقة firewalld",
+      "example": "public",
+      "default": "public"
+    },
+    "PATH": {
+      "label_ar": "المسار",
+      "example": "/var/log"
+    },
+    "HOST": {
+      "label_ar": "عنوان الخادم أو النطاق",
+      "example": "192.168.1.10"
+    },
+    "TEXT": {
+      "label_ar": "النص المطلوب البحث عنه",
+      "example": "error"
+    },
+    "SOURCE": {
+      "label_ar": "المصدر",
+      "example": "/tmp/file.txt"
+    },
+    "DESTINATION": {
+      "label_ar": "الوجهة",
+      "example": "/srv/backup/"
+    },
+    "COMMAND": {
+      "label_ar": "الأمر الكامل",
+      "example": "/usr/local/bin/backup.sh"
+    }
+  },
+  "intents": [
+    {
+      "id": "install_nginx",
+      "title_ar": "تثبيت وتشغيل Nginx",
+      "summary_ar": "تجهيز خادم Nginx وتشغيله وفتح HTTP.",
+      "icon": "◈",
+      "signals": {
+        "phrases_ar": [
+          "تثبيت nginx",
+          "نزل nginx",
+          "شغل nginx كخادم ويب",
+          "ابغى ويب سيرفر nginx"
+        ],
+        "any_terms": [
+          "nginx",
+          "انجنكس"
+        ],
+        "all_groups": [
+          [
+            "install",
+            "nginx"
+          ]
+        ],
+        "exclude_terms": [
+          "failed",
+          "لا يعمل"
+        ]
+      },
+      "target_entities": [
+        "install-nginx-web-server"
+      ],
+      "preferred_types": [
+        "task"
+      ],
+      "preferred_categories": [
+        "web_servers"
+      ],
+      "required_variables": [],
+      "query_expansions": [
+        "nginx web server systemctl firewall"
+      ]
+    },
+    {
+      "id": "install_package",
+      "title_ar": "تثبيت برنامج أو حزمة",
+      "summary_ar": "البحث عن حزمة ثم تثبيتها والتحقق منها.",
+      "icon": "↓",
+      "signals": {
+        "phrases_ar": [
+          "تثبيت برنامج",
+          "تحميل تطبيق",
+          "تنزيل حزمة",
+          "نصب برنامج",
+          "ابي اثبت برنامج"
+        ],
+        "any_terms": [
+          "install",
+          "package",
+          "برنامج",
+          "تطبيق"
+        ],
+        "all_groups": [
+          [
+            "install",
+            "package"
+          ]
+        ],
+        "exclude_terms": [
+          "nginx",
+          "remove"
+        ]
+      },
+      "target_entities": [
+        "install-package-dnf",
+        "legacy-pkg-install",
+        "cmd-dnf"
+      ],
+      "preferred_types": [
+        "task",
+        "command"
+      ],
+      "preferred_categories": [
+        "packages"
+      ],
+      "required_variables": [
+        "PACKAGE"
+      ],
+      "query_expansions": [
+        "dnf install package rpm"
+      ]
+    },
+    {
+      "id": "remove_package",
+      "title_ar": "إزالة برنامج أو حزمة",
+      "summary_ar": "إلغاء تثبيت حزمة بواسطة DNF.",
+      "icon": "−",
+      "signals": {
+        "phrases_ar": [
+          "حذف برنامج",
+          "ازالة حزمة",
+          "الغاء تثبيت برنامج",
+          "شيل البكج"
+        ],
+        "any_terms": [
+          "remove",
+          "package",
+          "برنامج"
+        ],
+        "all_groups": [
+          [
+            "remove",
+            "package"
+          ]
+        ],
+        "exclude_terms": []
+      },
+      "target_entities": [
+        "legacy-pkg-remove",
+        "cmd-dnf"
+      ],
+      "preferred_types": [
+        "task",
+        "command"
+      ],
+      "preferred_categories": [
+        "packages"
+      ],
+      "required_variables": [
+        "PACKAGE"
+      ],
+      "query_expansions": [
+        "dnf remove package"
+      ]
+    },
+    {
+      "id": "update_system",
+      "title_ar": "تحديث النظام والحزم",
+      "summary_ar": "فحص تحديثات RHEL ثم تثبيتها.",
+      "icon": "↻",
+      "signals": {
+        "phrases_ar": [
+          "تحديث النظام",
+          "حدث كل البرامج",
+          "ترقية الحزم",
+          "ابديت ريد هات"
+        ],
+        "any_terms": [
+          "update",
+          "نظام",
+          "حزم",
+          "system"
+        ],
+        "all_groups": [
+          [
+            "update",
+            "نظام"
+          ]
+        ],
+        "exclude_terms": []
+      },
+      "target_entities": [
+        "legacy-pkg-update-all",
+        "legacy-pkg-check-update",
+        "cmd-dnf"
+      ],
+      "preferred_types": [
+        "task",
+        "command"
+      ],
+      "preferred_categories": [
+        "packages"
+      ],
+      "required_variables": [],
+      "query_expansions": [
+        "dnf upgrade check-update"
+      ]
+    },
+    {
+      "id": "search_package",
+      "title_ar": "البحث عن حزمة",
+      "summary_ar": "العثور على الاسم الصحيح للحزمة ومعلوماتها.",
+      "icon": "⌕",
+      "signals": {
+        "phrases_ar": [
+          "ابحث عن برنامج",
+          "هل الحزمة موجودة",
+          "اسم البكج",
+          "وين البرنامج في المستودع",
+          "هل برنامج موجود",
+          "هل الحزمة موجودة"
+        ],
+        "any_terms": [
+          "search",
+          "package",
+          "برنامج",
+          "مستودع",
+          "available"
+        ],
+        "all_groups": [
+          [
+            "search",
+            "package"
+          ]
+        ],
+        "exclude_terms": [
+          "ملف"
+        ]
+      },
+      "target_entities": [
+        "legacy-pkg-search",
+        "legacy-pkg-info",
+        "cmd-dnf"
+      ],
+      "preferred_types": [
+        "task",
+        "command"
+      ],
+      "preferred_categories": [
+        "packages"
+      ],
+      "required_variables": [
+        "PACKAGE"
+      ],
+      "query_expansions": [
+        "dnf search info package"
+      ]
+    },
+    {
+      "id": "service_failed",
+      "title_ar": "تشخيص خدمة متوقفة أو Failed",
+      "summary_ar": "فحص حالة الخدمة وسجلاتها وسبب الفشل.",
+      "icon": "⚕",
+      "signals": {
+        "phrases_ar": [
+          "الخدمة لا تعمل",
+          "السيرفس failed",
+          "الخدمة طافية",
+          "ليش الخدمة متوقفة",
+          "service failed",
+          "الخدمة failed",
+          "الخدمة فاشلة"
+        ],
+        "any_terms": [
+          "service",
+          "failed",
+          "خطا",
+          "مشكله"
+        ],
+        "all_groups": [
+          [
+            "service",
+            "failed"
+          ]
+        ],
+        "exclude_terms": [
+          "ssh"
+        ]
+      },
+      "target_entities": [
+        "troubleshoot-systemd-service",
+        "legacy-svc-status",
+        "cmd-systemctl",
+        "cmd-journalctl"
+      ],
+      "preferred_types": [
+        "troubleshooting",
+        "command",
+        "task"
+      ],
+      "preferred_categories": [
+        "services"
+      ],
+      "required_variables": [
+        "SERVICE"
+      ],
+      "query_expansions": [
+        "systemctl status journalctl failed service"
+      ]
+    },
+    {
+      "id": "service_start",
+      "title_ar": "تشغيل خدمة",
+      "summary_ar": "تشغيل خدمة Systemd الآن.",
+      "icon": "▶",
+      "signals": {
+        "phrases_ar": [
+          "تشغيل خدمة",
+          "شغل السيرفس",
+          "ابدأ الخدمة"
+        ],
+        "any_terms": [
+          "start",
+          "service"
+        ],
+        "all_groups": [
+          [
+            "start",
+            "service"
+          ]
+        ],
+        "exclude_terms": [
+          "restart",
+          "enable"
+        ]
+      },
+      "target_entities": [
+        "legacy-svc-start",
+        "cmd-systemctl"
+      ],
+      "preferred_types": [
+        "task",
+        "command"
+      ],
+      "preferred_categories": [
+        "services"
+      ],
+      "required_variables": [
+        "SERVICE"
+      ],
+      "query_expansions": [
+        "systemctl start service"
+      ]
+    },
+    {
+      "id": "service_stop",
+      "title_ar": "إيقاف خدمة",
+      "summary_ar": "إيقاف خدمة Systemd حالياً.",
+      "icon": "■",
+      "signals": {
+        "phrases_ar": [
+          "ايقاف خدمة",
+          "وقف السيرفس",
+          "طفي الخدمة"
+        ],
+        "any_terms": [
+          "stop",
+          "service"
+        ],
+        "all_groups": [
+          [
+            "stop",
+            "service"
+          ]
+        ],
+        "exclude_terms": []
+      },
+      "target_entities": [
+        "legacy-svc-stop",
+        "cmd-systemctl"
+      ],
+      "preferred_types": [
+        "task",
+        "command"
+      ],
+      "preferred_categories": [
+        "services"
+      ],
+      "required_variables": [
+        "SERVICE"
+      ],
+      "query_expansions": [
+        "systemctl stop service"
+      ]
+    },
+    {
+      "id": "service_restart",
+      "title_ar": "إعادة تشغيل خدمة",
+      "summary_ar": "إعادة تشغيل خدمة بعد تعديل الإعدادات.",
+      "icon": "↻",
+      "signals": {
+        "phrases_ar": [
+          "اعادة تشغيل خدمة",
+          "ريستارت السيرفس",
+          "restart service"
+        ],
+        "any_terms": [
+          "restart",
+          "service"
+        ],
+        "all_groups": [
+          [
+            "restart",
+            "service"
+          ]
+        ],
+        "exclude_terms": []
+      },
+      "target_entities": [
+        "legacy-svc-restart",
+        "cmd-systemctl"
+      ],
+      "preferred_types": [
+        "task",
+        "command"
+      ],
+      "preferred_categories": [
+        "services"
+      ],
+      "required_variables": [
+        "SERVICE"
+      ],
+      "query_expansions": [
+        "systemctl restart service"
+      ]
+    },
+    {
+      "id": "service_enable",
+      "title_ar": "تشغيل خدمة مع الإقلاع",
+      "summary_ar": "تفعيل الخدمة لتبدأ تلقائياً مع النظام.",
+      "icon": "⏻",
+      "signals": {
+        "phrases_ar": [
+          "تشغيل الخدمة مع الاقلاع",
+          "فعل السيرفس تلقائي",
+          "enable service",
+          "تشغيل الخدمة مع الاقلاع",
+          "خلي الخدمة تشتغل مع الاقلاع"
+        ],
+        "any_terms": [
+          "enable",
+          "service",
+          "اقلاع",
+          "تلقائي"
+        ],
+        "all_groups": [
+          [
+            "service",
+            "اقلاع"
+          ]
+        ],
+        "exclude_terms": []
+      },
+      "target_entities": [
+        "legacy-svc-enable-now",
+        "legacy-svc-enable",
+        "cmd-systemctl"
+      ],
+      "preferred_types": [
+        "task",
+        "command"
+      ],
+      "preferred_categories": [
+        "services"
+      ],
+      "required_variables": [
+        "SERVICE"
+      ],
+      "query_expansions": [
+        "systemctl enable --now service boot"
+      ]
+    },
+    {
+      "id": "service_logs",
+      "title_ar": "عرض سجل وأخطاء خدمة",
+      "summary_ar": "قراءة journal لخدمة محددة.",
+      "icon": "≡",
+      "signals": {
+        "phrases_ar": [
+          "سجل الخدمة",
+          "لوق السيرفس",
+          "اخطاء الخدمة",
+          "كيف اشوف لوقات الخدمة"
+        ],
+        "any_terms": [
+          "log",
+          "service",
+          "اخطاء",
+          "journalctl"
+        ],
+        "all_groups": [
+          [
+            "log",
+            "service"
+          ]
+        ],
+        "exclude_terms": []
+      },
+      "target_entities": [
+        "legacy-log-unit",
+        "legacy-log-unit-follow",
+        "cmd-journalctl",
+        "troubleshoot-systemd-service"
+      ],
+      "preferred_types": [
+        "command",
+        "troubleshooting",
+        "task"
+      ],
+      "preferred_categories": [
+        "logs",
+        "services"
+      ],
+      "required_variables": [
+        "SERVICE"
+      ],
+      "query_expansions": [
+        "journalctl -u service logs errors"
+      ]
+    },
+    {
+      "id": "disk_full",
+      "title_ar": "تشخيص امتلاء القرص",
+      "summary_ar": "تحديد القسم والمجلدات والملفات التي تستهلك المساحة.",
+      "icon": "▰",
+      "signals": {
+        "phrases_ar": [
+          "الهارد ممتلئ",
+          "المساحة خلصت",
+          "القرص فل",
+          "no space left",
+          "disk full",
+          "الهارد فل",
+          "المساحة خلصت"
+        ],
+        "any_terms": [
+          "disk",
+          "مساحه",
+          "ممتلئ",
+          "full",
+          "تخزين"
+        ],
+        "all_groups": [
+          [
+            "disk",
+            "full"
+          ]
+        ],
+        "exclude_terms": []
+      },
+      "target_entities": [
+        "find-and-clean-large-files",
+        "legacy-file-df",
+        "legacy-text-find-size"
+      ],
+      "preferred_types": [
+        "task",
+        "troubleshooting"
+      ],
+      "preferred_categories": [
+        "storage"
+      ],
+      "required_variables": [
+        "PATH"
+      ],
+      "query_expansions": [
+        "df du find large files disk full"
+      ]
+    },
+    {
+      "id": "disk_usage",
+      "title_ar": "عرض مساحة الأقراص والمجلدات",
+      "summary_ar": "معرفة المساحة المستخدمة والمتاحة.",
+      "icon": "▤",
+      "signals": {
+        "phrases_ar": [
+          "مساحة القرص",
+          "كم باقي في الهارد",
+          "حجم المجلد",
+          "استهلاك التخزين",
+          "كم باقي في القرص",
+          "حجم مجلد"
+        ],
+        "any_terms": [
+          "disk",
+          "مساحه",
+          "حجم",
+          "تخزين"
+        ],
+        "all_groups": [],
+        "exclude_terms": [
+          "full",
+          "ممتلئ"
+        ]
+      },
+      "target_entities": [
+        "legacy-file-df",
+        "legacy-file-du",
+        "legacy-disk-lsblk"
+      ],
+      "preferred_types": [
+        "task",
+        "command"
+      ],
+      "preferred_categories": [
+        "storage",
+        "files"
+      ],
+      "required_variables": [],
+      "query_expansions": [
+        "df -h du -sh lsblk"
+      ]
+    },
+    {
+      "id": "ssh_failed",
+      "title_ar": "تشخيص تعذر اتصال SSH",
+      "summary_ar": "فصل المشكلة بين الشبكة والمنفذ والخدمة والمصادقة.",
+      "icon": "⇄",
+      "signals": {
+        "phrases_ar": [
+          "ssh لا يعمل",
+          "ما اقدر ادخل ssh",
+          "connection refused ssh",
+          "ssh timeout",
+          "تعذر الاتصال بالسيرفر",
+          "ssh connection refused"
+        ],
+        "any_terms": [
+          "ssh",
+          "failed",
+          "دخول",
+          "اتصال"
+        ],
+        "all_groups": [
+          [
+            "ssh",
+            "failed"
+          ]
+        ],
+        "exclude_terms": [
+          "مفتاح"
+        ]
+      },
+      "target_entities": [
+        "troubleshoot-ssh-connection",
+        "cmd-ssh",
+        "concept-ssh"
+      ],
+      "preferred_types": [
+        "troubleshooting",
+        "command",
+        "concept"
+      ],
+      "preferred_categories": [
+        "ssh"
+      ],
+      "required_variables": [
+        "HOST",
+        "USER",
+        "PORT"
+      ],
+      "query_expansions": [
+        "ssh connection refused timeout sshd firewall"
+      ]
+    },
+    {
+      "id": "ssh_connect",
+      "title_ar": "الاتصال بخادم عبر SSH",
+      "summary_ar": "فتح جلسة طرفية مشفرة على خادم بعيد.",
+      "icon": "↪",
+      "signals": {
+        "phrases_ar": [
+          "ادخل السيرفر ssh",
+          "اتصل بسيرفر",
+          "فتح ssh",
+          "دخول ريموت"
+        ],
+        "any_terms": [
+          "ssh",
+          "دخول",
+          "اتصال",
+          "سيرفر",
+          "enter"
+        ],
+        "all_groups": [
+          [
+            "ssh",
+            "دخول"
+          ]
+        ],
+        "exclude_terms": [
+          "failed",
+          "لا يعمل",
+          "مفتاح"
+        ]
+      },
+      "target_entities": [
+        "legacy-ssh-connect",
+        "legacy-ssh-port",
+        "cmd-ssh"
+      ],
+      "preferred_types": [
+        "task",
+        "command"
+      ],
+      "preferred_categories": [
+        "ssh"
+      ],
+      "required_variables": [
+        "USER",
+        "HOST",
+        "PORT"
+      ],
+      "query_expansions": [
+        "ssh user host port"
+      ]
+    },
+    {
+      "id": "ssh_key",
+      "title_ar": "إعداد مفتاح SSH",
+      "summary_ar": "إنشاء مفتاح ونسخه إلى الخادم للدخول الآمن.",
+      "icon": "⚿",
+      "signals": {
+        "phrases_ar": [
+          "انشاء مفتاح ssh",
+          "دخول بدون كلمة مرور",
+          "ssh key",
+          "نسخ المفتاح للسيرفر"
+        ],
+        "any_terms": [
+          "ssh",
+          "مفتاح",
+          "key",
+          "باسورد"
+        ],
+        "all_groups": [
+          [
+            "ssh",
+            "مفتاح"
+          ]
+        ],
+        "exclude_terms": []
+      },
+      "target_entities": [
+        "legacy-ssh-keygen",
+        "legacy-ssh-copy-key",
+        "cmd-ssh",
+        "concept-ssh"
+      ],
+      "preferred_types": [
+        "task",
+        "command",
+        "concept"
+      ],
+      "preferred_categories": [
+        "ssh"
+      ],
+      "required_variables": [
+        "USER",
+        "HOST"
+      ],
+      "query_expansions": [
+        "ssh-keygen ssh-copy-id public key"
+      ]
+    },
+    {
+      "id": "open_port",
+      "title_ar": "فتح منفذ في الجدار الناري",
+      "summary_ar": "السماح بمنفذ TCP أو UDP في firewalld.",
+      "icon": "⇥",
+      "signals": {
+        "phrases_ar": [
+          "فتح بورت",
+          "افتح منفذ",
+          "اسمح بمنفذ",
+          "open port"
+        ],
+        "any_terms": [
+          "open",
+          "port",
+          "firewalld"
+        ],
+        "all_groups": [
+          [
+            "open",
+            "port"
+          ]
+        ],
+        "exclude_terms": []
+      },
+      "target_entities": [
+        "legacy-fw-add-port",
+        "cmd-firewall-cmd",
+        "concept-firewalld"
+      ],
+      "preferred_types": [
+        "task",
+        "command",
+        "concept"
+      ],
+      "preferred_categories": [
+        "firewall"
+      ],
+      "required_variables": [
+        "PORT",
+        "PROTOCOL",
+        "ZONE"
+      ],
+      "query_expansions": [
+        "firewall-cmd permanent add-port reload"
+      ]
+    },
+    {
+      "id": "close_port",
+      "title_ar": "إغلاق منفذ في الجدار الناري",
+      "summary_ar": "إزالة السماح بمنفذ من firewalld.",
+      "icon": "⇤",
+      "signals": {
+        "phrases_ar": [
+          "اغلاق بورت",
+          "اقفل منفذ",
+          "امنع المنفذ",
+          "close port"
+        ],
+        "any_terms": [
+          "close",
+          "port",
+          "firewalld"
+        ],
+        "all_groups": [
+          [
+            "close",
+            "port"
+          ]
+        ],
+        "exclude_terms": []
+      },
+      "target_entities": [
+        "legacy-fw-remove-port",
+        "cmd-firewall-cmd"
+      ],
+      "preferred_types": [
+        "task",
+        "command"
+      ],
+      "preferred_categories": [
+        "firewall"
+      ],
+      "required_variables": [
+        "PORT",
+        "PROTOCOL",
+        "ZONE"
+      ],
+      "query_expansions": [
+        "firewall-cmd remove-port reload"
+      ]
+    },
+    {
+      "id": "firewall_status",
+      "title_ar": "فحص الجدار الناري وقواعده",
+      "summary_ar": "عرض حالة firewalld والمناطق والقواعد.",
+      "icon": "♢",
+      "signals": {
+        "phrases_ar": [
+          "حالة الفايروول",
+          "قواعد الجدار الناري",
+          "البورتات المسموحة",
+          "firewall status"
+        ],
+        "any_terms": [
+          "firewalld",
+          "حاله",
+          "قواعد",
+          "مسموح"
+        ],
+        "all_groups": [],
+        "exclude_terms": [
+          "open",
+          "close"
+        ]
+      },
+      "target_entities": [
+        "legacy-fw-state",
+        "legacy-fw-list",
+        "legacy-fw-zones",
+        "cmd-firewall-cmd",
+        "concept-firewalld"
+      ],
+      "preferred_types": [
+        "command",
+        "concept",
+        "task"
+      ],
+      "preferred_categories": [
+        "firewall"
+      ],
+      "required_variables": [],
+      "query_expansions": [
+        "firewall-cmd state list-all active-zones"
+      ]
+    },
+    {
+      "id": "selinux_denied",
+      "title_ar": "تشخيص رفض SELinux",
+      "summary_ar": "فحص AVC والسياقات وإصلاح السبب دون تعطيل SELinux.",
+      "icon": "S",
+      "signals": {
+        "phrases_ar": [
+          "selinux يمنع",
+          "avc denied",
+          "permission denied بسبب selinux",
+          "سيلنكس مانع",
+          "سيلنكس مانع"
+        ],
+        "any_terms": [
+          "selinux",
+          "denied",
+          "permission",
+          "avc"
+        ],
+        "all_groups": [
+          [
+            "selinux",
+            "denied"
+          ]
+        ],
+        "exclude_terms": []
+      },
+      "target_entities": [
+        "diagnose-selinux-denial",
+        "concept-selinux",
+        "legacy-se-ausearch",
+        "legacy-se-restorecon"
+      ],
+      "preferred_types": [
+        "troubleshooting",
+        "concept",
+        "task"
+      ],
+      "preferred_categories": [
+        "selinux"
+      ],
+      "required_variables": [
+        "PATH"
+      ],
+      "query_expansions": [
+        "SELinux AVC ausearch restorecon context"
+      ]
+    },
+    {
+      "id": "permission_denied",
+      "title_ar": "تشخيص Permission denied",
+      "summary_ar": "فحص صلاحيات الملف والمالك وSELinux.",
+      "icon": "🔒",
+      "signals": {
+        "phrases_ar": [
+          "permission denied",
+          "ممنوع الوصول",
+          "ما عندي صلاحية",
+          "الملف يمنعني"
+        ],
+        "any_terms": [
+          "permission",
+          "denied",
+          "صلاحيات",
+          "وصول"
+        ],
+        "all_groups": [
+          [
+            "permission",
+            "denied"
+          ]
+        ],
+        "exclude_terms": [
+          "selinux"
+        ]
+      },
+      "target_entities": [
+        "concept-linux-permissions",
+        "legacy-perm-ls",
+        "legacy-perm-chmod-octal",
+        "legacy-perm-chown",
+        "diagnose-selinux-denial"
+      ],
+      "preferred_types": [
+        "concept",
+        "task",
+        "troubleshooting"
+      ],
+      "preferred_categories": [
+        "permissions"
+      ],
+      "required_variables": [
+        "PATH"
+      ],
+      "query_expansions": [
+        "ls -l chmod chown permissions owner SELinux"
+      ]
+    },
+    {
+      "id": "change_permissions",
+      "title_ar": "تغيير صلاحيات ملف",
+      "summary_ar": "تعيين rwx أو صيغة رقمية بواسطة chmod.",
+      "icon": "rwx",
+      "signals": {
+        "phrases_ar": [
+          "غير صلاحيات الملف",
+          "chmod 755",
+          "اعطي صلاحية تنفيذ",
+          "تعديل البرمشن",
+          "غير صلاحية",
+          "chmod للسكربت"
+        ],
+        "any_terms": [
+          "chmod",
+          "صلاحيات",
+          "permission",
+          "تنفيذ"
+        ],
+        "all_groups": [],
+        "exclude_terms": [
+          "denied"
+        ]
+      },
+      "target_entities": [
+        "legacy-perm-chmod-octal",
+        "legacy-perm-chmod-symbolic",
+        "cmd-chmod",
+        "concept-linux-permissions"
+      ],
+      "preferred_types": [
+        "command",
+        "task",
+        "concept"
+      ],
+      "preferred_categories": [
+        "permissions"
+      ],
+      "required_variables": [
+        "PATH"
+      ],
+      "query_expansions": [
+        "chmod rwx permissions"
+      ]
+    },
+    {
+      "id": "change_owner",
+      "title_ar": "تغيير مالك ملف",
+      "summary_ar": "تغيير المستخدم والمجموعة المالكة بواسطة chown.",
+      "icon": "♙",
+      "signals": {
+        "phrases_ar": [
+          "غير مالك الملف",
+          "تغيير المالك",
+          "chown",
+          "حول الملكية"
+        ],
+        "any_terms": [
+          "chown",
+          "مالك",
+          "ملكيه",
+          "owner"
+        ],
+        "all_groups": [],
+        "exclude_terms": []
+      },
+      "target_entities": [
+        "legacy-perm-chown",
+        "cmd-chown",
+        "concept-linux-permissions"
+      ],
+      "preferred_types": [
+        "command",
+        "task",
+        "concept"
+      ],
+      "preferred_categories": [
+        "permissions"
+      ],
+      "required_variables": [
+        "USER",
+        "PATH"
+      ],
+      "query_expansions": [
+        "chown user group file ownership"
+      ]
+    },
+    {
+      "id": "create_user",
+      "title_ar": "إنشاء مستخدم جديد",
+      "summary_ar": "إنشاء الحساب وتعيين كلمة مرور وربما منحه wheel.",
+      "icon": "＋",
+      "signals": {
+        "phrases_ar": [
+          "انشاء مستخدم",
+          "اضافة يوزر",
+          "سوي حساب جديد",
+          "useradd",
+          "سوي يوزر",
+          "اضف مستخدم"
+        ],
+        "any_terms": [
+          "user",
+          "انشاء",
+          "اضافه",
+          "useradd"
+        ],
+        "all_groups": [
+          [
+            "create",
+            "user"
+          ]
+        ],
+        "exclude_terms": [
+          "حذف"
+        ]
+      },
+      "target_entities": [
+        "create-user-with-admin-access",
+        "legacy-usr-add",
+        "cmd-useradd",
+        "concept-linux-users"
+      ],
+      "preferred_types": [
+        "task",
+        "command",
+        "concept"
+      ],
+      "preferred_categories": [
+        "users"
+      ],
+      "required_variables": [
+        "USER"
+      ],
+      "query_expansions": [
+        "useradd passwd usermod wheel"
+      ]
+    },
+    {
+      "id": "delete_user",
+      "title_ar": "حذف مستخدم",
+      "summary_ar": "إزالة حساب مع خيار حذف ملفاته المنزلية.",
+      "icon": "−",
+      "signals": {
+        "phrases_ar": [
+          "حذف مستخدم",
+          "احذف اليوزر",
+          "ازالة حساب",
+          "userdel"
+        ],
+        "any_terms": [
+          "user",
+          "remove",
+          "حذف",
+          "userdel"
+        ],
+        "all_groups": [
+          [
+            "user",
+            "remove"
+          ]
+        ],
+        "exclude_terms": []
+      },
+      "target_entities": [
+        "legacy-usr-del",
+        "legacy-usr-del-home",
+        "concept-linux-users"
+      ],
+      "preferred_types": [
+        "task",
+        "concept"
+      ],
+      "preferred_categories": [
+        "users"
+      ],
+      "required_variables": [
+        "USER"
+      ],
+      "query_expansions": [
+        "userdel remove user home"
+      ]
+    },
+    {
+      "id": "change_password",
+      "title_ar": "تغيير كلمة مرور مستخدم",
+      "summary_ar": "تعيين أو تحديث كلمة مرور الحساب.",
+      "icon": "***",
+      "signals": {
+        "phrases_ar": [
+          "غير كلمة المرور",
+          "تغيير باسورد المستخدم",
+          "passwd user",
+          "نسيت باسورد اليوزر",
+          "غير باسورد",
+          "تغيير كلمة المرور"
+        ],
+        "any_terms": [
+          "باسورد",
+          "كلمه مرور",
+          "passwd",
+          "user"
+        ],
+        "all_groups": [],
+        "exclude_terms": []
+      },
+      "target_entities": [
+        "legacy-usr-passwd",
+        "concept-linux-users"
+      ],
+      "preferred_types": [
+        "task",
+        "concept"
+      ],
+      "preferred_categories": [
+        "users"
+      ],
+      "required_variables": [
+        "USER"
+      ],
+      "query_expansions": [
+        "passwd user password"
+      ]
+    },
+    {
+      "id": "add_user_group",
+      "title_ar": "إضافة مستخدم إلى مجموعة",
+      "summary_ar": "إضافة الحساب إلى مجموعة إضافية بواسطة usermod.",
+      "icon": "⊕",
+      "signals": {
+        "phrases_ar": [
+          "اضف المستخدم للمجموعة",
+          "حط اليوزر في wheel",
+          "منح sudo للمستخدم",
+          "usermod group"
+        ],
+        "any_terms": [
+          "user",
+          "مجموعه",
+          "wheel",
+          "usermod",
+          "sudo"
+        ],
+        "all_groups": [
+          [
+            "user",
+            "مجموعه"
+          ]
+        ],
+        "exclude_terms": []
+      },
+      "target_entities": [
+        "legacy-usr-mod-group",
+        "cmd-usermod",
+        "concept-linux-users"
+      ],
+      "preferred_types": [
+        "command",
+        "task",
+        "concept"
+      ],
+      "preferred_categories": [
+        "users"
+      ],
+      "required_variables": [
+        "USER",
+        "GROUP"
+      ],
+      "query_expansions": [
+        "usermod -aG group user wheel"
+      ]
+    },
+    {
+      "id": "find_file",
+      "title_ar": "البحث عن ملف",
+      "summary_ar": "العثور على ملف بالاسم أو النمط.",
+      "icon": "⌕",
+      "signals": {
+        "phrases_ar": [
+          "البحث عن ملف",
+          "وين الملف",
+          "دور على ملف",
+          "find file",
+          "وين ملف"
+        ],
+        "any_terms": [
+          "search",
+          "ملف",
+          "find",
+          "locate"
+        ],
+        "all_groups": [
+          [
+            "search",
+            "ملف"
+          ]
+        ],
+        "exclude_terms": [
+          "داخل"
+        ]
+      },
+      "target_entities": [
+        "legacy-text-find-name",
+        "legacy-text-locate",
+        "cmd-find"
+      ],
+      "preferred_types": [
+        "task",
+        "command"
+      ],
+      "preferred_categories": [
+        "search_text"
+      ],
+      "required_variables": [
+        "PATH"
+      ],
+      "query_expansions": [
+        "find locate file name"
+      ]
+    },
+    {
+      "id": "search_text",
+      "title_ar": "البحث داخل الملفات",
+      "summary_ar": "البحث عن كلمة أو نمط بواسطة grep.",
+      "icon": "¶",
+      "signals": {
+        "phrases_ar": [
+          "بحث داخل ملف",
+          "ابحث عن كلمة في الملفات",
+          "grep نص",
+          "دور داخل اللوق"
+        ],
+        "any_terms": [
+          "search",
+          "داخل",
+          "كلمه",
+          "grep",
+          "نص"
+        ],
+        "all_groups": [
+          [
+            "search",
+            "داخل"
+          ]
+        ],
+        "exclude_terms": []
+      },
+      "target_entities": [
+        "legacy-text-grep",
+        "legacy-text-grep-rec",
+        "cmd-grep"
+      ],
+      "preferred_types": [
+        "task",
+        "command"
+      ],
+      "preferred_categories": [
+        "search_text"
+      ],
+      "required_variables": [
+        "TEXT",
+        "PATH"
+      ],
+      "query_expansions": [
+        "grep recursive text files"
+      ]
+    },
+    {
+      "id": "copy_file",
+      "title_ar": "نسخ ملف أو مجلد",
+      "summary_ar": "نسخ الملفات مع خيارات الحفاظ على الخصائص.",
+      "icon": "⧉",
+      "signals": {
+        "phrases_ar": [
+          "نسخ ملف",
+          "انسخ مجلد",
+          "copy file",
+          "عمل نسخه"
+        ],
+        "any_terms": [
+          "نسخ",
+          "copy",
+          "cp",
+          "ملف",
+          "مجلد"
+        ],
+        "all_groups": [
+          [
+            "نسخ",
+            "ملف"
+          ]
+        ],
+        "exclude_terms": []
+      },
+      "target_entities": [
+        "legacy-file-cp",
+        "legacy-file-cp-dir"
+      ],
+      "preferred_types": [
+        "task",
+        "command"
+      ],
+      "preferred_categories": [
+        "files"
+      ],
+      "required_variables": [
+        "SOURCE",
+        "DESTINATION"
+      ],
+      "query_expansions": [
+        "cp copy source destination"
+      ]
+    },
+    {
+      "id": "move_file",
+      "title_ar": "نقل ملف أو إعادة تسميته",
+      "summary_ar": "استخدام mv للنقل أو تغيير الاسم.",
+      "icon": "↦",
+      "signals": {
+        "phrases_ar": [
+          "نقل ملف",
+          "غير اسم الملف",
+          "اعادة تسمية",
+          "move file"
+        ],
+        "any_terms": [
+          "نقل",
+          "mv",
+          "تسميه",
+          "ملف"
+        ],
+        "all_groups": [],
+        "exclude_terms": []
+      },
+      "target_entities": [
+        "legacy-file-mv"
+      ],
+      "preferred_types": [
+        "task",
+        "command"
+      ],
+      "preferred_categories": [
+        "files"
+      ],
+      "required_variables": [
+        "SOURCE",
+        "DESTINATION"
+      ],
+      "query_expansions": [
+        "mv move rename file"
+      ]
+    },
+    {
+      "id": "delete_file",
+      "title_ar": "حذف ملف أو مجلد",
+      "summary_ar": "اختيار أمر الحذف المناسب مع تنبيه للخطورة.",
+      "icon": "×",
+      "signals": {
+        "phrases_ar": [
+          "حذف ملف",
+          "امسح مجلد",
+          "rm file",
+          "احذف الفولدر"
+        ],
+        "any_terms": [
+          "remove",
+          "حذف",
+          "rm",
+          "ملف",
+          "مجلد"
+        ],
+        "all_groups": [],
+        "exclude_terms": [
+          "برنامج",
+          "حزمه",
+          "user"
+        ]
+      },
+      "target_entities": [
+        "legacy-file-rm",
+        "legacy-file-rm-dir"
+      ],
+      "preferred_types": [
+        "task"
+      ],
+      "preferred_categories": [
+        "files"
+      ],
+      "required_variables": [
+        "PATH"
+      ],
+      "query_expansions": [
+        "rm rmdir delete file directory"
+      ]
+    },
+    {
+      "id": "compress_archive",
+      "title_ar": "ضغط ملف أو مجلد",
+      "summary_ar": "إنشاء tar.gz أو ZIP.",
+      "icon": "▣",
+      "signals": {
+        "phrases_ar": [
+          "ضغط مجلد",
+          "سوي zip",
+          "انشاء tar gz",
+          "compress folder"
+        ],
+        "any_terms": [
+          "ضغط",
+          "zip",
+          "tar",
+          "ارشيف"
+        ],
+        "all_groups": [],
+        "exclude_terms": [
+          "فك"
+        ]
+      },
+      "target_entities": [
+        "legacy-arc-tar-create",
+        "legacy-arc-zip"
+      ],
+      "preferred_types": [
+        "task"
+      ],
+      "preferred_categories": [
+        "archives"
+      ],
+      "required_variables": [
+        "PATH"
+      ],
+      "query_expansions": [
+        "tar czf zip archive compress"
+      ]
+    },
+    {
+      "id": "extract_archive",
+      "title_ar": "فك ملف مضغوط",
+      "summary_ar": "استخراج tar.gz أو ZIP.",
+      "icon": "▢",
+      "signals": {
+        "phrases_ar": [
+          "فك ضغط",
+          "استخراج zip",
+          "فك tar gz",
+          "unzip file"
+        ],
+        "any_terms": [
+          "فك",
+          "استخراج",
+          "unzip",
+          "tar"
+        ],
+        "all_groups": [],
+        "exclude_terms": []
+      },
+      "target_entities": [
+        "legacy-arc-tar-extract",
+        "legacy-arc-unzip",
+        "legacy-arc-gunzip"
+      ],
+      "preferred_types": [
+        "task"
+      ],
+      "preferred_categories": [
+        "archives"
+      ],
+      "required_variables": [
+        "PATH"
+      ],
+      "query_expansions": [
+        "tar xzf unzip extract archive"
+      ]
+    },
+    {
+      "id": "network_unreachable",
+      "title_ar": "تشخيص مشكلة اتصال الشبكة",
+      "summary_ar": "فحص العنوان والمسار والبوابة والوصول.",
+      "icon": "⌁",
+      "signals": {
+        "phrases_ar": [
+          "الانترنت لا يعمل",
+          "السيرفر ما يرد",
+          "لا يوجد اتصال",
+          "network unreachable",
+          "ما اقدر اسوي ping",
+          "الانترنت ما يشتغل",
+          "السيرفر ما يرد"
+        ],
+        "any_terms": [
+          "network",
+          "اتصال",
+          "انترنت",
+          "ping",
+          "unreachable"
+        ],
+        "all_groups": [],
+        "exclude_terms": [
+          "ssh"
+        ]
+      },
+      "target_entities": [
+        "concept-network-stack",
+        "legacy-net-ip",
+        "legacy-net-route",
+        "legacy-net-ping"
+      ],
+      "preferred_types": [
+        "concept",
+        "task"
+      ],
+      "preferred_categories": [
+        "network"
+      ],
+      "required_variables": [
+        "HOST"
+      ],
+      "query_expansions": [
+        "ip address route ping network connectivity"
+      ]
+    },
+    {
+      "id": "show_ip",
+      "title_ar": "عرض عنوان IP وواجهات الشبكة",
+      "summary_ar": "عرض الواجهات والعناوين والمسارات.",
+      "icon": "IP",
+      "signals": {
+        "phrases_ar": [
+          "ماهو الاي بي",
+          "عرض ip",
+          "عنوان السيرفر",
+          "كروت الشبكة",
+          "وش ip الجهاز",
+          "ماهو الاي بي"
+        ],
+        "any_terms": [
+          "ip",
+          "عنوان",
+          "واجهات",
+          "network"
+        ],
+        "all_groups": [],
+        "exclude_terms": [
+          "مشكله",
+          "لا يعمل"
+        ]
+      },
+      "target_entities": [
+        "legacy-net-ip",
+        "legacy-net-route",
+        "concept-network-stack"
+      ],
+      "preferred_types": [
+        "task",
+        "concept"
+      ],
+      "preferred_categories": [
+        "network"
+      ],
+      "required_variables": [],
+      "query_expansions": [
+        "ip address show route interfaces"
+      ]
+    },
+    {
+      "id": "dns_problem",
+      "title_ar": "تشخيص DNS",
+      "summary_ar": "اختبار ترجمة أسماء النطاقات بواسطة dig وhost.",
+      "icon": "@",
+      "signals": {
+        "phrases_ar": [
+          "dns لا يعمل",
+          "الدومين ما يتحول",
+          "مشكلة حل الاسم",
+          "name resolution"
+        ],
+        "any_terms": [
+          "dns",
+          "دومين",
+          "اسم",
+          "dig",
+          "host"
+        ],
+        "all_groups": [],
+        "exclude_terms": []
+      },
+      "target_entities": [
+        "legacy-net-dns",
+        "legacy-net-host",
+        "concept-network-stack"
+      ],
+      "preferred_types": [
+        "task",
+        "concept"
+      ],
+      "preferred_categories": [
+        "network"
+      ],
+      "required_variables": [
+        "HOST"
+      ],
+      "query_expansions": [
+        "dig host DNS resolution domain"
+      ]
+    },
+    {
+      "id": "port_in_use",
+      "title_ar": "معرفة العملية التي تستخدم منفذاً",
+      "summary_ar": "كشف العملية المستمعة على منفذ معين.",
+      "icon": "#",
+      "signals": {
+        "phrases_ar": [
+          "البورت مستخدم",
+          "port already in use",
+          "من يستخدم المنفذ",
+          "المنفذ مشغول"
+        ],
+        "any_terms": [
+          "port",
+          "مستخدم",
+          "مشغول",
+          "lsof",
+          "ss",
+          "used"
+        ],
+        "all_groups": [
+          [
+            "port",
+            "مستخدم"
+          ]
+        ],
+        "exclude_terms": [
+          "open",
+          "close"
+        ]
+      },
+      "target_entities": [
+        "legacy-proc-lsof-port",
+        "legacy-proc-ss-listen",
+        "cmd-ss"
+      ],
+      "preferred_types": [
+        "task",
+        "command"
+      ],
+      "preferred_categories": [
+        "processes",
+        "network"
+      ],
+      "required_variables": [
+        "PORT"
+      ],
+      "query_expansions": [
+        "lsof -i ss listening port process"
+      ]
+    },
+    {
+      "id": "schedule_task",
+      "title_ar": "جدولة أمر أو مهمة",
+      "summary_ar": "تشغيل أمر دورياً بواسطة Cron أو مرة واحدة بواسطة at.",
+      "icon": "◷",
+      "signals": {
+        "phrases_ar": [
+          "جدولة امر",
+          "تشغيل يومي",
+          "cron job",
+          "شغل الامر كل يوم",
+          "مهمة تلقائية",
+          "شغل النسخة الاحتياطية كل يوم",
+          "تشغيل كل يوم"
+        ],
+        "any_terms": [
+          "جدوله",
+          "cron",
+          "يومي",
+          "تلقائي",
+          "at"
+        ],
+        "all_groups": [],
+        "exclude_terms": []
+      },
+      "target_entities": [
+        "legacy-sched-crontab-edit",
+        "legacy-sched-at",
+        "legacy-sched-systemd-timers"
+      ],
+      "preferred_types": [
+        "task"
+      ],
+      "preferred_categories": [
+        "scheduling"
+      ],
+      "required_variables": [
+        "COMMAND"
+      ],
+      "query_expansions": [
+        "crontab cron systemd timer schedule"
+      ]
+    },
+    {
+      "id": "system_slow",
+      "title_ar": "تشخيص بطء النظام",
+      "summary_ar": "فحص الحمل والمعالج والذاكرة والعمليات.",
+      "icon": "◴",
+      "signals": {
+        "phrases_ar": [
+          "النظام بطيء",
+          "السيرفر ثقيل",
+          "استهلاك cpu عالي",
+          "الرام فل"
+        ],
+        "any_terms": [
+          "بطيء",
+          "cpu",
+          "memory",
+          "رام",
+          "حمل",
+          "top"
+        ],
+        "all_groups": [],
+        "exclude_terms": []
+      },
+      "target_entities": [
+        "legacy-proc-top",
+        "legacy-proc-free",
+        "legacy-proc-uptime",
+        "legacy-proc-ps"
+      ],
+      "preferred_types": [
+        "task"
+      ],
+      "preferred_categories": [
+        "processes"
+      ],
+      "required_variables": [],
+      "query_expansions": [
+        "top free uptime ps load cpu memory"
+      ]
+    },
+    {
+      "id": "command_reference",
+      "title_ar": "فتح مرجع أمر",
+      "summary_ar": "عرض الصيغة والخيارات والأمثلة لأمر لينكس.",
+      "icon": ">_",
+      "signals": {
+        "phrases_ar": [
+          "شرح امر",
+          "مرجع الامر",
+          "خيارات command",
+          "كيف استخدم الامر"
+        ],
+        "any_terms": [
+          "امر",
+          "command",
+          "مرجع",
+          "syntax",
+          "خيارات"
+        ],
+        "all_groups": [],
+        "exclude_terms": []
+      },
+      "target_entities": [],
+      "preferred_types": [
+        "command"
+      ],
+      "preferred_categories": [
+        "reference"
+      ],
+      "required_variables": [],
+      "query_expansions": [
+        "command syntax options examples"
+      ]
+    },
+    {
+      "id": "explain_concept",
+      "title_ar": "شرح مفهوم في RHEL",
+      "summary_ar": "فهم الفكرة والنموذج الذهني قبل استخدام الأوامر.",
+      "icon": "◎",
+      "signals": {
+        "phrases_ar": [
+          "ما هو",
+          "اشرح لي",
+          "فهمني",
+          "وش يعني"
+        ],
+        "any_terms": [
+          "explain",
+          "مفهوم",
+          "ماهو",
+          "شرح"
+        ],
+        "all_groups": [],
+        "exclude_terms": []
+      },
+      "target_entities": [],
+      "preferred_types": [
+        "concept"
+      ],
+      "preferred_categories": [
+        "concepts"
+      ],
+      "required_variables": [],
+      "query_expansions": [
+        "concept definition mental model"
+      ]
+    },
+    {
+      "id": "learning_path",
+      "title_ar": "بدء مسار تعلم",
+      "summary_ar": "اختيار ترتيب تدريجي لتعلم RHEL.",
+      "icon": "↗",
+      "signals": {
+        "phrases_ar": [
+          "ابدأ تعلم ريد هات",
+          "مسار المبتدئ",
+          "دورة لينكس",
+          "كيف اتعلم rhel"
+        ],
+        "any_terms": [
+          "تعلم",
+          "مسار",
+          "دوره",
+          "مبتدئ",
+          "rhel"
+        ],
+        "all_groups": [],
+        "exclude_terms": []
+      },
+      "target_entities": [
+        "path-rhel-beginner",
+        "path-rhel-admin",
+        "path-rhel-troubleshooting"
+      ],
+      "preferred_types": [
+        "learning_path"
+      ],
+      "preferred_categories": [
+        "learning"
+      ],
+      "required_variables": [],
+      "query_expansions": [
+        "learning path beginner administrator troubleshooting"
+      ]
+    }
+  ]
+}

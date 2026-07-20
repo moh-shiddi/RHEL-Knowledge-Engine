@@ -36,11 +36,11 @@
     <main>
       <section class="hero">
         <div class="hero__content">
-          <span class="hero__eyebrow">المرحلة الثانية — Knowledge Engine</span>
-          <h1>ابدأ بالسؤال، وانتقل بين المعرفة المترابطة</h1>
+          <span class="hero__eyebrow">المرحلة الثالثة — Intent Engine</span>
+          <h1>اكتب بطريقتك، وسيفهم النظام ما تريد</h1>
           <p>
-            ابحث بالعربية عن هدف أو مشكلة أو أمر. سيقودك النظام إلى المهمة العملية،
-            مرجع الأمر، المفهوم الذي يشرحها، والمسار التعليمي المناسب.
+            اكتب باللهجة أو العربية الفصحى أو اسم الأمر. يحلل المحرك نيتك، يصحح الأخطاء التقنية،
+            يستخرج اسم الخدمة والمنفذ والحزمة، ثم يجهز المهمة المناسبة.
           </p>
 
           <div class="search-wrapper">
@@ -48,7 +48,7 @@
               <span class="search-box__icon" aria-hidden="true">⌕</span>
               <input id="searchInput" type="search" autocomplete="off" spellcheck="false"
                      aria-label="البحث في محرك المعرفة" aria-controls="suggestions" aria-expanded="false"
-                     placeholder="مثال: لماذا الخدمة Failed؟ ما هو SELinux؟ كيف أفتح منفذ؟">
+                     placeholder="مثال: السيرفس failed، افتح بورت 8080، أبي أثبت ngnix...">
               <kbd>Ctrl K</kbd>
               <button id="clearSearchButton" class="clear-button" type="button" aria-label="مسح البحث" hidden>×</button>
             </div>
@@ -71,7 +71,13 @@
           <article><strong id="commandsMetric">—</strong><span>مرجع أمر</span></article>
           <article><strong id="conceptsMetric">—</strong><span>مفهوماً</span></article>
           <article><strong id="pathsMetric">—</strong><span>مسارات تعلم</span></article>
+          <article><strong id="intentsMetric">—</strong><span>نية بحث</span></article>
         </div>
+      </section>
+
+
+      <section id="intentPanel" class="intent-panel" aria-live="polite" hidden>
+        <div id="intentPanelContent"></div>
       </section>
 
       <section class="type-explorer" aria-labelledby="explorerTitle">
@@ -192,6 +198,7 @@
     </article>
   </template>
 
+  <script src="intent-engine.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
