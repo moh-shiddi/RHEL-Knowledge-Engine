@@ -1,0 +1,2427 @@
+{
+  "schema_version": "1.0.0",
+  "title": "RHEL Execution Diagnostic Patterns",
+  "description_ar": "أنماط محلية لتحليل مخرجات أوامر RHEL دون إرسال البيانات خارج المتصفح.",
+  "success_patterns": [
+    {
+      "id": "systemd-active",
+      "pattern": "^\\s*active\\s*$|active \\(running\\)",
+      "summary_ar": "الخدمة في حالة Active."
+    },
+    {
+      "id": "systemd-enabled",
+      "pattern": "^\\s*enabled\\s*$",
+      "summary_ar": "الخدمة مفعلة مع الإقلاع."
+    },
+    {
+      "id": "generic-success",
+      "pattern": "\\bsuccess(?:ful|fully)?\\b|complete!|completed successfully",
+      "summary_ar": "الناتج يحتوي مؤشراً واضحاً على النجاح."
+    },
+    {
+      "id": "config-ok",
+      "pattern": "syntax is ok|syntax ok|test is successful|configuration file .* test is successful",
+      "summary_ar": "اختبار ملف الإعداد ناجح."
+    },
+    {
+      "id": "http-success",
+      "pattern": "http/\\d(?:\\.\\d)?\\s+(?:20[0-9]|30[0-9])",
+      "summary_ar": "استجابة HTTP ناجحة أو إعادة توجيه."
+    },
+    {
+      "id": "dnf-complete",
+      "pattern": "^\\s*(?:installed|upgraded|removed):|complete!\\s*$|nothing to do",
+      "summary_ar": "معاملة DNF اكتملت."
+    },
+    {
+      "id": "firewall-success",
+      "pattern": "^\\s*success\\s*$|^\\s*yes\\s*$",
+      "summary_ar": "firewalld أكد نجاح العملية."
+    },
+    {
+      "id": "ping-success",
+      "pattern": "0% packet loss|[1-9]\\d* received",
+      "summary_ar": "اختبار الشبكة تلقى رداً."
+    },
+    {
+      "id": "exists-success",
+      "pattern": "^\\s*exists\\s*$",
+      "summary_ar": "تم التأكد من وجود المورد."
+    }
+  ],
+  "rules": [
+    {
+      "id": "command-not-found",
+      "title_ar": "الأمر أو البرنامج غير موجود",
+      "patterns": [
+        "command not found",
+        "(?:bash|sh): .*: not found"
+      ],
+      "negative_patterns": [],
+      "domains": [
+        "shell",
+        "packages"
+      ],
+      "severity": "medium",
+      "base_confidence": 0.98,
+      "explanation_ar": "النظام لم يجد الملف التنفيذي للأمر داخل PATH أو أن الحزمة التي توفره غير مثبتة.",
+      "likely_causes_ar": [
+        "اسم الأمر غير صحيح",
+        "الحزمة غير مثبتة",
+        "المسار التنفيذي غير موجود داخل PATH"
+      ],
+      "checks": [
+        {
+          "title_ar": "البحث عن الأمر",
+          "command": "command -v <COMMAND>",
+          "expected_result_ar": "المسار الكامل أو نتيجة فارغة",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "معرفة الحزمة التي توفره",
+          "command": "dnf provides '*/<COMMAND>'",
+          "expected_result_ar": "اسم الحزمة",
+          "purpose": "diagnosis"
+        }
+      ],
+      "fixes_ar": [
+        "صحح اسم الأمر",
+        "ثبت الحزمة التي توفره",
+        "استخدم المسار الكامل"
+      ],
+      "verification": [
+        {
+          "title_ar": "إعادة التحقق",
+          "command": "command -v <COMMAND>",
+          "expected_result_ar": "ظهور المسار الكامل",
+          "purpose": "diagnosis"
+        }
+      ]
+    },
+    {
+      "id": "sudoers-denied",
+      "title_ar": "المستخدم غير مخول باستخدام sudo",
+      "patterns": [
+        "is not in the sudoers file",
+        "may not run sudo",
+        "not allowed to execute.*as root"
+      ],
+      "negative_patterns": [],
+      "domains": [
+        "permissions",
+        "users"
+      ],
+      "severity": "high",
+      "base_confidence": 0.99,
+      "explanation_ar": "المستخدم الحالي لا يملك تفويض sudo المطلوب.",
+      "likely_causes_ar": [
+        "المستخدم ليس ضمن wheel",
+        "قاعدة sudoers غير موجودة أو معطلة"
+      ],
+      "checks": [
+        {
+          "title_ar": "عرض مجموعات المستخدم",
+          "command": "id <USER>",
+          "expected_result_ar": "ظهور wheel عند التفويض",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "عرض صلاحيات sudo",
+          "command": "sudo -l",
+          "expected_result_ar": "الأوامر المسموحة",
+          "purpose": "diagnosis"
+        }
+      ],
+      "fixes_ar": [
+        "أضف المستخدم إلى wheel من حساب إداري",
+        "راجع sudoers باستخدام visudo"
+      ],
+      "verification": [
+        {
+          "title_ar": "اختبار sudo",
+          "command": "sudo -v",
+          "expected_result_ar": "عدم ظهور رفض",
+          "purpose": "diagnosis"
+        }
+      ]
+    },
+    {
+      "id": "permission-denied",
+      "title_ar": "رفض صلاحية الوصول",
+      "patterns": [
+        "permission denied",
+        "operation not permitted",
+        "access denied"
+      ],
+      "negative_patterns": [],
+      "domains": [
+        "permissions",
+        "filesystem",
+        "selinux"
+      ],
+      "severity": "high",
+      "base_confidence": 0.97,
+      "explanation_ar": "العملية لا تملك صلاحية الوصول المطلوبة. قد يكون السبب أذونات Unix أو الملكية أو SELinux.",
+      "likely_causes_ar": [
+        "المالك أو المجموعة غير مناسبين",
+        "أذونات أحد المجلدات الأب غير كافية",
+        "SELinux يمنع العملية",
+        "خيار mount يمنع التنفيذ"
+      ],
+      "checks": [
+        {
+          "title_ar": "عرض هوية المستخدم",
+          "command": "id",
+          "expected_result_ar": "UID والمجموعات",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "فحص سلسلة المسار",
+          "command": "namei -l <PATH>",
+          "expected_result_ar": "أذونات كل جزء",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "عرض الأذونات والسياق",
+          "command": "ls -ldZ <PATH>",
+          "expected_result_ar": "المالك والأذونات وسياق SELinux",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "أحداث SELinux",
+          "command": "sudo ausearch -m AVC,USER_AVC -ts recent",
+          "expected_result_ar": "أحداث AVC مرتبطة",
+          "purpose": "diagnosis"
+        }
+      ],
+      "fixes_ar": [
+        "صحح الملكية أو الأذونات بالحد الأدنى",
+        "استخدم restorecon عند خطأ السياق",
+        "لا تستخدم chmod 777 كحل عام"
+      ],
+      "verification": [
+        {
+          "title_ar": "إعادة العملية",
+          "command": "<RETRY_ORIGINAL_ACTION>",
+          "expected_result_ar": "نجاح دون Permission denied",
+          "purpose": "diagnosis"
+        }
+      ]
+    },
+    {
+      "id": "no-space",
+      "title_ar": "نفدت مساحة التخزين",
+      "patterns": [
+        "no space left on device",
+        "disk quota exceeded",
+        "not enough space"
+      ],
+      "negative_patterns": [],
+      "domains": [
+        "storage",
+        "filesystem"
+      ],
+      "severity": "high",
+      "base_confidence": 0.99,
+      "explanation_ar": "لم يتمكن النظام من الكتابة لأن المساحة أو inodes أو الحصة نفدت.",
+      "likely_causes_ar": [
+        "القسم ممتلئ",
+        "inodes مستهلكة",
+        "حصة المستخدم ممتلئة",
+        "ملف محذوف ما زال مفتوحاً"
+      ],
+      "checks": [
+        {
+          "title_ar": "مساحة الأقسام",
+          "command": "df -hT",
+          "expected_result_ar": "القسم الممتلئ",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "فحص inodes",
+          "command": "df -ih",
+          "expected_result_ar": "نسبة inodes",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "أكبر المجلدات",
+          "command": "sudo du -xhd1 <PATH> | sort -h",
+          "expected_result_ar": "الأعلى استهلاكاً",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "ملفات محذوفة مفتوحة",
+          "command": "sudo lsof +L1",
+          "expected_result_ar": "عمليات تحتفظ بمساحة",
+          "purpose": "diagnosis"
+        }
+      ],
+      "fixes_ar": [
+        "نظف الملفات بعد معرفة وظيفتها",
+        "أعد تشغيل الخدمة التي تمسك ملفاً محذوفاً بعد التحقق",
+        "وسع نظام الملفات عند الحاجة"
+      ],
+      "verification": [
+        {
+          "title_ar": "إعادة فحص المساحة",
+          "command": "df -hT",
+          "expected_result_ar": "انخفاض الاستخدام",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "إعادة العملية",
+          "command": "<RETRY_ORIGINAL_ACTION>",
+          "expected_result_ar": "نجاح العملية",
+          "purpose": "diagnosis"
+        }
+      ]
+    },
+    {
+      "id": "read-only-filesystem",
+      "title_ar": "نظام الملفات للقراءة فقط",
+      "patterns": [
+        "read-only file system",
+        "filesystem is read-only"
+      ],
+      "negative_patterns": [],
+      "domains": [
+        "storage",
+        "filesystem"
+      ],
+      "severity": "critical",
+      "base_confidence": 0.98,
+      "explanation_ar": "نظام الملفات لا يسمح بالكتابة حالياً، وقد تحول للحماية بعد خطأ تخزين.",
+      "likely_causes_ar": [
+        "مركب بخيار ro",
+        "خطأ في نظام الملفات",
+        "مشكلة I/O"
+      ],
+      "checks": [
+        {
+          "title_ar": "خيارات الربط",
+          "command": "findmnt -no TARGET,SOURCE,FSTYPE,OPTIONS <PATH>",
+          "expected_result_ar": "ظهور ro أو rw",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "رسائل النواة",
+          "command": "sudo journalctl -k -b --no-pager | tail -n 100",
+          "expected_result_ar": "أخطاء filesystem أو I/O",
+          "purpose": "diagnosis"
+        }
+      ],
+      "fixes_ar": [
+        "لا تعِد الربط rw قبل فهم السبب",
+        "افحص التخزين ونظام الملفات في نافذة صيانة"
+      ],
+      "verification": [
+        {
+          "title_ar": "التحقق من الربط",
+          "command": "findmnt -no OPTIONS <PATH>",
+          "expected_result_ar": "ظهور rw بعد المعالجة",
+          "purpose": "diagnosis"
+        }
+      ]
+    },
+    {
+      "id": "file-missing",
+      "title_ar": "ملف أو مسار غير موجود",
+      "patterns": [
+        "no such file or directory",
+        "cannot stat",
+        "cannot access .* no such",
+        "not a directory"
+      ],
+      "negative_patterns": [
+        "command not found"
+      ],
+      "domains": [
+        "filesystem"
+      ],
+      "severity": "medium",
+      "base_confidence": 0.92,
+      "explanation_ar": "المسار غير موجود أو أن جزءاً من سلسلة المسار غير صحيح.",
+      "likely_causes_ar": [
+        "خطأ في المسار",
+        "الملف لم يُنشأ",
+        "رابط رمزي مكسور"
+      ],
+      "checks": [
+        {
+          "title_ar": "فحص المسار",
+          "command": "ls -ld <PATH>",
+          "expected_result_ar": "وجود المسار أو الخطأ",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "فحص كل أجزاء المسار",
+          "command": "namei -l <PATH>",
+          "expected_result_ar": "أول جزء مفقود",
+          "purpose": "diagnosis"
+        }
+      ],
+      "fixes_ar": [
+        "صحح المسار",
+        "أنشئ المورد المطلوب وفق تعليمات الخدمة",
+        "صحح الرابط الرمزي"
+      ],
+      "verification": [
+        {
+          "title_ar": "التحقق من الوجود",
+          "command": "test -e <PATH> && echo EXISTS",
+          "expected_result_ar": "ظهور EXISTS",
+          "purpose": "diagnosis"
+        }
+      ]
+    },
+    {
+      "id": "unit-not-found",
+      "title_ar": "خدمة Systemd غير موجودة",
+      "patterns": [
+        "unit .* not found",
+        "unit .* could not be found"
+      ],
+      "negative_patterns": [],
+      "domains": [
+        "service",
+        "systemd"
+      ],
+      "severity": "medium",
+      "base_confidence": 0.98,
+      "explanation_ar": "اسم الوحدة غير صحيح أو الحزمة التي توفرها غير مثبتة.",
+      "likely_causes_ar": [
+        "اسم الخدمة غير صحيح",
+        "الحزمة غير مثبتة",
+        "daemon-reload لم ينفذ"
+      ],
+      "checks": [
+        {
+          "title_ar": "البحث عن الوحدة",
+          "command": "systemctl list-unit-files | grep -i <SERVICE>",
+          "expected_result_ar": "اسم الوحدة الصحيح",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "البحث عن الحزمة",
+          "command": "dnf search <SERVICE>",
+          "expected_result_ar": "الحزمة المحتملة",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "إعادة قراءة الوحدات",
+          "command": "sudo systemctl daemon-reload",
+          "expected_result_ar": "اكتمال بلا خطأ",
+          "purpose": "diagnosis"
+        }
+      ],
+      "fixes_ar": [
+        "استخدم اسم الوحدة الصحيح",
+        "ثبت الحزمة",
+        "نفذ daemon-reload بعد تعديل ملفات الوحدات"
+      ],
+      "verification": [
+        {
+          "title_ar": "عرض الحالة",
+          "command": "systemctl status <SERVICE> --no-pager",
+          "expected_result_ar": "ظهور معلومات الوحدة",
+          "purpose": "diagnosis"
+        }
+      ]
+    },
+    {
+      "id": "service-failed",
+      "title_ar": "فشل تشغيل الخدمة",
+      "patterns": [
+        "job for .*\\.service failed",
+        "control process exited with error code",
+        "failed with result ['\"]?exit-code",
+        "main process exited"
+      ],
+      "negative_patterns": [],
+      "domains": [
+        "service",
+        "systemd"
+      ],
+      "severity": "high",
+      "base_confidence": 0.94,
+      "explanation_ar": "Systemd سجل فشل الخدمة، لكن السبب النهائي يحتاج قراءة الحالة والسجل.",
+      "likely_causes_ar": [
+        "خطأ إعداد",
+        "منفذ مستخدم",
+        "ملف أو صلاحية مفقودة",
+        "اعتمادية متوقفة",
+        "رفض SELinux"
+      ],
+      "checks": [
+        {
+          "title_ar": "الحالة التفصيلية",
+          "command": "systemctl status <SERVICE> --no-pager -l",
+          "expected_result_ar": "آخر رسالة",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "سجل الخدمة",
+          "command": "journalctl -u <SERVICE> -b --no-pager -n 120",
+          "expected_result_ar": "الخطأ الأصلي",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "ملف الوحدة",
+          "command": "systemctl cat <SERVICE>",
+          "expected_result_ar": "أمر التشغيل والاعتماديات",
+          "purpose": "diagnosis"
+        }
+      ],
+      "fixes_ar": [
+        "عالج أول خطأ واضح في السجل",
+        "لا تكرر restart دون قراءة السبب"
+      ],
+      "verification": [
+        {
+          "title_ar": "حالة الخدمة",
+          "command": "systemctl is-active <SERVICE>",
+          "expected_result_ar": "active",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "الوحدات الفاشلة",
+          "command": "systemctl --failed",
+          "expected_result_ar": "عدم ظهور الخدمة",
+          "purpose": "diagnosis"
+        }
+      ]
+    },
+    {
+      "id": "service-masked",
+      "title_ar": "الخدمة مقنّعة Masked",
+      "patterns": [
+        "unit .* is masked",
+        "unit file .* is masked"
+      ],
+      "negative_patterns": [],
+      "domains": [
+        "service",
+        "systemd"
+      ],
+      "severity": "high",
+      "base_confidence": 0.99,
+      "explanation_ar": "الوحدة مقنعة لمنع تشغيلها كلياً.",
+      "likely_causes_ar": [
+        "تم تنفيذ systemctl mask",
+        "سياسة نظام أو حزمة عطلت الوحدة"
+      ],
+      "checks": [
+        {
+          "title_ar": "حالة التمكين",
+          "command": "systemctl is-enabled <SERVICE>",
+          "expected_result_ar": "masked",
+          "purpose": "diagnosis"
+        }
+      ],
+      "fixes_ar": [
+        "أزل mask فقط عندما يكون تشغيل الخدمة مطلوباً: sudo systemctl unmask <SERVICE>"
+      ],
+      "verification": [
+        {
+          "title_ar": "إعادة الفحص",
+          "command": "systemctl is-enabled <SERVICE>",
+          "expected_result_ar": "قيمة غير masked",
+          "purpose": "diagnosis"
+        }
+      ]
+    },
+    {
+      "id": "address-in-use",
+      "title_ar": "المنفذ مستخدم من عملية أخرى",
+      "patterns": [
+        "address already in use",
+        "bind\\(\\).*failed.*(?:98|address in use)",
+        "failed to bind.*address"
+      ],
+      "negative_patterns": [],
+      "domains": [
+        "service",
+        "network",
+        "port"
+      ],
+      "severity": "high",
+      "base_confidence": 0.99,
+      "explanation_ar": "الخدمة حاولت الاستماع على منفذ تستخدمه عملية أخرى.",
+      "likely_causes_ar": [
+        "نسخة أخرى من الخدمة تعمل",
+        "خدمة مختلفة تستخدم المنفذ",
+        "عملية قديمة لم تغلق"
+      ],
+      "checks": [
+        {
+          "title_ar": "معرفة العملية المستمعة",
+          "command": "sudo ss -tulpn | grep ':<PORT>'",
+          "expected_result_ar": "اسم العملية وPID",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "ملف الوحدة",
+          "command": "systemctl cat <SERVICE>",
+          "expected_result_ar": "أمر التشغيل",
+          "purpose": "diagnosis"
+        }
+      ],
+      "fixes_ar": [
+        "أوقف الخدمة المتعارضة إن لم تكن مطلوبة",
+        "غيّر منفذ إحدى الخدمتين",
+        "لا تقتل العملية قبل معرفة وظيفتها"
+      ],
+      "verification": [
+        {
+          "title_ar": "فحص المنفذ",
+          "command": "sudo ss -tulpn | grep ':<PORT>'",
+          "expected_result_ar": "عدم وجود تعارض",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "تشغيل الخدمة",
+          "command": "sudo systemctl restart <SERVICE> && systemctl is-active <SERVICE>",
+          "expected_result_ar": "active",
+          "purpose": "diagnosis"
+        }
+      ]
+    },
+    {
+      "id": "configuration-syntax",
+      "title_ar": "خطأ في صياغة ملف الإعداد",
+      "patterns": [
+        "syntax error",
+        "unknown directive",
+        "invalid command",
+        "invalid number of arguments",
+        "nginx:\\s*\\[emerg\\]",
+        "configuration file .* test failed"
+      ],
+      "negative_patterns": [],
+      "domains": [
+        "configuration",
+        "service",
+        "web"
+      ],
+      "severity": "high",
+      "base_confidence": 0.97,
+      "explanation_ar": "التطبيق رفض ملف الإعداد بسبب تعليمة أو قيمة أو صياغة غير صحيحة.",
+      "likely_causes_ar": [
+        "خطأ إملائي",
+        "قوس أو اقتباس مفقود",
+        "تعليمة غير مدعومة",
+        "ملف include يحتوي خطأ"
+      ],
+      "checks": [
+        {
+          "title_ar": "اختبار Nginx",
+          "command": "sudo nginx -t",
+          "expected_result_ar": "الملف والسطر أو نجاح الاختبار",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "اختبار Apache",
+          "command": "sudo apachectl configtest",
+          "expected_result_ar": "Syntax OK أو الخطأ",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "عرض السطور",
+          "command": "sudo nl -ba <PATH> | sed -n '<LINE_START>,<LINE_END>p'",
+          "expected_result_ar": "السطور بأرقامها",
+          "purpose": "diagnosis"
+        }
+      ],
+      "fixes_ar": [
+        "صحح أول خطأ يذكره الاختبار",
+        "أعد نسخة سليمة",
+        "اختبر الإعداد قبل restart"
+      ],
+      "verification": [
+        {
+          "title_ar": "اختبار الإعداد",
+          "command": "<CONFIG_TEST_COMMAND>",
+          "expected_result_ar": "نجاح الاختبار",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "إعادة تشغيل الخدمة",
+          "command": "sudo systemctl restart <SERVICE>",
+          "expected_result_ar": "عدم ظهور خطأ",
+          "purpose": "diagnosis"
+        }
+      ]
+    },
+    {
+      "id": "dependency-failed",
+      "title_ar": "فشل اعتماد خدمة أخرى",
+      "patterns": [
+        "dependency failed for",
+        "failed to start .* dependency",
+        "required dependency .* failed"
+      ],
+      "negative_patterns": [],
+      "domains": [
+        "service",
+        "systemd"
+      ],
+      "severity": "high",
+      "base_confidence": 0.95,
+      "explanation_ar": "الخدمة لم تبدأ لأن وحدة تعتمد عليها فشلت.",
+      "likely_causes_ar": [
+        "خدمة مطلوبة متوقفة",
+        "نقطة ربط أو شبكة غير جاهزة",
+        "اعتماد غير صحيح"
+      ],
+      "checks": [
+        {
+          "title_ar": "سلسلة الاعتماديات",
+          "command": "systemctl list-dependencies <SERVICE>",
+          "expected_result_ar": "الوحدات المطلوبة",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "الوحدات الفاشلة",
+          "command": "systemctl --failed",
+          "expected_result_ar": "الوحدة الأصلية",
+          "purpose": "diagnosis"
+        }
+      ],
+      "fixes_ar": [
+        "عالج الوحدة الأصلية أولاً",
+        "راجع After وRequires"
+      ],
+      "verification": [
+        {
+          "title_ar": "إعادة الفحص",
+          "command": "systemctl --failed",
+          "expected_result_ar": "عدم وجود اعتماد فاشل",
+          "purpose": "diagnosis"
+        }
+      ]
+    },
+    {
+      "id": "connection-refused",
+      "title_ar": "الاتصال مرفوض",
+      "patterns": [
+        "connection refused",
+        "failed to connect .* refused"
+      ],
+      "negative_patterns": [],
+      "domains": [
+        "network",
+        "port",
+        "service"
+      ],
+      "severity": "high",
+      "base_confidence": 0.98,
+      "explanation_ar": "تم الوصول إلى الجهاز لكن لا توجد خدمة تستمع على المنفذ أو يوجد رفض صريح.",
+      "likely_causes_ar": [
+        "الخدمة متوقفة",
+        "المنفذ غير صحيح",
+        "الخدمة تستمع على localhost",
+        "قاعدة Reject"
+      ],
+      "checks": [
+        {
+          "title_ar": "حالة الخدمة",
+          "command": "systemctl status <SERVICE> --no-pager -l",
+          "expected_result_ar": "active أو سبب الفشل",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "فحص الاستماع",
+          "command": "sudo ss -tlnp | grep ':<PORT>'",
+          "expected_result_ar": "عملية LISTEN",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "الجدار الناري",
+          "command": "sudo firewall-cmd --list-all",
+          "expected_result_ar": "الخدمة أو المنفذ مسموح",
+          "purpose": "diagnosis"
+        }
+      ],
+      "fixes_ar": [
+        "شغّل الخدمة",
+        "صحح عنوان الاستماع أو المنفذ",
+        "افتح المنفذ المطلوب فقط"
+      ],
+      "verification": [
+        {
+          "title_ar": "اختبار المنفذ",
+          "command": "nc -vz <HOST> <PORT>",
+          "expected_result_ar": "succeeded",
+          "purpose": "diagnosis"
+        }
+      ]
+    },
+    {
+      "id": "connection-timeout",
+      "title_ar": "انتهت مهلة الاتصال",
+      "patterns": [
+        "connection timed out",
+        "operation timed out",
+        "timed out after",
+        "timeout was reached"
+      ],
+      "negative_patterns": [],
+      "domains": [
+        "network",
+        "port"
+      ],
+      "severity": "high",
+      "base_confidence": 0.97,
+      "explanation_ar": "لم يصل رد خلال المهلة، وغالباً توجد مشكلة مسار أو جدار ناري يسقط الحزم.",
+      "likely_causes_ar": [
+        "العنوان غير صحيح",
+        "لا يوجد مسار",
+        "جدار ناري يسقط الاتصال",
+        "الخادم غير متاح"
+      ],
+      "checks": [
+        {
+          "title_ar": "اختبار الوصول",
+          "command": "ping -c 4 <HOST>",
+          "expected_result_ar": "ردود أو فقد",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "عرض المسار",
+          "command": "ip route get <HOST>",
+          "expected_result_ar": "الواجهة والبوابة",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "اختبار المنفذ",
+          "command": "nc -vz -w 5 <HOST> <PORT>",
+          "expected_result_ar": "نجاح أو مهلة",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "تتبع المسار",
+          "command": "tracepath <HOST>",
+          "expected_result_ar": "مكان التوقف",
+          "purpose": "diagnosis"
+        }
+      ],
+      "fixes_ar": [
+        "صحح العنوان أو المسار",
+        "راجع الجدران النارية بين الطرفين",
+        "تحقق من حالة الخادم"
+      ],
+      "verification": [
+        {
+          "title_ar": "إعادة اختبار المنفذ",
+          "command": "nc -vz -w 5 <HOST> <PORT>",
+          "expected_result_ar": "succeeded",
+          "purpose": "diagnosis"
+        }
+      ]
+    },
+    {
+      "id": "network-unreachable",
+      "title_ar": "الشبكة أو الوجهة غير قابلة للوصول",
+      "patterns": [
+        "network is unreachable",
+        "destination host unreachable",
+        "no route to host"
+      ],
+      "negative_patterns": [],
+      "domains": [
+        "network"
+      ],
+      "severity": "high",
+      "base_confidence": 0.98,
+      "explanation_ar": "النظام لا يملك مساراً صالحاً إلى الوجهة.",
+      "likely_causes_ar": [
+        "الواجهة غير متصلة",
+        "IP أو البوابة خطأ",
+        "المسار الافتراضي مفقود"
+      ],
+      "checks": [
+        {
+          "title_ar": "العناوين",
+          "command": "ip -br address",
+          "expected_result_ar": "واجهة UP وعنوان صحيح",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "المسارات",
+          "command": "ip route",
+          "expected_result_ar": "default route",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "NetworkManager",
+          "command": "nmcli device status",
+          "expected_result_ar": "connected",
+          "purpose": "diagnosis"
+        }
+      ],
+      "fixes_ar": [
+        "فعّل الاتصال الصحيح",
+        "صحح IP والبوابة",
+        "أضف المسار المطلوب"
+      ],
+      "verification": [
+        {
+          "title_ar": "اختبار الوجهة",
+          "command": "ping -c 4 <HOST>",
+          "expected_result_ar": "ردود",
+          "purpose": "diagnosis"
+        }
+      ]
+    },
+    {
+      "id": "dns-resolution",
+      "title_ar": "فشل حل اسم النطاق DNS",
+      "patterns": [
+        "could not resolve host",
+        "temporary failure in name resolution",
+        "name or service not known",
+        "no address associated with hostname"
+      ],
+      "negative_patterns": [],
+      "domains": [
+        "network",
+        "dns"
+      ],
+      "severity": "high",
+      "base_confidence": 0.99,
+      "explanation_ar": "النظام لم يستطع تحويل اسم المضيف إلى عنوان IP.",
+      "likely_causes_ar": [
+        "DNS غير متاح",
+        "resolv.conf أو NetworkManager خطأ",
+        "اسم النطاق مكتوب خطأ"
+      ],
+      "checks": [
+        {
+          "title_ar": "اختبار الاسم",
+          "command": "getent hosts <HOST>",
+          "expected_result_ar": "عنوان IP",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "إعداد DNS",
+          "command": "cat /etc/resolv.conf",
+          "expected_result_ar": "nameserver صالح",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "DNS في NetworkManager",
+          "command": "nmcli dev show | grep -i DNS",
+          "expected_result_ar": "خوادم DNS",
+          "purpose": "diagnosis"
+        }
+      ],
+      "fixes_ar": [
+        "صحح اسم المضيف",
+        "صحح خوادم DNS",
+        "تحقق من الوصول إلى DNS"
+      ],
+      "verification": [
+        {
+          "title_ar": "إعادة حل الاسم",
+          "command": "getent hosts <HOST>",
+          "expected_result_ar": "ظهور عنوان IP",
+          "purpose": "diagnosis"
+        }
+      ]
+    },
+    {
+      "id": "http-403",
+      "title_ar": "الخادم أعاد HTTP 403",
+      "patterns": [
+        "http/\\d(?:\\.\\d)?\\s+403",
+        "\\b403 forbidden\\b"
+      ],
+      "negative_patterns": [],
+      "domains": [
+        "web",
+        "permissions",
+        "selinux"
+      ],
+      "severity": "medium",
+      "base_confidence": 0.98,
+      "explanation_ar": "الخادم استقبل الطلب لكنه رفض السماح بالوصول.",
+      "likely_causes_ar": [
+        "أذونات ملفات",
+        "قاعدة وصول",
+        "سياق SELinux",
+        "مصادقة مطلوبة"
+      ],
+      "checks": [
+        {
+          "title_ar": "أذونات المسار",
+          "command": "namei -l <PATH>",
+          "expected_result_ar": "إمكانية العبور والقراءة",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "سياق SELinux",
+          "command": "ls -ldZ <PATH>",
+          "expected_result_ar": "سياق مناسب",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "سجل الخادم",
+          "command": "journalctl -u <SERVICE> -b --no-pager -n 100",
+          "expected_result_ar": "سبب الرفض",
+          "purpose": "diagnosis"
+        }
+      ],
+      "fixes_ar": [
+        "صحح الأذونات بالحد الأدنى",
+        "صحح قاعدة الوصول",
+        "استعد سياق SELinux الصحيح"
+      ],
+      "verification": [
+        {
+          "title_ar": "إعادة الطلب",
+          "command": "curl -I http://<HOST>:<PORT><PATH>",
+          "expected_result_ar": "رمز غير 403",
+          "purpose": "diagnosis"
+        }
+      ]
+    },
+    {
+      "id": "http-404",
+      "title_ar": "الخادم أعاد HTTP 404",
+      "patterns": [
+        "http/\\d(?:\\.\\d)?\\s+404",
+        "\\b404 not found\\b"
+      ],
+      "negative_patterns": [],
+      "domains": [
+        "web"
+      ],
+      "severity": "low",
+      "base_confidence": 0.98,
+      "explanation_ar": "الخادم يعمل لكنه لم يجد المورد المطلوب.",
+      "likely_causes_ar": [
+        "URL غير صحيح",
+        "الملف غير موجود",
+        "DocumentRoot أو route خطأ"
+      ],
+      "checks": [
+        {
+          "title_ar": "اختبار الصفحة الرئيسية",
+          "command": "curl -I http://<HOST>:<PORT>/",
+          "expected_result_ar": "استجابة الخادم",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "فحص المورد",
+          "command": "ls -l <PATH>",
+          "expected_result_ar": "وجود الملف",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "البحث في الإعداد",
+          "command": "grep -Rni '<PATH>' /etc/nginx /etc/httpd 2>/dev/null",
+          "expected_result_ar": "المسار في الإعداد",
+          "purpose": "diagnosis"
+        }
+      ],
+      "fixes_ar": [
+        "صحح URL",
+        "ضع المورد في المسار الصحيح",
+        "صحح DocumentRoot أو route"
+      ],
+      "verification": [
+        {
+          "title_ar": "إعادة الطلب",
+          "command": "curl -I http://<HOST>:<PORT><PATH>",
+          "expected_result_ar": "2xx أو 3xx",
+          "purpose": "diagnosis"
+        }
+      ]
+    },
+    {
+      "id": "http-5xx",
+      "title_ar": "الخادم أعاد خطأ HTTP 5xx",
+      "patterns": [
+        "http/\\d(?:\\.\\d)?\\s+50[0-9]",
+        "\\b(?:500 internal server error|502 bad gateway|503 service unavailable|504 gateway timeout)\\b"
+      ],
+      "negative_patterns": [],
+      "domains": [
+        "web",
+        "service"
+      ],
+      "severity": "high",
+      "base_confidence": 0.96,
+      "explanation_ar": "خادم الويب أو التطبيق الخلفي فشل في معالجة الطلب.",
+      "likely_causes_ar": [
+        "التطبيق الخلفي متوقف",
+        "upstream خطأ",
+        "استثناء داخل التطبيق",
+        "مهلة"
+      ],
+      "checks": [
+        {
+          "title_ar": "الخدمة",
+          "command": "systemctl status <SERVICE> --no-pager -l",
+          "expected_result_ar": "الحالة",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "المنافذ",
+          "command": "sudo ss -tlnp",
+          "expected_result_ar": "استماع التطبيق",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "السجل",
+          "command": "journalctl -u <SERVICE> -b --no-pager -n 120",
+          "expected_result_ar": "الخطأ الأصلي",
+          "purpose": "diagnosis"
+        }
+      ],
+      "fixes_ar": [
+        "شغّل أو أصلح التطبيق الخلفي",
+        "صحح upstream",
+        "عالج الاستثناء أو المهلة"
+      ],
+      "verification": [
+        {
+          "title_ar": "إعادة الطلب",
+          "command": "curl -I http://<HOST>:<PORT><PATH>",
+          "expected_result_ar": "2xx أو 3xx",
+          "purpose": "diagnosis"
+        }
+      ]
+    },
+    {
+      "id": "tls-certificate",
+      "title_ar": "مشكلة في شهادة TLS",
+      "patterns": [
+        "certificate verify failed",
+        "self[- ]signed certificate",
+        "certificate has expired",
+        "hostname mismatch",
+        "unable to get local issuer certificate"
+      ],
+      "negative_patterns": [],
+      "domains": [
+        "tls",
+        "web"
+      ],
+      "severity": "high",
+      "base_confidence": 0.98,
+      "explanation_ar": "العميل لم يثق بالشهادة أو أنها منتهية أو لا تطابق اسم المضيف.",
+      "likely_causes_ar": [
+        "سلسلة ناقصة",
+        "شهادة منتهية",
+        "SAN لا يطابق",
+        "CA غير موثوقة"
+      ],
+      "checks": [
+        {
+          "title_ar": "عرض الشهادة",
+          "command": "openssl s_client -connect <HOST>:<PORT> -servername <HOST> </dev/null",
+          "expected_result_ar": "السلسلة والتاريخ",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "تفاصيل الشهادة",
+          "command": "echo | openssl s_client -connect <HOST>:<PORT> -servername <HOST> 2>/dev/null | openssl x509 -noout -subject -issuer -dates -ext subjectAltName",
+          "expected_result_ar": "الأسماء والتواريخ",
+          "purpose": "diagnosis"
+        }
+      ],
+      "fixes_ar": [
+        "ثبت السلسلة الكاملة",
+        "جدد الشهادة",
+        "استخدم اسماً مطابقاً",
+        "أضف CA الموثوقة"
+      ],
+      "verification": [
+        {
+          "title_ar": "اختبار TLS",
+          "command": "curl -Iv https://<HOST>:<PORT>/",
+          "expected_result_ar": "عدم ظهور خطأ التحقق",
+          "purpose": "diagnosis"
+        }
+      ]
+    },
+    {
+      "id": "ssh-publickey",
+      "title_ar": "فشلت مصادقة SSH",
+      "patterns": [
+        "permission denied \\(publickey",
+        "permission denied, please try again",
+        "no supported authentication methods available"
+      ],
+      "negative_patterns": [],
+      "domains": [
+        "ssh",
+        "authentication"
+      ],
+      "severity": "high",
+      "base_confidence": 0.99,
+      "explanation_ar": "تم الوصول إلى sshd لكن المصادقة لم تنجح.",
+      "likely_causes_ar": [
+        "اسم المستخدم خطأ",
+        "المفتاح العام مفقود أو أذوناته خطأ",
+        "العميل يستخدم مفتاحاً آخر",
+        "طريقة المصادقة معطلة"
+      ],
+      "checks": [
+        {
+          "title_ar": "SSH بتفصيل",
+          "command": "ssh -vvv -p <PORT> <USER>@<HOST>",
+          "expected_result_ar": "المفتاح وسبب رفضه",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "أذونات ملفات SSH",
+          "command": "ls -ldZ ~/.ssh ~/.ssh/authorized_keys",
+          "expected_result_ar": "الأذونات والسياق",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "سجل sshd",
+          "command": "sudo journalctl -u sshd -b --no-pager -n 120",
+          "expected_result_ar": "سبب الرفض",
+          "purpose": "diagnosis"
+        }
+      ],
+      "fixes_ar": [
+        "صحح اسم المستخدم",
+        "أضف المفتاح الصحيح",
+        "صحح الملكية والأذونات والسياق",
+        "راجع AllowUsers"
+      ],
+      "verification": [
+        {
+          "title_ar": "إعادة الاتصال",
+          "command": "ssh -p <PORT> <USER>@<HOST>",
+          "expected_result_ar": "فتح جلسة",
+          "purpose": "diagnosis"
+        }
+      ]
+    },
+    {
+      "id": "ssh-host-key",
+      "title_ar": "تغير مفتاح خادم SSH",
+      "patterns": [
+        "remote host identification has changed",
+        "host key verification failed"
+      ],
+      "negative_patterns": [],
+      "domains": [
+        "ssh",
+        "security"
+      ],
+      "severity": "critical",
+      "base_confidence": 0.99,
+      "explanation_ar": "المفتاح المخزن لا يطابق المفتاح الحالي للخادم.",
+      "likely_causes_ar": [
+        "أعيد تثبيت الخادم",
+        "تغيرت المفاتيح",
+        "العنوان يشير إلى جهاز آخر",
+        "احتمال اعتراض"
+      ],
+      "checks": [
+        {
+          "title_ar": "بصمة الخادم من قناة موثوقة",
+          "command": "ssh-keygen -lf /etc/ssh/ssh_host_ed25519_key.pub",
+          "expected_result_ar": "البصمة الرسمية",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "السطر المخزن",
+          "command": "ssh-keygen -F <HOST>",
+          "expected_result_ar": "المفتاح في known_hosts",
+          "purpose": "diagnosis"
+        }
+      ],
+      "fixes_ar": [
+        "تحقق من البصمة أولاً",
+        "بعد التأكد استخدم ssh-keygen -R <HOST>"
+      ],
+      "verification": [
+        {
+          "title_ar": "إعادة الاتصال",
+          "command": "ssh <USER>@<HOST>",
+          "expected_result_ar": "قبول المفتاح الصحيح",
+          "purpose": "diagnosis"
+        }
+      ]
+    },
+    {
+      "id": "invalid-user",
+      "title_ar": "اسم المستخدم غير معروف",
+      "patterns": [
+        "invalid user",
+        "user .* not allowed because not listed",
+        "unknown user"
+      ],
+      "negative_patterns": [],
+      "domains": [
+        "ssh",
+        "users"
+      ],
+      "severity": "high",
+      "base_confidence": 0.98,
+      "explanation_ar": "الخادم لا يعرف الحساب أو تمنعه سياسة الوصول.",
+      "likely_causes_ar": [
+        "اسم المستخدم خطأ",
+        "الحساب غير موجود",
+        "AllowUsers أو AllowGroups تمنعه"
+      ],
+      "checks": [
+        {
+          "title_ar": "فحص الحساب",
+          "command": "getent passwd <USER>",
+          "expected_result_ar": "سجل المستخدم",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "سياسة sshd",
+          "command": "sudo sshd -T | grep -Ei 'allowusers|allowgroups|denyusers|denygroups'",
+          "expected_result_ar": "قواعد الوصول",
+          "purpose": "diagnosis"
+        }
+      ],
+      "fixes_ar": [
+        "صحح اسم المستخدم",
+        "أنشئ الحساب عند الحاجة",
+        "صحح سياسة السماح"
+      ],
+      "verification": [
+        {
+          "title_ar": "إعادة الاتصال",
+          "command": "ssh <USER>@<HOST>",
+          "expected_result_ar": "الوصول للمصادقة أو فتح الجلسة",
+          "purpose": "diagnosis"
+        }
+      ]
+    },
+    {
+      "id": "firewalld-not-running",
+      "title_ar": "خدمة firewalld لا تعمل",
+      "patterns": [
+        "firewalld is not running",
+        "firewall-cmd: error:.*not running"
+      ],
+      "negative_patterns": [],
+      "domains": [
+        "firewall",
+        "service"
+      ],
+      "severity": "high",
+      "base_confidence": 0.99,
+      "explanation_ar": "firewall-cmd لم يستطع العمل لأن الخدمة متوقفة.",
+      "likely_causes_ar": [
+        "الخدمة متوقفة",
+        "تم استبدالها بجدار آخر",
+        "الخدمة فشلت"
+      ],
+      "checks": [
+        {
+          "title_ar": "الحالة",
+          "command": "systemctl status firewalld --no-pager -l",
+          "expected_result_ar": "active أو السبب",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "السجل",
+          "command": "journalctl -u firewalld -b --no-pager -n 100",
+          "expected_result_ar": "سبب التوقف",
+          "purpose": "diagnosis"
+        }
+      ],
+      "fixes_ar": [
+        "شغّل firewalld إذا كان الجدار المعتمد",
+        "لا تشغله بالتوازي مع إدارة أخرى دون تصميم"
+      ],
+      "verification": [
+        {
+          "title_ar": "التحقق",
+          "command": "firewall-cmd --state",
+          "expected_result_ar": "running",
+          "purpose": "diagnosis"
+        }
+      ]
+    },
+    {
+      "id": "firewalld-zone",
+      "title_ar": "منطقة firewalld غير صحيحة",
+      "patterns": [
+        "invalid_zone",
+        "zone .* is not available",
+        "unknown zone"
+      ],
+      "negative_patterns": [],
+      "domains": [
+        "firewall"
+      ],
+      "severity": "medium",
+      "base_confidence": 0.98,
+      "explanation_ar": "اسم Zone غير موجود أو غير مرتبط بالواجهة.",
+      "likely_causes_ar": [
+        "خطأ في الاسم",
+        "الواجهة مرتبطة بمنطقة أخرى",
+        "ملف منطقة مخصص غير صالح"
+      ],
+      "checks": [
+        {
+          "title_ar": "المناطق",
+          "command": "firewall-cmd --get-zones",
+          "expected_result_ar": "المناطق المتاحة",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "المناطق النشطة",
+          "command": "firewall-cmd --get-active-zones",
+          "expected_result_ar": "المنطقة والواجهة",
+          "purpose": "diagnosis"
+        }
+      ],
+      "fixes_ar": [
+        "استخدم اسم المنطقة الصحيح",
+        "طبق القاعدة على المنطقة النشطة"
+      ],
+      "verification": [
+        {
+          "title_ar": "عرض المنطقة",
+          "command": "firewall-cmd --zone=<ZONE> --list-all",
+          "expected_result_ar": "التفاصيل دون خطأ",
+          "purpose": "diagnosis"
+        }
+      ]
+    },
+    {
+      "id": "selinux-avc",
+      "title_ar": "SELinux منع العملية",
+      "patterns": [
+        "avc:\\s*denied",
+        "type=avc",
+        "selinux is preventing",
+        "security context .* denied"
+      ],
+      "negative_patterns": [],
+      "domains": [
+        "selinux",
+        "permissions"
+      ],
+      "severity": "high",
+      "base_confidence": 0.99,
+      "explanation_ar": "سياسة SELinux رفضت وصولاً لا يتوافق مع السياق أو Boolean أو المنفذ.",
+      "likely_causes_ar": [
+        "سياق ملف خطأ",
+        "مسار أو منفذ غير معتاد",
+        "Boolean مطلوب",
+        "سلوك غير مسموح"
+      ],
+      "checks": [
+        {
+          "title_ar": "الأحداث الحديثة",
+          "command": "sudo ausearch -m AVC,USER_AVC -ts recent",
+          "expected_result_ar": "المصدر والهدف",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "شرح الرفض",
+          "command": "sudo ausearch -m AVC -ts recent | audit2why",
+          "expected_result_ar": "سبب الرفض",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "سياق المسار",
+          "command": "ls -ldZ <PATH>",
+          "expected_result_ar": "السياق الحالي",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "Booleans",
+          "command": "getsebool -a | grep -i <SERVICE>",
+          "expected_result_ar": "خيارات مرتبطة",
+          "purpose": "diagnosis"
+        }
+      ],
+      "fixes_ar": [
+        "استخدم restorecon",
+        "استخدم semanage fcontext للسياق الدائم",
+        "فعّل Boolean موثق فقط",
+        "لا تعطل SELinux"
+      ],
+      "verification": [
+        {
+          "title_ar": "إعادة العملية",
+          "command": "<RETRY_ORIGINAL_ACTION>",
+          "expected_result_ar": "نجاح العملية",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "AVC الجديد",
+          "command": "sudo ausearch -m AVC -ts recent",
+          "expected_result_ar": "عدم ظهور رفض جديد",
+          "purpose": "diagnosis"
+        }
+      ]
+    },
+    {
+      "id": "dnf-no-match",
+      "title_ar": "الحزمة غير موجودة في المستودعات",
+      "patterns": [
+        "no match for argument",
+        "unable to find a match",
+        "no package .* available"
+      ],
+      "negative_patterns": [],
+      "domains": [
+        "packages",
+        "repository"
+      ],
+      "severity": "medium",
+      "base_confidence": 0.99,
+      "explanation_ar": "DNF لم يجد الحزمة في المستودعات المفعلة.",
+      "likely_causes_ar": [
+        "الاسم خطأ",
+        "المستودع غير مفعل",
+        "الحزمة ضمن Module أو مستودع إضافي"
+      ],
+      "checks": [
+        {
+          "title_ar": "البحث",
+          "command": "dnf search <PACKAGE>",
+          "expected_result_ar": "حزم مطابقة",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "المستودعات",
+          "command": "dnf repolist --all",
+          "expected_result_ar": "المستودعات وحالتها",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "معرفة مزود الملف",
+          "command": "dnf provides '*/<COMMAND>'",
+          "expected_result_ar": "الحزمة التي توفر الملف",
+          "purpose": "diagnosis"
+        }
+      ],
+      "fixes_ar": [
+        "صحح الاسم",
+        "فعّل المستودع الرسمي المطلوب",
+        "استخدم اسم الحزمة الفعلي"
+      ],
+      "verification": [
+        {
+          "title_ar": "معلومات الحزمة",
+          "command": "dnf info <PACKAGE>",
+          "expected_result_ar": "المعلومات والمستودع",
+          "purpose": "diagnosis"
+        }
+      ]
+    },
+    {
+      "id": "repo-metadata",
+      "title_ar": "تعذر تنزيل بيانات المستودع",
+      "patterns": [
+        "failed to download metadata",
+        "cannot download repomd\\.xml",
+        "failed to synchronize cache",
+        "cannot prepare internal mirrorlist"
+      ],
+      "negative_patterns": [],
+      "domains": [
+        "packages",
+        "repository",
+        "network"
+      ],
+      "severity": "high",
+      "base_confidence": 0.97,
+      "explanation_ar": "DNF لم يستطع الوصول إلى Metadata لأحد المستودعات.",
+      "likely_causes_ar": [
+        "شبكة أو DNS",
+        "baseurl خطأ",
+        "TLS أو Proxy",
+        "المستودع غير متاح"
+      ],
+      "checks": [
+        {
+          "title_ar": "تفاصيل المستودعات",
+          "command": "dnf repolist -v",
+          "expected_result_ar": "baseurl والحالة",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "إنشاء الكاش بتفصيل",
+          "command": "sudo dnf -v makecache",
+          "expected_result_ar": "المستودع والسبب",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "اختبار DNS",
+          "command": "getent hosts <REPO_HOST>",
+          "expected_result_ar": "عنوان IP",
+          "purpose": "diagnosis"
+        }
+      ],
+      "fixes_ar": [
+        "عالج الشبكة أو DNS",
+        "صحح Proxy أو baseurl",
+        "عطل المستودع المعطوب مؤقتاً فقط عند عدم الحاجة"
+      ],
+      "verification": [
+        {
+          "title_ar": "إعادة بناء الكاش",
+          "command": "sudo dnf clean all && sudo dnf makecache",
+          "expected_result_ar": "اكتمال دون خطأ",
+          "purpose": "diagnosis"
+        }
+      ]
+    },
+    {
+      "id": "gpg-check",
+      "title_ar": "فشل التحقق من توقيع الحزمة",
+      "patterns": [
+        "gpg check failed",
+        "public key .* is not installed",
+        "signature verification failed",
+        "bad gpg signature"
+      ],
+      "negative_patterns": [],
+      "domains": [
+        "packages",
+        "security"
+      ],
+      "severity": "high",
+      "base_confidence": 0.99,
+      "explanation_ar": "DNF أو RPM لم يثق بتوقيع الحزمة.",
+      "likely_causes_ar": [
+        "المفتاح غير مستورد",
+        "الحزمة تالفة أو غير موثوقة",
+        "gpgkey خطأ"
+      ],
+      "checks": [
+        {
+          "title_ar": "مفاتيح RPM",
+          "command": "rpm -qa 'gpg-pubkey*'",
+          "expected_result_ar": "المفاتيح المثبتة",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "إعداد المستودع",
+          "command": "grep -RniE '^(gpgcheck|gpgkey)=' /etc/yum.repos.d",
+          "expected_result_ar": "مصدر المفتاح",
+          "purpose": "diagnosis"
+        }
+      ],
+      "fixes_ar": [
+        "استورد المفتاح من مصدر رسمي",
+        "أعد تنزيل الحزمة",
+        "لا تستخدم --nogpgcheck كحل اعتيادي"
+      ],
+      "verification": [
+        {
+          "title_ar": "إعادة التثبيت",
+          "command": "sudo dnf install <PACKAGE>",
+          "expected_result_ar": "نجاح التحقق",
+          "purpose": "diagnosis"
+        }
+      ]
+    },
+    {
+      "id": "package-conflict",
+      "title_ar": "تعارض بين الحزم أو الملفات",
+      "patterns": [
+        "conflicts with file from package",
+        "package .* conflicts with",
+        "file .* from install of .* conflicts"
+      ],
+      "negative_patterns": [],
+      "domains": [
+        "packages"
+      ],
+      "severity": "high",
+      "base_confidence": 0.98,
+      "explanation_ar": "الحزمة تتعارض مع حزمة مثبتة أو ملف تملكه حزمة أخرى.",
+      "likely_causes_ar": [
+        "حزمتان توفران الملف نفسه",
+        "مصدر خارجي يتعارض مع RHEL",
+        "ترقية غير متسقة"
+      ],
+      "checks": [
+        {
+          "title_ar": "مالك الملف",
+          "command": "rpm -qf <PATH>",
+          "expected_result_ar": "الحزمة المالكة",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "الحزم المثبتة",
+          "command": "rpm -qa | grep -i <PACKAGE>",
+          "expected_result_ar": "الإصدارات",
+          "purpose": "diagnosis"
+        }
+      ],
+      "fixes_ar": [
+        "لا تستخدم --replacefiles قبل فهم التعارض",
+        "وحّد مصادر الحزم",
+        "أزل المتعارض بعد تقييم الاعتماديات"
+      ],
+      "verification": [
+        {
+          "title_ar": "اختبار المعاملة",
+          "command": "sudo dnf install <PACKAGE> --assumeno",
+          "expected_result_ar": "عدم وجود تعارض",
+          "purpose": "diagnosis"
+        }
+      ]
+    },
+    {
+      "id": "dependency-resolution",
+      "title_ar": "تعذر حل اعتماديات الحزمة",
+      "patterns": [
+        "nothing provides .* needed by",
+        "conflicting requests",
+        "cannot install the best candidate",
+        "package .* requires"
+      ],
+      "negative_patterns": [],
+      "domains": [
+        "packages",
+        "repository"
+      ],
+      "severity": "high",
+      "base_confidence": 0.97,
+      "explanation_ar": "المستودعات الحالية لا توفر اعتماداً مناسباً أو توجد نسخ متعارضة.",
+      "likely_causes_ar": [
+        "مستودع ناقص",
+        "خلط إصدارات",
+        "حزمة خارجية",
+        "Module stream غير مناسب"
+      ],
+      "checks": [
+        {
+          "title_ar": "تفاصيل المعاملة",
+          "command": "sudo dnf install <PACKAGE> --assumeno -v",
+          "expected_result_ar": "الاعتماد المفقود",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "المستودعات",
+          "command": "dnf repolist --all",
+          "expected_result_ar": "المستودعات",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "Modules",
+          "command": "dnf module list",
+          "expected_result_ar": "Streams",
+          "purpose": "diagnosis"
+        }
+      ],
+      "fixes_ar": [
+        "فعّل المستودع الصحيح",
+        "استخدم حزمة متوافقة",
+        "صحح Module stream"
+      ],
+      "verification": [
+        {
+          "title_ar": "اختبار المعاملة",
+          "command": "sudo dnf install <PACKAGE> --assumeno",
+          "expected_result_ar": "معاملة قابلة للحل",
+          "purpose": "diagnosis"
+        }
+      ]
+    },
+    {
+      "id": "rpm-lock",
+      "title_ar": "مدير الحزم مشغول",
+      "patterns": [
+        "another app is currently holding the yum lock",
+        "waiting for process with pid",
+        "rpmdb.*locked",
+        "resource temporarily unavailable.*rpm"
+      ],
+      "negative_patterns": [],
+      "domains": [
+        "packages"
+      ],
+      "severity": "medium",
+      "base_confidence": 0.96,
+      "explanation_ar": "عملية أخرى تستخدم DNF/RPM أو بقي قفل بعد توقف.",
+      "likely_causes_ar": [
+        "تحديث تلقائي",
+        "جلسة DNF أخرى",
+        "عملية سابقة تعطلت"
+      ],
+      "checks": [
+        {
+          "title_ar": "العملية الحالية",
+          "command": "ps -ef | grep -E '[d]nf|[r]pm'",
+          "expected_result_ar": "عملية مدير الحزم",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "المؤقتات",
+          "command": "systemctl list-timers | grep -i dnf",
+          "expected_result_ar": "تحديث تلقائي",
+          "purpose": "diagnosis"
+        }
+      ],
+      "fixes_ar": [
+        "انتظر العملية السليمة",
+        "لا تحذف القفل ولا تقتل العملية قبل التحقق"
+      ],
+      "verification": [
+        {
+          "title_ar": "فحص DNF",
+          "command": "dnf check",
+          "expected_result_ar": "اكتمال دون قفل",
+          "purpose": "diagnosis"
+        }
+      ]
+    },
+    {
+      "id": "mount-filesystem",
+      "title_ar": "تعذر تركيب نظام الملفات",
+      "patterns": [
+        "wrong fs type",
+        "bad superblock",
+        "unknown filesystem type",
+        "special device .* does not exist"
+      ],
+      "negative_patterns": [],
+      "domains": [
+        "storage",
+        "mount"
+      ],
+      "severity": "high",
+      "base_confidence": 0.98,
+      "explanation_ar": "mount لم يتعرف على الجهاز أو نوع نظام الملفات أو superblock.",
+      "likely_causes_ar": [
+        "الجهاز أو UUID خطأ",
+        "نوع النظام غير صحيح",
+        "تلف",
+        "fstab خطأ"
+      ],
+      "checks": [
+        {
+          "title_ar": "الأجهزة وأنواعها",
+          "command": "lsblk -f",
+          "expected_result_ar": "الجهاز وUUID والنوع",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "تعريف الجهاز",
+          "command": "blkid <DEVICE>",
+          "expected_result_ar": "UUID وTYPE",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "اختبار fstab",
+          "command": "sudo mount -av",
+          "expected_result_ar": "السطر الفاشل",
+          "purpose": "diagnosis"
+        }
+      ],
+      "fixes_ar": [
+        "صحح الجهاز أو UUID أو النوع",
+        "ثبت أداة النظام المطلوبة",
+        "افحص النظام في صيانة عند الاشتباه بالتلف"
+      ],
+      "verification": [
+        {
+          "title_ar": "التحقق من الربط",
+          "command": "findmnt <MOUNT_POINT>",
+          "expected_result_ar": "الجهاز ونقطة الربط",
+          "purpose": "diagnosis"
+        }
+      ]
+    },
+    {
+      "id": "device-busy",
+      "title_ar": "المورد أو الجهاز مشغول",
+      "patterns": [
+        "device or resource busy",
+        "target is busy"
+      ],
+      "negative_patterns": [],
+      "domains": [
+        "storage",
+        "mount"
+      ],
+      "severity": "high",
+      "base_confidence": 0.98,
+      "explanation_ar": "عملية أو نقطة ربط ما زالت تستخدم المورد.",
+      "likely_causes_ar": [
+        "عملية تستخدم ملفات داخله",
+        "مجلد جلسة داخل نقطة الربط",
+        "ربط فرعي"
+      ],
+      "checks": [
+        {
+          "title_ar": "العمليات المستخدمة",
+          "command": "sudo fuser -vm <MOUNT_POINT>",
+          "expected_result_ar": "العمليات والمستخدمون",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "الربوط الفرعية",
+          "command": "findmnt -R <MOUNT_POINT>",
+          "expected_result_ar": "الربوط التابعة",
+          "purpose": "diagnosis"
+        }
+      ],
+      "fixes_ar": [
+        "أوقف الاستخدام بطريقة منظمة",
+        "اخرج من المجلد",
+        "افصل الربوط الفرعية أولاً"
+      ],
+      "verification": [
+        {
+          "title_ar": "إعادة الفصل",
+          "command": "sudo umount <MOUNT_POINT>",
+          "expected_result_ar": "اكتمال دون busy",
+          "purpose": "diagnosis"
+        }
+      ]
+    },
+    {
+      "id": "lvm-no-space",
+      "title_ar": "لا توجد Extents كافية في Volume Group",
+      "patterns": [
+        "insufficient free space",
+        "insufficient free extents",
+        "not enough free space.*volume group"
+      ],
+      "negative_patterns": [],
+      "domains": [
+        "storage",
+        "lvm"
+      ],
+      "severity": "high",
+      "base_confidence": 0.99,
+      "explanation_ar": "مجموعة LVM لا تحتوي مساحة حرة تكفي للعملية.",
+      "likely_causes_ar": [
+        "كل VG مستخدمة",
+        "الحجم المطلوب أكبر من المتاح",
+        "PV جديد لم يضف"
+      ],
+      "checks": [
+        {
+          "title_ar": "مساحة VG",
+          "command": "vgs",
+          "expected_result_ar": "VFree",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "الأقراص الفيزيائية",
+          "command": "pvs",
+          "expected_result_ar": "المساحة الحرة",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "الأحجام المنطقية",
+          "command": "lvs -a -o +devices",
+          "expected_result_ar": "الأحجام والأجهزة",
+          "purpose": "diagnosis"
+        }
+      ],
+      "fixes_ar": [
+        "قلل الحجم",
+        "أضف PV بعد التحقق",
+        "حرر مساحة وفق خطة"
+      ],
+      "verification": [
+        {
+          "title_ar": "إعادة فحص VG",
+          "command": "vgs",
+          "expected_result_ar": "VFree كافية",
+          "purpose": "diagnosis"
+        }
+      ]
+    },
+    {
+      "id": "oom-killed",
+      "title_ar": "أنهت النواة العملية بسبب نفاد الذاكرة",
+      "patterns": [
+        "out of memory: killed process",
+        "oom-kill",
+        "killed process \\d+",
+        "memory cgroup out of memory"
+      ],
+      "negative_patterns": [],
+      "domains": [
+        "memory",
+        "performance",
+        "service"
+      ],
+      "severity": "critical",
+      "base_confidence": 0.98,
+      "explanation_ar": "النظام أو cgroup لم يملك ذاكرة كافية فأنهى عملية.",
+      "likely_causes_ar": [
+        "استهلاك مرتفع",
+        "تسرب ذاكرة",
+        "MemoryMax منخفض",
+        "Swap غير كافية"
+      ],
+      "checks": [
+        {
+          "title_ar": "رسائل OOM",
+          "command": "sudo journalctl -k -b --no-pager | grep -iE 'out of memory|oom|killed process'",
+          "expected_result_ar": "العملية والذاكرة",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "الذاكرة",
+          "command": "free -h",
+          "expected_result_ar": "RAM وSwap",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "أعلى العمليات",
+          "command": "ps aux --sort=-%mem | head -n 15",
+          "expected_result_ar": "الأعلى استهلاكاً",
+          "purpose": "diagnosis"
+        }
+      ],
+      "fixes_ar": [
+        "عالج سبب الاستهلاك",
+        "اضبط الحدود بعد القياس",
+        "أضف Swap أو RAM عند الحاجة"
+      ],
+      "verification": [
+        {
+          "title_ar": "مراقبة الذاكرة",
+          "command": "free -h && systemctl status <SERVICE> --no-pager",
+          "expected_result_ar": "استقرار الذاكرة والخدمة",
+          "purpose": "diagnosis"
+        }
+      ]
+    },
+    {
+      "id": "segmentation-fault",
+      "title_ar": "انهيار Segmentation Fault",
+      "patterns": [
+        "segmentation fault",
+        "segfault at",
+        "core dumped"
+      ],
+      "negative_patterns": [],
+      "domains": [
+        "application",
+        "memory"
+      ],
+      "severity": "critical",
+      "base_confidence": 0.98,
+      "explanation_ar": "البرنامج وصل إلى ذاكرة غير صالحة وانتهى أو أنشأ Core dump.",
+      "likely_causes_ar": [
+        "خلل برمجي",
+        "مكتبة غير متوافقة",
+        "بيانات تالفة"
+      ],
+      "checks": [
+        {
+          "title_ar": "Core dumps",
+          "command": "coredumpctl list",
+          "expected_result_ar": "السجل المرتبط",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "تفاصيل الانهيار",
+          "command": "coredumpctl info <COMMAND>",
+          "expected_result_ar": "الإشارة والمكتبات",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "المكتبات",
+          "command": "ldd <PATH>",
+          "expected_result_ar": "مكتبات مفقودة",
+          "purpose": "diagnosis"
+        }
+      ],
+      "fixes_ar": [
+        "حدث الحزمة",
+        "وحّد مصادر المكتبات",
+        "اجمع backtrace لفريق التطبيق"
+      ],
+      "verification": [
+        {
+          "title_ar": "إعادة الاختبار",
+          "command": "<RETRY_ORIGINAL_ACTION>",
+          "expected_result_ar": "عدم تكرار الانهيار",
+          "purpose": "diagnosis"
+        }
+      ]
+    },
+    {
+      "id": "authentication-failure",
+      "title_ar": "فشلت المصادقة",
+      "patterns": [
+        "authentication failure",
+        "login incorrect",
+        "pam_unix.*authentication failure",
+        "incorrect password"
+      ],
+      "negative_patterns": [],
+      "domains": [
+        "authentication",
+        "users"
+      ],
+      "severity": "high",
+      "base_confidence": 0.98,
+      "explanation_ar": "بيانات الاعتماد أو سياسة PAM لم تسمح بالدخول.",
+      "likely_causes_ar": [
+        "كلمة مرور خطأ",
+        "الحساب مقفل أو منتهي",
+        "PAM يمنع",
+        "تجاوز المحاولات"
+      ],
+      "checks": [
+        {
+          "title_ar": "حالة الحساب",
+          "command": "sudo passwd -S <USER>",
+          "expected_result_ar": "حالة كلمة المرور",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "المحاولات الفاشلة",
+          "command": "sudo faillock --user <USER>",
+          "expected_result_ar": "العدد",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "انتهاء الحساب",
+          "command": "sudo chage -l <USER>",
+          "expected_result_ar": "التواريخ",
+          "purpose": "diagnosis"
+        }
+      ],
+      "fixes_ar": [
+        "تحقق من البيانات",
+        "افتح الحساب وفق السياسة",
+        "أعد ضبط كلمة المرور عند التفويض"
+      ],
+      "verification": [
+        {
+          "title_ar": "اختبار الحساب",
+          "command": "su - <USER>",
+          "expected_result_ar": "فتح جلسة",
+          "purpose": "diagnosis"
+        }
+      ]
+    },
+    {
+      "id": "io-error",
+      "title_ar": "خطأ إدخال وإخراج في التخزين",
+      "patterns": [
+        "input/output error",
+        "\\bi/o error\\b",
+        "blk_update_request.*error",
+        "buffer i/o error"
+      ],
+      "negative_patterns": [],
+      "domains": [
+        "storage",
+        "hardware"
+      ],
+      "severity": "critical",
+      "base_confidence": 0.99,
+      "explanation_ar": "النظام واجه خطأ قراءة أو كتابة على جهاز تخزين.",
+      "likely_causes_ar": [
+        "قرص متعطل",
+        "كابل أو Controller",
+        "نظام ملفات تالف",
+        "تخزين شبكي منقطع"
+      ],
+      "checks": [
+        {
+          "title_ar": "رسائل النواة",
+          "command": "sudo journalctl -k -b --no-pager | grep -iE 'I/O error|blk_update|buffer I/O|nvme|ata'",
+          "expected_result_ar": "الجهاز والأخطاء",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "الأجهزة",
+          "command": "lsblk -o NAME,SIZE,FSTYPE,MOUNTPOINTS,MODEL,SERIAL",
+          "expected_result_ar": "تحديد الجهاز",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "SMART",
+          "command": "sudo smartctl -a <DEVICE>",
+          "expected_result_ar": "مؤشرات الصحة",
+          "purpose": "diagnosis"
+        }
+      ],
+      "fixes_ar": [
+        "قلل الكتابة",
+        "خذ نسخة احتياطية فوراً",
+        "استبدل الوسيط أو أصلح المسار"
+      ],
+      "verification": [
+        {
+          "title_ar": "مراقبة الأخطاء",
+          "command": "sudo journalctl -k --since '-10 min' | grep -i 'I/O error'",
+          "expected_result_ar": "عدم ظهور أخطاء جديدة",
+          "purpose": "diagnosis"
+        }
+      ]
+    },
+    {
+      "id": "too-many-open-files",
+      "title_ar": "تجاوز حد الملفات المفتوحة",
+      "patterns": [
+        "too many open files",
+        "\\bemfile\\b"
+      ],
+      "negative_patterns": [],
+      "domains": [
+        "service",
+        "performance"
+      ],
+      "severity": "high",
+      "base_confidence": 0.99,
+      "explanation_ar": "العملية أو النظام وصل إلى حد file descriptors.",
+      "likely_causes_ar": [
+        "تسرب داخل التطبيق",
+        "LimitNOFILE منخفض",
+        "اتصالات أكثر من التصميم"
+      ],
+      "checks": [
+        {
+          "title_ar": "حدود العملية",
+          "command": "cat /proc/<PID>/limits | grep -i 'open files'",
+          "expected_result_ar": "الحد الحالي",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "عدد الملفات",
+          "command": "ls /proc/<PID>/fd | wc -l",
+          "expected_result_ar": "المستخدم",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "إعداد systemd",
+          "command": "systemctl show <SERVICE> -p LimitNOFILE",
+          "expected_result_ar": "الحد",
+          "purpose": "diagnosis"
+        }
+      ],
+      "fixes_ar": [
+        "عالج التسرب",
+        "ارفع الحد بصورة محسوبة",
+        "راجع الحمل"
+      ],
+      "verification": [
+        {
+          "title_ar": "إعادة الفحص",
+          "command": "systemctl show <SERVICE> -p LimitNOFILE",
+          "expected_result_ar": "حد مناسب",
+          "purpose": "diagnosis"
+        }
+      ]
+    },
+    {
+      "id": "generic-error",
+      "title_ar": "ظهرت رسالة فشل عامة",
+      "patterns": [
+        "\\berror\\b",
+        "\\bfailed\\b",
+        "\\bfailure\\b",
+        "\\bfatal\\b"
+      ],
+      "negative_patterns": [],
+      "domains": [
+        "global"
+      ],
+      "severity": "medium",
+      "base_confidence": 0.6,
+      "explanation_ar": "الناتج يحتوي فشلاً، لكن المعلومات غير كافية لتحديد السبب الدقيق.",
+      "likely_causes_ar": [
+        "الرسالة مختصرة",
+        "السبب في سجل آخر",
+        "خطأ سابق أهم من السطر الأخير"
+      ],
+      "checks": [
+        {
+          "title_ar": "آخر التحذيرات",
+          "command": "journalctl -b -p warning --no-pager -n 120",
+          "expected_result_ar": "الأحداث القريبة",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "حالة الخدمة",
+          "command": "systemctl status <SERVICE> --no-pager -l",
+          "expected_result_ar": "الخطأ الأصلي",
+          "purpose": "diagnosis"
+        },
+        {
+          "title_ar": "سجل الخدمة",
+          "command": "journalctl -u <SERVICE> -b --no-pager -n 120",
+          "expected_result_ar": "التفاصيل",
+          "purpose": "diagnosis"
+        }
+      ],
+      "fixes_ar": [
+        "الصق المخرجات كاملة",
+        "نفذ أول فحص والصق نتيجته"
+      ],
+      "verification": [
+        {
+          "title_ar": "إعادة العملية",
+          "command": "<RETRY_ORIGINAL_ACTION>",
+          "expected_result_ar": "عدم ظهور Error أو Failed",
+          "purpose": "diagnosis"
+        }
+      ]
+    }
+  ],
+  "fallbacks": {
+    "service": [
+      {
+        "title_ar": "حالة الخدمة",
+        "command": "systemctl status <SERVICE> --no-pager -l",
+        "expected_result_ar": "الحالة وآخر رسالة",
+        "purpose": "diagnosis"
+      },
+      {
+        "title_ar": "سجل الخدمة",
+        "command": "journalctl -u <SERVICE> -b --no-pager -n 120",
+        "expected_result_ar": "الخطأ الأصلي",
+        "purpose": "diagnosis"
+      },
+      {
+        "title_ar": "ملف الوحدة",
+        "command": "systemctl cat <SERVICE>",
+        "expected_result_ar": "أمر التشغيل",
+        "purpose": "diagnosis"
+      }
+    ],
+    "packages": [
+      {
+        "title_ar": "المستودعات",
+        "command": "dnf repolist --all",
+        "expected_result_ar": "المستودعات وحالتها",
+        "purpose": "diagnosis"
+      },
+      {
+        "title_ar": "فحص DNF",
+        "command": "dnf check",
+        "expected_result_ar": "سلامة الاعتماديات",
+        "purpose": "diagnosis"
+      },
+      {
+        "title_ar": "إعادة العملية بتفصيل",
+        "command": "sudo dnf -v <ORIGINAL_DNF_ACTION>",
+        "expected_result_ar": "تفاصيل الفشل",
+        "purpose": "diagnosis"
+      }
+    ],
+    "network": [
+      {
+        "title_ar": "العناوين",
+        "command": "ip -br address",
+        "expected_result_ar": "واجهة وعنوان",
+        "purpose": "diagnosis"
+      },
+      {
+        "title_ar": "المسارات",
+        "command": "ip route",
+        "expected_result_ar": "المسار الافتراضي",
+        "purpose": "diagnosis"
+      },
+      {
+        "title_ar": "اختبار الاسم",
+        "command": "getent hosts <HOST>",
+        "expected_result_ar": "عنوان IP",
+        "purpose": "diagnosis"
+      },
+      {
+        "title_ar": "اختبار المنفذ",
+        "command": "nc -vz -w 5 <HOST> <PORT>",
+        "expected_result_ar": "نجاح أو سبب الفشل",
+        "purpose": "diagnosis"
+      }
+    ],
+    "permissions": [
+      {
+        "title_ar": "هوية المستخدم",
+        "command": "id",
+        "expected_result_ar": "UID والمجموعات",
+        "purpose": "diagnosis"
+      },
+      {
+        "title_ar": "أذونات المسار",
+        "command": "namei -l <PATH>",
+        "expected_result_ar": "كل جزء",
+        "purpose": "diagnosis"
+      },
+      {
+        "title_ar": "الأذونات والسياق",
+        "command": "ls -ldZ <PATH>",
+        "expected_result_ar": "المالك وSELinux",
+        "purpose": "diagnosis"
+      }
+    ],
+    "storage": [
+      {
+        "title_ar": "المساحة",
+        "command": "df -hT",
+        "expected_result_ar": "الأقسام",
+        "purpose": "diagnosis"
+      },
+      {
+        "title_ar": "Inodes",
+        "command": "df -ih",
+        "expected_result_ar": "النسبة",
+        "purpose": "diagnosis"
+      },
+      {
+        "title_ar": "رسائل النواة",
+        "command": "journalctl -k -b --no-pager | tail -n 100",
+        "expected_result_ar": "أخطاء التخزين",
+        "purpose": "diagnosis"
+      }
+    ],
+    "selinux": [
+      {
+        "title_ar": "حالة SELinux",
+        "command": "getenforce",
+        "expected_result_ar": "Enforcing أو Permissive",
+        "purpose": "diagnosis"
+      },
+      {
+        "title_ar": "أحداث AVC",
+        "command": "sudo ausearch -m AVC,USER_AVC -ts recent",
+        "expected_result_ar": "رفض مرتبط",
+        "purpose": "diagnosis"
+      },
+      {
+        "title_ar": "سياق المسار",
+        "command": "ls -ldZ <PATH>",
+        "expected_result_ar": "السياق",
+        "purpose": "diagnosis"
+      }
+    ],
+    "global": [
+      {
+        "title_ar": "آخر التحذيرات",
+        "command": "journalctl -b -p warning --no-pager -n 120",
+        "expected_result_ar": "رسائل قريبة",
+        "purpose": "diagnosis"
+      },
+      {
+        "title_ar": "الوحدات الفاشلة",
+        "command": "systemctl --failed",
+        "expected_result_ar": "الخدمات الفاشلة",
+        "purpose": "diagnosis"
+      },
+      {
+        "title_ar": "رسائل النواة",
+        "command": "journalctl -k -b --no-pager | tail -n 80",
+        "expected_result_ar": "أخطاء النواة",
+        "purpose": "diagnosis"
+      }
+    ]
+  }
+}

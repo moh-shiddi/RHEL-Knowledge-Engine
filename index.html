@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="محرك معرفة عربي ومسارات تنفيذ موجهة وتشخيص تفاعلي لمهام Red Hat Enterprise Linux">
   <meta name="theme-color" content="#0b6b50">
-  <title>محرك معرفة RHEL العربي | Guided Workflows</title>
+  <title>محرك معرفة RHEL العربي | Execution Diagnostic Engine</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -44,11 +44,11 @@
     <main>
       <section class="hero">
         <div class="hero__content">
-          <span class="hero__eyebrow">المرحلة الخامسة — Guided Workflows</span>
-          <h1>تعلّم، نفّذ، وتحقق عبر مسار موجه خطوة بخطوة</h1>
+          <span class="hero__eyebrow">المرحلة الخامسة — Execution Diagnostic Engine</span>
+          <h1>نفّذ الأمر والصق الناتج ليكشف النظام سبب المشكلة</h1>
           <p>
-            افتح أي مهمة كمسار تنفيذي موجه يبدأ بالاستعداد، ثم يعرض كل أمر ونتيجته المتوقعة،
-            وينقلك إلى التحقق والأخطاء الشائعة والتراجع مع حفظ تقدمك تلقائياً.
+            ينظم الموقع خطوات المهمة، ثم يحلل مخرجات الطرفية محلياً: يحدد نمط الخطأ،
+            ويعرض الفحص التالي والعلاج وطريقة إثبات نجاحه دون إرسال البيانات إلى أي خادم.
           </p>
 
           <div class="search-wrapper">
@@ -107,12 +107,12 @@
 
       <section class="workflow-launch" aria-labelledby="workflowLaunchTitle">
         <div class="workflow-launch__content">
-          <span class="eyebrow">Guided Workflow Runner</span>
-          <h2 id="workflowLaunchTitle">نفّذ المهمة كمسار متكامل بدل قراءة الأوامر فقط</h2>
-          <p>راجع المتطلبات، عبّئ المتغيرات، نفّذ خطوة واحدة في كل مرة، ثم تحقق من النتيجة واحفظ تقرير الجلسة.</p>
+          <span class="eyebrow">Execution Diagnostic Engine</span>
+          <h2 id="workflowLaunchTitle">نفّذ الأمر ثم الصق الناتج ليتم تشخيصه</h2>
+          <p>يحلل النظام مخرجات الطرفية، ويحدد نمط الخطأ والدليل والفحص التالي والعلاج، ثم يحفظ سلسلة التشخيص داخل التقرير.</p>
           <div class="workflow-launch__features">
-            <span>✓ استعداد قبل التنفيذ</span><span>✓ أوامر جاهزة</span>
-            <span>✓ نجاح أو مشكلة لكل خطوة</span><span>✓ حفظ واستكمال</span><span>✓ تقرير TXT</span>
+            <span>✓ تحليل مخرجات الطرفية</span><span>✓ تحديد سبب الخطأ</span>
+            <span>✓ فحوصات متتابعة</span><span>✓ علاج وإثبات نجاح</span><span>✓ تقرير TXT</span>
           </div>
           <div class="workflow-launch__actions">
             <button id="browseWorkflowsButton" type="button">استعراض كل المسارات</button>
@@ -263,7 +263,7 @@
 
   <dialog id="workflowDialog" class="workflow-dialog">
     <div class="workflow-dialog__topbar">
-      <div class="workflow-dialog__identity"><span>▶</span><div><small>RHEL Guided Workflow</small><strong id="workflowDialogTitle">مسارات التنفيذ</strong></div></div>
+      <div class="workflow-dialog__identity"><span>▶</span><div><small>RHEL Execution Diagnostic</small><strong id="workflowDialogTitle">مسارات التنفيذ</strong></div></div>
       <div class="workflow-dialog__actions">
         <button id="workflowLibraryButton" type="button">المسارات</button>
         <button id="workflowReportButton" type="button" hidden>التقرير</button>
@@ -312,6 +312,7 @@
 
   <script src="intent-engine.js"></script>
   <script src="doctor-engine.js"></script>
+  <script src="execution-diagnostics.js"></script>
   <script src="workflow-engine.js"></script>
   <script src="app.js"></script>
 </body>

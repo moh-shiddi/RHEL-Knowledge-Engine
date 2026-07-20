@@ -13,7 +13,7 @@ class GuidedWorkflowRunner {
       prepare: ["1", "قبل البدء", "المتطلبات والبيانات"],
       execute: ["2", "التنفيذ", "الأوامر خطوة بخطوة"],
       verify: ["3", "التحقق", "التأكد من النتيجة"],
-      issues: ["4", "المشكلات", "الفحوصات والإصلاحات"],
+      issues: ["4", "التشخيص", "نتائج التحليل والفحوصات"],
       rollback: ["5", "التراجع", "العودة للوضع السابق"],
       complete: ["✓", "الإنهاء", "الملخص والتقرير"]
     };
@@ -104,8 +104,8 @@ class GuidedWorkflowRunner {
       stepIndex:0, verificationIndex:0,
       startedAt:new Date().toISOString(), updatedAt:new Date().toISOString(),
       completedAt:null, prerequisites:{}, variables:values,
-      stepStatus:{}, stepNotes:{}, verificationStatus:{},
-      verificationNotes:{}, rollbackStatus:{}, issueNotes:"",
+      stepStatus:{}, stepNotes:{}, stepDiagnostics:{}, verificationStatus:{},
+      verificationNotes:{}, verificationDiagnostics:{}, rollbackStatus:{}, issueNotes:"",
       visited:["prepare"]
     };
   }
@@ -118,8 +118,10 @@ class GuidedWorkflowRunner {
       prerequisites:{...(saved?.prerequisites||{})},
       stepStatus:{...(saved?.stepStatus||{})},
       stepNotes:{...(saved?.stepNotes||{})},
+      stepDiagnostics:{...(saved?.stepDiagnostics||{})},
       verificationStatus:{...(saved?.verificationStatus||{})},
       verificationNotes:{...(saved?.verificationNotes||{})},
+      verificationDiagnostics:{...(saved?.verificationDiagnostics||{})},
       rollbackStatus:{...(saved?.rollbackStatus||{})},
       visited:Array.isArray(saved?.visited) ? saved.visited : ["prepare"]
     };
@@ -327,9 +329,11 @@ class GuidedWorkflowRunner {
     </section>`;
   }
 
+
   execute() {
     const t=this.task,s=this.session,steps=t.steps,index=Math.min(s.stepIndex,steps.length-1),step=steps[index],status=s.stepStatus[step.id]||"pending";
     const command=this.resolve(step.command), unresolved=this.unresolved(command);
+    const record=this.diagnosticRecord("step",step.id);
     return `<section class="wf-stage">${this.heading(`المرحلة 2 — ${index+1}/${steps.length}`,step.title_ar,step.explanation_ar)}
       <div class="wf-dots">${steps.map((x,i)=>`<button data-wf-step="${i}" class="${i===index?"current":""} ${s.stepStatus[x.id]||"pending"}">${s.stepStatus[x.id]==="success"?"✓":s.stepStatus[x.id]==="issue"?"!":s.stepStatus[x.id]==="skipped"?"↷":i+1}</button>`).join("")}</div>
       <article class="wf-command ${status}">
@@ -338,10 +342,17 @@ class GuidedWorkflowRunner {
         <div class="wf-code"><code>${ArabicText.escape(command)}</code><button data-wf-copy-step>نسخ</button></div>
         ${unresolved.length?`<div class="wf-unresolved">أكمل المتغيرات: ${unresolved.map(x=>`<code>&lt;${x}&gt;</code>`).join(" ")} <button data-wf-prepare>تعديل البيانات</button></div>`:""}
         ${step.expected_result_ar?`<div class="wf-expected"><strong>النتيجة المتوقعة</strong><p>${ArabicText.escape(step.expected_result_ar)}</p></div>`:""}
-        <label class="wf-notes"><span>ملاحظات الخطوة</span><textarea data-wf-step-note="${step.id}">${ArabicText.escape(s.stepNotes[step.id]||"")}</textarea></label>
-        <div class="wf-outcomes"><button class="success" data-wf-outcome="success" ${unresolved.length?"disabled":""}><b>✓</b><span>نجحت الخطوة<small>ظهرت النتيجة المتوقعة</small></span></button>
-        <button class="issue" data-wf-outcome="issue"><b>!</b><span>واجهت مشكلة<small>افتح الأخطاء الشائعة</small></span></button>
-        ${step.optional?`<button data-wf-outcome="skipped"><b>↷</b><span>تخطي<small>خطوة اختيارية</small></span></button>`:""}</div>
+        <section class="wf-output-analyzer">
+          <header><div><span>⌁</span><div><strong>الصق نتيجة الأمر</strong><small>يتم التحليل محلياً داخل المتصفح</small></div></div><b>لا يتم إرسال البيانات</b></header>
+          <textarea data-wf-step-output="${ArabicText.escape(step.id)}" spellcheck="false" placeholder="الصق هنا كل ما ظهر في الطرفية...">${ArabicText.escape(record.output||"")}</textarea>
+          <div class="wf-analyzer-actions">
+            <button class="analyze" data-wf-analyze-step ${unresolved.length?"disabled":""}>تحليل النتيجة</button>
+            <button data-wf-silent-step ${unresolved.length?"disabled":""}>الأمر نجح بلا مخرجات</button>
+            <button data-wf-clear-analysis>مسح التحليل</button>
+            ${step.optional?`<button data-wf-outcome="skipped">تخطي الخطوة</button>`:""}
+          </div>
+        </section>
+        ${this.diagnosticHtml(record,"step",step.id)}
       </article>
       <div class="wf-step-list">${steps.map((x,i)=>`<button data-wf-step="${i}" class="${i===index?"current":""} ${s.stepStatus[x.id]||"pending"}"><b>${s.stepStatus[x.id]==="success"?"✓":s.stepStatus[x.id]==="issue"?"!":i+1}</b><span>${ArabicText.escape(x.title_ar)}<small>${this.statusLabel(s.stepStatus[x.id]||"pending")}</small></span></button>`).join("")}</div>
     </section>`;
@@ -351,28 +362,33 @@ class GuidedWorkflowRunner {
     const list=this.task.verification||[],i=Math.min(this.session.verificationIndex,list.length-1),item=list[i];
     if(!item) return `<section class="wf-stage">${this.heading("المرحلة 3","لا توجد فحوصات تحقق","يمكن الانتقال إلى التقرير النهائي.")}</section>`;
     const status=this.session.verificationStatus[i]||"pending";
-    return `<section class="wf-stage">${this.heading(`المرحلة 3 — ${i+1}/${list.length}`,"تحقق من نجاح المهمة","لا تعتبر المهمة مكتملة قبل التأكد من النتيجة الفعلية.")}
+    const record=this.diagnosticRecord("verify",String(i));
+    return `<section class="wf-stage">${this.heading(`المرحلة 3 — ${i+1}/${list.length}`,"تحقق من نجاح المهمة","نفذ أمر التحقق والصق نتيجته ليحدد النظام النجاح أو سبب الفشل.")}
       <div class="wf-verify-tabs">${list.map((x,n)=>`<button data-wf-verify="${n}" class="${n===i?"current":""} ${this.session.verificationStatus[n]||"pending"}"><b>${this.session.verificationStatus[n]==="success"?"✓":this.session.verificationStatus[n]==="failed"?"!":n+1}</b>${ArabicText.escape(x.title_ar)}</button>`).join("")}</div>
       <article class="wf-command ${status}"><h3>${ArabicText.escape(item.title_ar)}</h3><div class="wf-code"><code>${ArabicText.escape(this.resolve(item.command))}</code><button data-wf-copy-verify>نسخ</button></div>
       <div class="wf-expected"><strong>المتوقع</strong><p>${ArabicText.escape(item.expected_result_ar||"نتيجة تؤكد نجاح العملية.")}</p></div>
-      <label class="wf-notes"><span>ملاحظات التحقق</span><textarea data-wf-verify-note="${i}">${ArabicText.escape(this.session.verificationNotes[i]||"")}</textarea></label>
-      <div class="wf-outcomes two"><button class="success" data-wf-verify-outcome="success"><b>✓</b><span>التحقق ناجح</span></button><button class="issue" data-wf-verify-outcome="failed"><b>!</b><span>فشل التحقق</span></button></div></article>
+      <section class="wf-output-analyzer">
+        <header><div><span>⌁</span><div><strong>الصق نتيجة التحقق</strong><small>سيحدد النظام هل النتيجة ناجحة أو تكشف مشكلة</small></div></div><b>تحليل محلي</b></header>
+        <textarea data-wf-verify-output="${i}" spellcheck="false" placeholder="الصق نتيجة أمر التحقق...">${ArabicText.escape(record.output||"")}</textarea>
+        <div class="wf-analyzer-actions"><button class="analyze" data-wf-analyze-verify>تحليل التحقق</button><button data-wf-clear-analysis>مسح التحليل</button></div>
+      </section>
+      ${this.diagnosticHtml(record,"verify",String(i))}
+      </article>
     </section>`;
   }
 
   issues() {
-    const errors=this.task.common_errors||[];
-    return `<section class="wf-stage">${this.heading("المرحلة 4","المشكلات الشائعة","ابدأ بالفحوصات قبل تعديل الإعدادات.")}
-      ${errors.length?`<div class="wf-errors">${errors.map((e,ei)=>`<details ${ei===0?"open":""}><summary><b>!</b><strong>${ArabicText.escape(e.symptom_ar)}</strong></summary><div>
+    const errors=this.task.common_errors||[],findings=this.allDiagnosticFindings();
+    return `<section class="wf-stage">${this.heading("المرحلة 4","مركز التشخيص","يعرض النتائج التي استنتجها المحرك، إضافة إلى المشكلات المسجلة في قاعدة المعرفة.")}
+      ${findings.length?`<div class="wf-collected-findings"><h3>نتائج اكتشفها المحرك أثناء الجلسة</h3>${findings.map(f=>`<article class="${f.result.status}"><header><span>${f.result.status==="success"?"✓":f.result.status==="issue"?"!":"?"}</span><div><strong>${ArabicText.escape(f.result.title_ar)}</strong><small>${ArabicText.escape(f.source)} — ثقة ${f.result.confidence||0}%</small></div></header><p>${ArabicText.escape(f.result.explanation_ar||"")}</p>${(f.result.evidence||[]).length?`<pre>${ArabicText.escape(f.result.evidence.join("\\n"))}</pre>`:""}</article>`).join("")}</div>`:""}
+      ${errors.length?`<div class="wf-errors"><h3>قاعدة المشكلات الخاصة بالمهمة</h3>${errors.map((e,ei)=>`<details ${ei===0&&!findings.length?"open":""}><summary><b>!</b><strong>${ArabicText.escape(e.symptom_ar)}</strong></summary><div>
         <h4>الأسباب المحتملة</h4><ul>${(e.likely_causes_ar||[]).map(x=>`<li>${ArabicText.escape(x)}</li>`).join("")}</ul>
         ${(e.checks||[]).map((c,ci)=>`<article><strong>${ArabicText.escape(c.title_ar)}</strong><div class="wf-code"><code>${ArabicText.escape(this.resolve(c.command))}</code><button data-wf-copy-error="${ei}:${ci}">نسخ</button></div><small>المتوقع: ${ArabicText.escape(c.expected_result_ar||"")}</small></article>`).join("")}
         ${(e.fixes_ar||[]).length?`<h4>الإصلاحات المقترحة</h4><ol>${e.fixes_ar.map(x=>`<li>${ArabicText.escape(x)}</li>`).join("")}</ol>`:""}
-      </div></details>`).join("")}</div>`:`<div class="wf-empty">لا توجد أخطاء شائعة مسجلة</div>`}
-      <label class="wf-notes"><span>رسالة الخطأ أو ملاحظاتك</span><textarea data-wf-issue-notes>${ArabicText.escape(this.session.issueNotes||"")}</textarea></label>
-      <div class="wf-inline"><button data-wf-return>العودة للتنفيذ</button>${(this.task.rollback_ar||[]).length?`<button data-wf-rollback>فتح التراجع</button>`:""}<button data-wf-doctor>فتح Linux Doctor</button></div>
+      </div></details>`).join("")}</div>`:`<div class="wf-empty">لا توجد أخطاء خاصة بالمهمة، لكن المحرك العام ما زال متاحاً داخل كل خطوة.</div>`}
+      <div class="wf-inline"><button data-wf-return>العودة إلى الخطوة المتعثرة</button>${(this.task.rollback_ar||[]).length?`<button data-wf-rollback>فتح التراجع</button>`:""}<button data-wf-doctor>فتح Linux Doctor</button></div>
     </section>`;
   }
-
   rollback() {
     const list=this.task.rollback_ar||[];
     return `<section class="wf-stage">${this.heading("المرحلة 5","التراجع والعودة للوضع السابق","راجع أثر كل بند قبل تنفيذه.")}
@@ -411,13 +427,16 @@ class GuidedWorkflowRunner {
   }
   previous(){const s=this.stages(this.task),i=s.indexOf(this.session.stage);if(i>0)this.go(s[i-1]);}
 
+
   onInput(e) {
     const v=e.target.closest("[data-wf-var]"); if(v){this.session.variables[v.dataset.wfVar]=v.value.trim();this.save();return;}
     const n=e.target.closest("[data-wf-step-note]"); if(n){this.session.stepNotes[n.dataset.wfStepNote]=n.value;this.save();return;}
     const q=e.target.closest("[data-wf-verify-note]"); if(q){this.session.verificationNotes[q.dataset.wfVerifyNote]=q.value;this.save();return;}
+    const so=e.target.closest("[data-wf-step-output]"); if(so){const r=this.diagnosticRecord("step",so.dataset.wfStepOutput);r.output=so.value;this.save();return;}
+    const vo=e.target.closest("[data-wf-verify-output]"); if(vo){const r=this.diagnosticRecord("verify",vo.dataset.wfVerifyOutput);r.output=vo.value;this.save();return;}
+    const follow=e.target.closest("[data-wf-followup-output]"); if(follow){const {scope,key}=this.currentDiagnosticScope();const r=this.diagnosticRecord(scope,key);r.followupOutput=follow.value;this.save();return;}
     if(e.target.matches("[data-wf-issue-notes]")){this.session.issueNotes=e.target.value;this.save();}
   }
-
   onChange(e) {
     const p=e.target.closest("[data-wf-pre]"); if(p){this.session.prerequisites[p.dataset.wfPre]=p.checked;this.save();this.render();return;}
     const r=e.target.closest("[data-wf-rollback-item]"); if(r){this.session.rollbackStatus[r.dataset.wfRollbackItem]=r.checked?"done":"pending";this.save();r.closest("article")?.classList.toggle("done",r.checked);}
@@ -432,6 +451,17 @@ class GuidedWorkflowRunner {
     const verify=e.target.closest("[data-wf-verify]");if(verify){this.session.verificationIndex=Number(verify.dataset.wfVerify);this.save();this.render();return;}
     if(e.target.closest("[data-wf-copy-step]")){const x=this.task.steps[this.session.stepIndex];this.app.copy(this.resolve(x.command),"تم نسخ أمر الخطوة");return;}
     if(e.target.closest("[data-wf-copy-verify]")){const x=this.task.verification[this.session.verificationIndex];this.app.copy(this.resolve(x.command),"تم نسخ أمر التحقق");return;}
+    if(e.target.closest("[data-wf-analyze-step]")){this.analyzeCurrent("step");return;}
+    if(e.target.closest("[data-wf-analyze-verify]")){this.analyzeCurrent("verify");return;}
+    if(e.target.closest("[data-wf-silent-step]")){this.silentStepSuccess();return;}
+    if(e.target.closest("[data-wf-clear-analysis]")){this.clearCurrentAnalysis();return;}
+    const diagCheck=e.target.closest("[data-wf-diag-check]");if(diagCheck){this.selectDiagnosticAction("checks",Number(diagCheck.dataset.wfDiagCheck));return;}
+    const diagVerify=e.target.closest("[data-wf-diag-verify]");if(diagVerify){this.selectDiagnosticAction("verification",Number(diagVerify.dataset.wfDiagVerify));return;}
+    if(e.target.closest("[data-wf-analyze-followup]")){this.analyzeFollowup();return;}
+    if(e.target.closest("[data-wf-copy-followup]")){const {scope,key}=this.currentDiagnosticScope(),r=this.diagnosticRecord(scope,key);if(r.activeAction)this.app.copy(this.resolve(r.activeAction.command),"تم نسخ أمر الفحص");return;}
+    if(e.target.closest("[data-wf-accept-step]")){this.stepOutcome("success");return;}
+    if(e.target.closest("[data-wf-accept-verify]")){this.verifyOutcome("success");return;}
+    if(e.target.closest("[data-wf-open-diagnosis]")){this.go("issues");return;}
     const outcome=e.target.closest("[data-wf-outcome]");if(outcome){this.stepOutcome(outcome.dataset.wfOutcome);return;}
     const vo=e.target.closest("[data-wf-verify-outcome]");if(vo){this.verifyOutcome(vo.dataset.wfVerifyOutcome);return;}
     if(e.target.closest("[data-wf-prepare]")){this.go("prepare");return;}
@@ -468,6 +498,146 @@ class GuidedWorkflowRunner {
     this.go("complete");
   }
 
+
+  diagnosticRecord(scope,key) {
+    const store=scope==="verify"?this.session.verificationDiagnostics:this.session.stepDiagnostics;
+    if(!store[key])store[key]={output:"",followupOutput:"",activeAction:null,history:[]};
+    if(!Array.isArray(store[key].history))store[key].history=[];
+    return store[key];
+  }
+
+  currentDiagnosticScope() {
+    if(this.session.stage==="verify")return {scope:"verify",key:String(this.session.verificationIndex)};
+    const step=this.task.steps[this.session.stepIndex];
+    return {scope:"step",key:step?.id||""};
+  }
+
+  currentDiagnosticCommand(scope) {
+    if(scope==="verify"){
+      const item=this.task.verification?.[this.session.verificationIndex];
+      return {command:this.resolve(item?.command||""),title:item?.title_ar||"فحص التحقق"};
+    }
+    const step=this.task.steps[this.session.stepIndex];
+    return {command:this.resolve(step?.command||""),title:step?.title_ar||"خطوة التنفيذ"};
+  }
+
+  analyzeCurrent(scope) {
+    if(!this.app.executionDiagnosticEngine)return this.app.showToast("محرك التحليل غير متاح");
+    const key=scope==="verify"?String(this.session.verificationIndex):this.task.steps[this.session.stepIndex].id;
+    const record=this.diagnosticRecord(scope,key),output=String(record.output||"").trim();
+    if(!output)return this.app.showToast("الصق نتيجة الأمر أولاً، أو استخدم خيار النجاح بلا مخرجات");
+    const context=this.currentDiagnosticCommand(scope);
+    const result=this.app.executionDiagnosticEngine.analyze({
+      output,command:context.command,task:this.task,
+      step:scope==="step"?this.task.steps[this.session.stepIndex]:{},
+      variables:this.session.variables,sourceTitle:context.title
+    });
+    this.mergeExtractedVariables(result.extracted_variables);
+    record.history.push({at:new Date().toISOString(),source:context.title,command:context.command,output,result});
+    record.activeAction=null;record.followupOutput="";
+    if(scope==="step")this.session.stepStatus[key]=result.status==="success"?"success":result.status==="issue"?"issue":"pending";
+    else this.session.verificationStatus[key]=result.status==="success"?"success":result.status==="issue"?"failed":"pending";
+    this.save();this.render();
+  }
+
+  silentStepSuccess() {
+    const step=this.task.steps[this.session.stepIndex],record=this.diagnosticRecord("step",step.id);
+    const result={status:"success",confidence:70,id:"silent-manual-success",title_ar:"تم تأكيد نجاح أمر بلا مخرجات",
+      explanation_ar:"المستخدم أكد أن الأمر انتهى دون رسالة خطأ. يبقى فحص التحقق اللاحق هو الدليل الأقوى.",
+      evidence:["لم يطبع الأمر أي مخرجات"],likely_causes_ar:[],checks:[],fixes_ar:[],
+      verification:(this.task.verification||[]).slice(0,2),alternatives:[]};
+    record.history.push({at:new Date().toISOString(),source:step.title_ar,command:this.resolve(step.command),output:"",result});
+    this.session.stepStatus[step.id]="success";this.save();this.render();
+  }
+
+  clearCurrentAnalysis() {
+    const {scope,key}=this.currentDiagnosticScope(),record=this.diagnosticRecord(scope,key);
+    record.output="";record.followupOutput="";record.activeAction=null;record.history=[];
+    if(scope==="step")this.session.stepStatus[key]="pending";
+    else this.session.verificationStatus[key]="pending";
+    this.save();this.render();
+  }
+
+  selectDiagnosticAction(group,index) {
+    const {scope,key}=this.currentDiagnosticScope(),record=this.diagnosticRecord(scope,key),latest=record.history.at(-1)?.result;
+    const action=latest?.[group]?.[index];if(!action)return;
+    record.activeAction={...action,group,index};record.followupOutput="";
+    this.save();this.render();
+  }
+
+  analyzeFollowup() {
+    if(!this.app.executionDiagnosticEngine)return;
+    const {scope,key}=this.currentDiagnosticScope(),record=this.diagnosticRecord(scope,key),action=record.activeAction;
+    if(!action)return;
+    const output=String(record.followupOutput||"").trim();
+    if(!output)return this.app.showToast("الصق نتيجة الفحص التالي");
+    const result=this.app.executionDiagnosticEngine.analyze({
+      output,command:this.resolve(action.command),task:this.task,
+      step:scope==="step"?this.task.steps[this.session.stepIndex]:{},
+      variables:this.session.variables,sourceTitle:action.title_ar
+    });
+    this.mergeExtractedVariables(result.extracted_variables);
+    record.history.push({at:new Date().toISOString(),source:action.title_ar,command:this.resolve(action.command),output,result});
+    record.activeAction=null;record.followupOutput="";
+    if(scope==="step")this.session.stepStatus[key]=result.status==="success"?"success":result.status==="issue"?"issue":this.session.stepStatus[key]||"pending";
+    else this.session.verificationStatus[key]=result.status==="success"?"success":result.status==="issue"?"failed":this.session.verificationStatus[key]||"pending";
+    this.save();this.render();
+  }
+
+  mergeExtractedVariables(values) {
+    for(const [name,value] of Object.entries(values||{}))if(value&&!this.session.variables[name])this.session.variables[name]=value;
+  }
+
+  diagnosticHtml(record,scope,key) {
+    if(!record.history.length)return `<div class="wf-analysis-placeholder"><span>⌁</span><div><strong>بانتظار نتيجة الطرفية</strong><p>بعد التحليل سيظهر مكان الفشل والسبب المرجح والفحص التالي والعلاج.</p></div></div>`;
+    const latest=record.history.at(-1),result=latest.result,status=result.status||"unknown";
+    const statusLabel=status==="success"?"النتيجة ناجحة":status==="issue"?"تم اكتشاف مشكلة":status==="empty"?"لا توجد مخرجات":"النتيجة غير حاسمة";
+    const icon=status==="success"?"✓":status==="issue"?"!":"?",checks=result.checks||[],verification=result.verification||[];
+    return `<section class="wf-diagnosis ${status}">
+      <header><span>${icon}</span><div><small>${statusLabel}</small><h3>${ArabicText.escape(result.title_ar||"نتيجة التحليل")}</h3></div><b>ثقة ${result.confidence||0}%</b></header>
+      <p class="wf-diagnosis-explanation">${ArabicText.escape(result.explanation_ar||"")}</p>
+      ${(result.evidence||[]).length?`<div class="wf-evidence"><strong>الدليل من المخرجات</strong><pre>${ArabicText.escape(result.evidence.join("\n"))}</pre></div>`:""}
+      ${(result.likely_causes_ar||[]).length?`<div class="wf-diagnosis-list"><h4>الأسباب المحتملة</h4><ul>${result.likely_causes_ar.map(x=>`<li>${ArabicText.escape(x)}</li>`).join("")}</ul></div>`:""}
+      ${(result.alternatives||[]).length?`<div class="wf-alternatives"><strong>احتمالات أخرى</strong>${result.alternatives.map(x=>`<span>${ArabicText.escape(x.title_ar)} <b>${x.confidence}%</b></span>`).join("")}</div>`:""}
+      ${checks.length?`<div class="wf-next-checks"><h4>الفحص التالي المقترح</h4>${checks.map((x,i)=>this.diagnosticActionCard(x,"check",i)).join("")}</div>`:""}
+      ${(result.fixes_ar||[]).length?`<div class="wf-fixes"><h4>المعالجة المقترحة</h4><ol>${result.fixes_ar.map(x=>`<li>${ArabicText.escape(x)}</li>`).join("")}</ol></div>`:""}
+      ${verification.length?`<div class="wf-next-checks verification"><h4>إثبات نجاح المعالجة</h4>${verification.map((x,i)=>this.diagnosticActionCard(x,"verify",i)).join("")}</div>`:""}
+      ${record.activeAction?this.followupHtml(record):""}
+      ${record.history.length>1?`<details class="wf-analysis-history"><summary>سجل التحليل (${record.history.length})</summary>${record.history.map((h,i)=>`<article><b>${i+1}</b><div><strong>${ArabicText.escape(h.source)}</strong><small>${ArabicText.escape(h.result.title_ar)} — ${h.result.confidence||0}%</small></div></article>`).join("")}</details>`:""}
+      <div class="wf-diagnosis-actions">
+        ${status==="success"?(scope==="step"?`<button class="accept" data-wf-accept-step>اعتماد النجاح والانتقال</button>`:`<button class="accept" data-wf-accept-verify>اعتماد التحقق والانتقال</button>`):""}
+        ${status==="issue"?`<button data-wf-open-diagnosis>عرض مركز التشخيص</button>`:""}
+      </div>
+    </section>`;
+  }
+
+  diagnosticActionCard(item,type,index) {
+    const attr=type==="verify"?`data-wf-diag-verify="${index}"`:`data-wf-diag-check="${index}"`;
+    return `<article><div><strong>${ArabicText.escape(item.title_ar||"فحص")}</strong><small>${ArabicText.escape(item.expected_result_ar||"")}</small></div><div class="wf-code"><code>${ArabicText.escape(this.resolve(item.command||""))}</code><button ${attr}>استخدام الفحص</button></div></article>`;
+  }
+
+  followupHtml(record) {
+    const action=record.activeAction;
+    return `<section class="wf-followup"><header><span>→</span><div><strong>${ArabicText.escape(action.title_ar)}</strong><small>نفذ الفحص ثم الصق نتيجته لإكمال التشخيص</small></div></header>
+      <div class="wf-code"><code>${ArabicText.escape(this.resolve(action.command||""))}</code><button data-wf-copy-followup>نسخ</button></div>
+      ${action.expected_result_ar?`<p>المتوقع: ${ArabicText.escape(action.expected_result_ar)}</p>`:""}
+      <textarea data-wf-followup-output spellcheck="false" placeholder="الصق نتيجة الفحص هنا...">${ArabicText.escape(record.followupOutput||"")}</textarea>
+      <button class="analyze" data-wf-analyze-followup>تحليل نتيجة الفحص</button>
+    </section>`;
+  }
+
+  allDiagnosticFindings() {
+    const output=[];
+    for(const step of this.task.steps||[]){
+      const record=this.session.stepDiagnostics?.[step.id];
+      for(const item of record?.history||[])output.push({source:step.title_ar,result:item.result,at:item.at});
+    }
+    for(const [key,record] of Object.entries(this.session.verificationDiagnostics||{})){
+      const title=this.task.verification?.[Number(key)]?.title_ar||`تحقق ${Number(key)+1}`;
+      for(const item of record?.history||[])output.push({source:title,result:item.result,at:item.at});
+    }
+    return output.sort((a,b)=>new Date(b.at)-new Date(a.at));
+  }
   resolve(text) {
     let out=String(text||"");
     for(const [k,v] of Object.entries(this.session?.variables||{}))if(v)out=out.replaceAll(`<${k}>`,v);
@@ -502,7 +672,12 @@ class GuidedWorkflowRunner {
 
   report() {
     const t=this.task,s=this.session,lines=["تقرير مسار تنفيذ RHEL","================================",`المهمة: ${t.title_ar}`,`الحالة: ${this.stateLabel(s.state)}`,`التقدم: ${this.progress(t,s)}%`,`بدأت: ${this.date(s.startedAt)}`,"","خطوات التنفيذ","----------------"];
-    t.steps.forEach((x,i)=>{lines.push(`${i+1}. ${x.title_ar} — ${this.statusLabel(s.stepStatus[x.id]||"pending")}`,`   ${this.resolve(x.command)}`);if(s.stepNotes[x.id])lines.push(`   ملاحظة: ${s.stepNotes[x.id]}`);});
+    t.steps.forEach((x,i)=>{
+      lines.push(`${i+1}. ${x.title_ar} — ${this.statusLabel(s.stepStatus[x.id]||"pending")}`,`   ${this.resolve(x.command)}`);
+      const history=s.stepDiagnostics?.[x.id]?.history||[];
+      if(history.length){const last=history.at(-1).result;lines.push(`   التشخيص: ${last.title_ar} — ثقة ${last.confidence||0}%`);if(last.evidence?.length)lines.push(`   الدليل: ${last.evidence.join(" | ")}`);}
+      if(s.stepNotes[x.id])lines.push(`   ملاحظة: ${s.stepNotes[x.id]}`);
+    });
     if((t.verification||[]).length){lines.push("","التحقق","----------------");t.verification.forEach((x,i)=>lines.push(`${i+1}. ${x.title_ar} — ${this.statusLabel(s.verificationStatus[i]||"pending")}`,`   ${this.resolve(x.command)}`));}
     if(s.issueNotes)lines.push("","ملاحظات المشكلة",s.issueNotes);
     lines.push("","تنبيه: هذه جلسة تعليمية ولا تعني أن الأوامر نُفذت تلقائياً.");

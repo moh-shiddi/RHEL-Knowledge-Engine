@@ -225,6 +225,8 @@ class KnowledgeEngineApp {
     this.doctorData = null;
     this.doctor = null;
     this.workflowRunner = null;
+    this.executionDiagnosticData = null;
+    this.executionDiagnosticEngine = null;
     this.searchAnalysis = null;
     this.dismissedIntentQuery = "";
     this.intentInputValues = {};
@@ -388,17 +390,20 @@ class KnowledgeEngineApp {
 
   async loadData() {
     try {
-      const [knowledgeResponse, intentResponse, doctorResponse] = await Promise.all([
+      const [knowledgeResponse, intentResponse, doctorResponse, diagnosticResponse] = await Promise.all([
         fetch("knowledge.json", { cache: "no-store" }),
         fetch("intents.json", { cache: "no-store" }),
-        fetch("doctor-data.json", { cache: "no-store" })
+        fetch("doctor-data.json", { cache: "no-store" }),
+        fetch("diagnostic-patterns.json", { cache: "no-store" })
       ]);
       if (!knowledgeResponse.ok) throw new Error(`knowledge.json HTTP ${knowledgeResponse.status}`);
       if (!intentResponse.ok) throw new Error(`intents.json HTTP ${intentResponse.status}`);
       if (!doctorResponse.ok) throw new Error(`doctor-data.json HTTP ${doctorResponse.status}`);
+      if (!diagnosticResponse.ok) throw new Error(`diagnostic-patterns.json HTTP ${diagnosticResponse.status}`);
       this.data = await knowledgeResponse.json();
       this.intentData = await intentResponse.json();
       this.doctorData = await doctorResponse.json();
+      this.executionDiagnosticData = await diagnosticResponse.json();
       if (!Array.isArray(this.data.entities)) throw new Error("Invalid knowledge schema");
 
       this.entities = this.data.entities;
@@ -406,6 +411,7 @@ class KnowledgeEngineApp {
       this.index = new KnowledgeIndex(this.entities, this.data.categories || {}, this.data.entity_types || this.typeLabels, this.entityById);
       this.intentEngine = new RhelIntentEngine(this.intentData, this.entities);
       this.doctor = new LinuxDoctor(this.doctorData, this);
+      this.executionDiagnosticEngine = new ExecutionDiagnosticEngine(this.executionDiagnosticData);
       this.workflowRunner = new GuidedWorkflowRunner(this);
 
       this.populateCategories();
