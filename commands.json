@@ -2,7 +2,7 @@
   "schema_version": "1.0.0",
   "project": "RHEL Arabic Command Dictionary",
   "language": "ar",
-  "baseline": "Red Hat Enterprise Linux 9",
+  "baseline": "Red Hat Enterprise Linux 9 and 10",
   "supported_versions": [
     "8",
     "9",
