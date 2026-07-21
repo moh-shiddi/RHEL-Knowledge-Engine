@@ -1,9 +1,0 @@
-RHEL Arabic Intent Engine V1 — Test Report
-
-Intent definitions: 43
-Arabic query tests: 143
-Passed: 143
-Accuracy: 100.0%
-
-Test command:
-node test-intents.js
