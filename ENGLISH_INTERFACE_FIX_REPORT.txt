@@ -1,0 +1,46 @@
+ENGLISH INTERFACE FIX REPORT — V2
+=================================
+
+Root cause
+----------
+The previous English build translated rendered DOM text at runtime. Any Arabic
+string that was not present in the translation dictionary was replaced by the
+same generic sentence:
+
+  Review the information shown for this step.
+
+This produced repeated badges and mixed-language phrases.
+
+Corrective architecture
+-----------------------
+- Removed runtime DOM translation from en.html.
+- Added dedicated English JavaScript files:
+  - app-en.js
+  - intent-engine-en.js
+  - doctor-engine-en.js
+  - workflow-engine-en.js
+  - execution-diagnostics-en.js
+- en.html now loads the English JavaScript files directly.
+- English JavaScript loads the English JSON files directly.
+- Arabic interface and original Arabic JavaScript remain unchanged.
+- No generic fallback sentence is used.
+
+Validated content
+-----------------
+- 215 English knowledge entities
+- 43 English search intents
+- 9 English Linux Doctor flows
+- 41 English execution diagnostic rules
+
+Validation results
+------------------
+- JavaScript syntax: PASS
+- JSON parsing: PASS
+- Arabic/English entity ID parity: PASS
+- Generic fallback phrase scan: PASS
+- Broken transliteration scan: PASS
+- Arabic glyph scan in English HTML and English JSON: PASS
+- Intent tests: 143/143 PASS
+- Linux Doctor validation: PASS
+- Workflow validation: PASS
+- Execution diagnostics tests: PASS
