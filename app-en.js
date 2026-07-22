@@ -302,6 +302,11 @@ class KnowledgeEngineApp {
     this.e.searchInput.addEventListener("input", () => {
       this.intentInputValues = {};
       this.dismissedIntentQuery = "";
+
+      // The main search box is global. Do not let a previously selected
+      // content type, category, level, or RHEL version hide valid commands.
+      if (this.e.searchInput.value.trim()) this.activateGlobalSearchScope();
+
       clearTimeout(this.searchTimer);
       this.searchTimer = setTimeout(() => {
         this.visibleLimit = 24;
@@ -503,6 +508,20 @@ class KnowledgeEngineApp {
     if (scroll) this.e.resultsSection.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
+  activateGlobalSearchScope() {
+    this.view = "all";
+    this.e.categoryFilter.value = "all";
+    this.e.difficultyFilter.value = "all";
+    this.e.versionFilter.value = "all";
+    this.e.sortFilter.value = "relevance";
+
+    document.querySelectorAll("[data-view]").forEach(button => {
+      const active = button.dataset.view === "all";
+      button.classList.toggle("is-active", active);
+      button.setAttribute("aria-pressed", String(active));
+    });
+  }
+
   reset() {
     this.e.searchInput.value = "";
     this.e.categoryFilter.value = "all";
@@ -521,7 +540,8 @@ class KnowledgeEngineApp {
     this.intentInputValues = {};
     this.dismissedIntentQuery = "";
     this.closeSuggestions();
-    this.setView("all");
+    this.activateGlobalSearchScope();
+    this.render();
     this.e.resultsSection.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
@@ -633,6 +653,40 @@ class KnowledgeEngineApp {
     this.searchAnalysis = this.intentEngine?.analyze(query) || null;
     const effectiveQuery = this.searchAnalysis?.searchQuery || query;
     let items = this.index.search(effectiveQuery);
+
+    // Direct command lookup: a query such as "pvcreate" must always return
+    // cmd-pvcreate even if the command is nested inside an RHCSA module.
+    if (query) {
+      const normalizedQuery = ArabicText.normalize(query);
+      const itemMap = new Map(items.map(item => [item.entity.id, item]));
+
+      for (const entity of this.entities) {
+        if (entity.entity_type !== "command") continue;
+
+        const commandName = ArabicText.normalize(entity.command_name || "");
+        const entityIdCommand = ArabicText.normalize(
+          String(entity.id || "").replace(/^cmd-/, "")
+        );
+        const syntaxCommand = ArabicText.normalize(
+          String(entity.syntax || "").trim().split(/\s+/)[0] || ""
+        );
+
+        if (
+          normalizedQuery === commandName ||
+          normalizedQuery === entityIdCommand ||
+          normalizedQuery === syntaxCommand
+        ) {
+          const existing = itemMap.get(entity.id);
+          if (existing) {
+            existing.score = Math.max(existing.score, 2000);
+          } else {
+            const item = { entity, score: 2000 };
+            items.push(item);
+            itemMap.set(entity.id, item);
+          }
+        }
+      }
+    }
 
     if (this.searchAnalysis?.intent) {
       const itemMap = new Map(items.map(item => [item.entity.id, item]));
