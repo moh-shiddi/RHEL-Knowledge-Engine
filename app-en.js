@@ -416,7 +416,7 @@ class KnowledgeEngineApp {
   async loadData() {
     try {
       const [knowledgeResponse, intentResponse, doctorResponse, diagnosticResponse] = await Promise.all([
-        fetch("knowledge-en.json?v=20260722-rhcsa-search-en2", { cache: "no-store" }),
+        fetch("knowledge-en.json?v=20260722-rhcsa-concepts25", { cache: "no-store" }),
         fetch("intents-en.json?v=20260722-rhcsa-search-en2", { cache: "no-store" }),
         fetch("doctor-data-en.json?v=20260722-rhcsa-search-en2", { cache: "no-store" }),
         fetch("diagnostic-patterns-en.json?v=20260722-rhcsa-search-en2", { cache: "no-store" })

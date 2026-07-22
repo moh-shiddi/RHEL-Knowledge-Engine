@@ -68,10 +68,10 @@ Verify the result
 
 | Component | Count |
 |---|---:|
-| Knowledge entities | 400 |
+| Knowledge entities | 414 |
 | Practical tasks | 181 |
 | Command references | 189 |
-| Concepts | 11 |
+| Concepts | 25 |
 | Troubleshooting pages | 3 |
 | Learning paths | 16 |
 | RHCSA modules | 12 |
@@ -206,10 +206,10 @@ https://rhel-knowledge-engine.pages.dev/
 
 | المكوّن | العدد |
 |---|---:|
-| كيانات المعرفة | 400 |
+| كيانات المعرفة | 414 |
 | المهام العملية | 181 |
 | مراجع الأوامر | 189 |
-| المفاهيم | 11 |
+| المفاهيم | 25 |
 | صفحات حل المشكلات | 3 |
 | مسارات التعلم | 16 |
 | وحدات RHCSA | 12 |

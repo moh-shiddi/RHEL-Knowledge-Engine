@@ -10006,7 +10006,10 @@
         "troubleshoot-ssh-connection",
         "diagnose-selinux-denial",
         "path-rhcsa-module-7-services",
-        "path-rhcsa-module-12-troubleshooting"
+        "path-rhcsa-module-12-troubleshooting",
+        "concept-boot-process",
+        "concept-logs-time",
+        "concept-task-scheduling"
       ],
       "tags_ar": [
         "Reference",
@@ -10116,7 +10119,8 @@
         "legacy-fw-remove-port",
         "legacy-fw-reload",
         "concept-network-stack",
-        "path-rhcsa-module-11-firewalld"
+        "path-rhcsa-module-11-firewalld",
+        "concept-persistent-configuration"
       ],
       "tags_ar": [
         "Reference",
@@ -10477,7 +10481,9 @@
         "legacy-net-nmcli-status",
         "legacy-net-nmcli-dev",
         "path-rhcsa-module-8-networking",
-        "path-rhcsa-module-12-troubleshooting"
+        "path-rhcsa-module-12-troubleshooting",
+        "concept-persistent-configuration",
+        "concept-name-resolution"
       ],
       "tags_ar": [
         "Reference",
@@ -10573,7 +10579,8 @@
         "legacy-text-find-size",
         "concept-pipelines",
         "path-rhcsa-module-1-basics",
-        "path-rhcsa-module-12-troubleshooting"
+        "path-rhcsa-module-12-troubleshooting",
+        "concept-inodes-links"
       ],
       "tags_ar": [
         "Reference",
@@ -10659,7 +10666,8 @@
         "cmd-find",
         "legacy-text-grep",
         "legacy-text-grep-rec",
-        "path-rhcsa-module-1-basics"
+        "path-rhcsa-module-1-basics",
+        "concept-regular-expressions"
       ],
       "tags_ar": [
         "Reference",
@@ -11035,7 +11043,8 @@
         "legacy-disk-lsblk",
         "concept-filesystem-hierarchy",
         "path-rhcsa-module-9-storage",
-        "path-rhcsa-module-12-troubleshooting"
+        "path-rhcsa-module-12-troubleshooting",
+        "concept-persistent-mounts"
       ],
       "tags_ar": [
         "Reference",
@@ -11171,7 +11180,9 @@
         "cmd-systemctl",
         "cmd-journalctl",
         "troubleshoot-systemd-service",
-        "path-rhel-beginner"
+        "path-rhel-beginner",
+        "concept-containers-podman",
+        "concept-rhel-image-mode"
       ],
       "tags_ar": [
         "Concept",
@@ -11215,7 +11226,8 @@
         "diagnose-selinux-denial",
         "cmd-restorecon",
         "install-nginx-web-server",
-        "path-rhel-admin"
+        "path-rhel-admin",
+        "concept-containers-podman"
       ],
       "tags_ar": [
         "Concept",
@@ -11259,7 +11271,8 @@
         "cmd-dnf",
         "cmd-rpm",
         "install-package-dnf",
-        "path-rhel-beginner"
+        "path-rhel-beginner",
+        "concept-rhel-image-mode"
       ],
       "tags_ar": [
         "Concept",
@@ -11304,7 +11317,8 @@
         "install-nginx-web-server",
         "concept-network-stack",
         "path-rhel-admin",
-        "troubleshoot-ssh-connection"
+        "troubleshoot-ssh-connection",
+        "concept-containers-podman"
       ],
       "tags_ar": [
         "Concept",
@@ -11528,7 +11542,10 @@
       "related_entities": [
         "cmd-lsblk",
         "find-and-clean-large-files",
-        "path-rhel-admin"
+        "path-rhel-admin",
+        "concept-filesystems-swap-resizing",
+        "concept-containers-podman",
+        "concept-rhel-image-mode"
       ],
       "tags_ar": [
         "Concept",
@@ -11609,7 +11626,8 @@
       "related_entities": [
         "cmd-grep",
         "cmd-find",
-        "path-rhel-beginner"
+        "path-rhel-beginner",
+        "concept-regular-expressions"
       ],
       "tags_ar": [
         "Concept",
@@ -11748,7 +11766,9 @@
         "path-rhel-troubleshooting",
         "concept-selinux",
         "concept-firewalld",
-        "concept-storage-stack"
+        "concept-storage-stack",
+        "concept-containers-podman",
+        "concept-rhel-image-mode"
       ],
       "tags_ar": [
         "Learning path"
@@ -11757,6 +11777,16 @@
       "description_ar": "An intermediate path covering users, networking, storage, firewalld, SELinux, and troubleshooting.",
       "estimated_hours": 16,
       "modules": [
+        {
+          "entity_id": "concept-containers-podman",
+          "required": true,
+          "note_ar": "A modern RHEL administration concept."
+        },
+        {
+          "entity_id": "concept-rhel-image-mode",
+          "required": true,
+          "note_ar": "A modern RHEL administration concept."
+        },
         {
           "entity_id": "concept-linux-users",
           "objective_ar": "Learn and apply: Users and Groups.",
@@ -12310,7 +12340,8 @@
       ],
       "related_entities": [
         "path-rhcsa-module-7-services",
-        "legacy-sched-at"
+        "legacy-sched-at",
+        "concept-task-scheduling"
       ],
       "tags_ar": [
         "RHCSA reference",
@@ -12364,7 +12395,8 @@
         "10"
       ],
       "related_entities": [
-        "path-rhcsa-module-7-services"
+        "path-rhcsa-module-7-services",
+        "concept-task-scheduling"
       ],
       "tags_ar": [
         "RHCSA reference",
@@ -12414,7 +12446,8 @@
         "10"
       ],
       "related_entities": [
-        "path-rhcsa-module-7-services"
+        "path-rhcsa-module-7-services",
+        "concept-task-scheduling"
       ],
       "tags_ar": [
         "RHCSA reference",
@@ -12573,7 +12606,8 @@
         "10"
       ],
       "related_entities": [
-        "path-rhcsa-module-9-storage"
+        "path-rhcsa-module-9-storage",
+        "concept-nfs-autofs"
       ],
       "tags_ar": [
         "RHCSA reference",
@@ -12627,7 +12661,8 @@
       ],
       "related_entities": [
         "legacy-text-awk",
-        "path-rhcsa-module-1-basics"
+        "path-rhcsa-module-1-basics",
+        "concept-regular-expressions"
       ],
       "tags_ar": [
         "RHCSA reference",
@@ -12735,7 +12770,8 @@
         "10"
       ],
       "related_entities": [
-        "path-rhcsa-module-1-basics"
+        "path-rhcsa-module-1-basics",
+        "concept-shell-scripting"
       ],
       "tags_ar": [
         "RHCSA reference",
@@ -12870,7 +12906,8 @@
       ],
       "related_entities": [
         "legacy-disk-blkid",
-        "path-rhcsa-module-9-storage"
+        "path-rhcsa-module-9-storage",
+        "concept-persistent-mounts"
       ],
       "tags_ar": [
         "RHCSA reference",
@@ -13373,7 +13410,8 @@
         "10"
       ],
       "related_entities": [
-        "path-rhcsa-module-7-services"
+        "path-rhcsa-module-7-services",
+        "concept-logs-time"
       ],
       "tags_ar": [
         "RHCSA reference",
@@ -13434,7 +13472,8 @@
       ],
       "related_entities": [
         "path-rhcsa-module-7-services",
-        "path-rhcsa-module-12-troubleshooting"
+        "path-rhcsa-module-12-troubleshooting",
+        "concept-boot-process"
       ],
       "tags_ar": [
         "RHCSA reference",
@@ -13604,7 +13643,8 @@
       "related_entities": [
         "legacy-sched-crontab-list",
         "legacy-sched-crontab-edit",
-        "path-rhcsa-module-7-services"
+        "path-rhcsa-module-7-services",
+        "concept-task-scheduling"
       ],
       "tags_ar": [
         "RHCSA reference",
@@ -13742,7 +13782,8 @@
       "related_entities": [
         "legacy-text-cut",
         "legacy-usr-list",
-        "path-rhcsa-module-1-basics"
+        "path-rhcsa-module-1-basics",
+        "concept-regular-expressions"
       ],
       "tags_ar": [
         "RHCSA reference",
@@ -13865,7 +13906,8 @@
         "legacy-file-df",
         "path-rhcsa-module-9-storage",
         "path-rhcsa-module-12-troubleshooting",
-        "find-and-clean-large-files"
+        "find-and-clean-large-files",
+        "concept-inodes-links"
       ],
       "tags_ar": [
         "RHCSA reference",
@@ -13975,7 +14017,8 @@
       ],
       "related_entities": [
         "legacy-net-dns",
-        "path-rhcsa-module-8-networking"
+        "path-rhcsa-module-8-networking",
+        "concept-name-resolution"
       ],
       "tags_ar": [
         "RHCSA reference",
@@ -14074,7 +14117,8 @@
       "related_entities": [
         "legacy-log-dmesg",
         "path-rhcsa-module-7-services",
-        "path-rhcsa-module-12-troubleshooting"
+        "path-rhcsa-module-12-troubleshooting",
+        "concept-logs-time"
       ],
       "tags_ar": [
         "RHCSA reference",
@@ -14502,7 +14546,10 @@
       "related_entities": [
         "legacy-disk-mounts",
         "path-rhcsa-module-9-storage",
-        "path-rhcsa-module-12-troubleshooting"
+        "path-rhcsa-module-12-troubleshooting",
+        "concept-persistent-mounts",
+        "concept-filesystems-swap-resizing",
+        "concept-nfs-autofs"
       ],
       "tags_ar": [
         "RHCSA reference",
@@ -14811,7 +14858,8 @@
       "related_entities": [
         "path-rhcsa-module-4-users",
         "path-rhcsa-module-8-networking",
-        "path-rhcsa-module-12-troubleshooting"
+        "path-rhcsa-module-12-troubleshooting",
+        "concept-name-resolution"
       ],
       "tags_ar": [
         "RHCSA reference",
@@ -15267,7 +15315,8 @@
         "10"
       ],
       "related_entities": [
-        "path-rhcsa-module-7-services"
+        "path-rhcsa-module-7-services",
+        "concept-boot-process"
       ],
       "tags_ar": [
         "RHCSA reference",
@@ -15317,7 +15366,8 @@
         "10"
       ],
       "related_entities": [
-        "path-rhcsa-module-7-services"
+        "path-rhcsa-module-7-services",
+        "concept-boot-process"
       ],
       "tags_ar": [
         "RHCSA reference",
@@ -15373,7 +15423,8 @@
       ],
       "related_entities": [
         "path-rhcsa-module-7-services",
-        "path-rhcsa-module-12-troubleshooting"
+        "path-rhcsa-module-12-troubleshooting",
+        "concept-boot-process"
       ],
       "tags_ar": [
         "RHCSA reference",
@@ -15638,7 +15689,8 @@
       ],
       "related_entities": [
         "legacy-net-host",
-        "path-rhcsa-module-8-networking"
+        "path-rhcsa-module-8-networking",
+        "concept-name-resolution"
       ],
       "tags_ar": [
         "RHCSA reference",
@@ -15689,7 +15741,8 @@
       "related_entities": [
         "legacy-net-hostname",
         "legacy-net-set-hostname",
-        "path-rhcsa-module-8-networking"
+        "path-rhcsa-module-8-networking",
+        "concept-name-resolution"
       ],
       "tags_ar": [
         "RHCSA reference",
@@ -15908,7 +15961,8 @@
         "10"
       ],
       "related_entities": [
-        "path-rhcsa-module-6-processes"
+        "path-rhcsa-module-6-processes",
+        "concept-process-control"
       ],
       "tags_ar": [
         "RHCSA reference",
@@ -15960,7 +16014,8 @@
       "related_entities": [
         "legacy-proc-kill",
         "legacy-proc-kill-force",
-        "path-rhcsa-module-6-processes"
+        "path-rhcsa-module-6-processes",
+        "concept-process-control"
       ],
       "tags_ar": [
         "RHCSA reference",
@@ -16229,7 +16284,8 @@
       ],
       "related_entities": [
         "legacy-file-ln-s",
-        "path-rhcsa-module-2-filesystem"
+        "path-rhcsa-module-2-filesystem",
+        "concept-inodes-links"
       ],
       "tags_ar": [
         "RHCSA reference",
@@ -16336,7 +16392,8 @@
         "10"
       ],
       "related_entities": [
-        "path-rhcsa-module-7-services"
+        "path-rhcsa-module-7-services",
+        "concept-logs-time"
       ],
       "tags_ar": [
         "RHCSA reference",
@@ -16401,7 +16458,8 @@
         "path-rhcsa-module-2-filesystem",
         "path-rhcsa-module-3-permissions",
         "path-rhcsa-module-10-selinux",
-        "diagnose-selinux-denial"
+        "diagnose-selinux-denial",
+        "concept-inodes-links"
       ],
       "tags_ar": [
         "RHCSA reference",
@@ -16646,7 +16704,8 @@
         "10"
       ],
       "related_entities": [
-        "path-rhcsa-module-9-storage"
+        "path-rhcsa-module-9-storage",
+        "concept-filesystems-swap-resizing"
       ],
       "tags_ar": [
         "RHCSA reference",
@@ -17182,7 +17241,8 @@
         "10"
       ],
       "related_entities": [
-        "path-rhcsa-module-9-storage"
+        "path-rhcsa-module-9-storage",
+        "concept-filesystems-swap-resizing"
       ],
       "tags_ar": [
         "RHCSA reference",
@@ -17287,7 +17347,10 @@
       ],
       "related_entities": [
         "legacy-disk-mount",
-        "path-rhcsa-module-9-storage"
+        "path-rhcsa-module-9-storage",
+        "concept-persistent-configuration",
+        "concept-persistent-mounts",
+        "concept-nfs-autofs"
       ],
       "tags_ar": [
         "RHCSA reference",
@@ -17566,7 +17629,8 @@
       ],
       "related_entities": [
         "legacy-proc-nice",
-        "path-rhcsa-module-6-processes"
+        "path-rhcsa-module-6-processes",
+        "concept-process-control"
       ],
       "tags_ar": [
         "RHCSA reference",
@@ -17904,7 +17968,8 @@
         "legacy-net-ping",
         "path-rhcsa-module-8-networking",
         "path-rhcsa-module-12-troubleshooting",
-        "troubleshoot-ssh-connection"
+        "troubleshoot-ssh-connection",
+        "concept-name-resolution"
       ],
       "tags_ar": [
         "RHCSA reference",
@@ -17962,7 +18027,8 @@
         "10"
       ],
       "related_entities": [
-        "path-rhcsa-module-6-processes"
+        "path-rhcsa-module-6-processes",
+        "concept-process-control"
       ],
       "tags_ar": [
         "RHCSA reference",
@@ -18030,7 +18096,8 @@
         "10"
       ],
       "related_entities": [
-        "path-rhcsa-module-1-basics"
+        "path-rhcsa-module-1-basics",
+        "concept-shell-scripting"
       ],
       "tags_ar": [
         "RHCSA reference",
@@ -18086,7 +18153,8 @@
         "legacy-proc-ps",
         "path-rhcsa-module-6-processes",
         "path-rhcsa-module-10-selinux",
-        "path-rhcsa-module-12-troubleshooting"
+        "path-rhcsa-module-12-troubleshooting",
+        "concept-process-control"
       ],
       "tags_ar": [
         "RHCSA reference",
@@ -18348,7 +18416,8 @@
         "10"
       ],
       "related_entities": [
-        "path-rhcsa-module-1-basics"
+        "path-rhcsa-module-1-basics",
+        "concept-shell-scripting"
       ],
       "tags_ar": [
         "RHCSA reference",
@@ -18466,7 +18535,8 @@
         "10"
       ],
       "related_entities": [
-        "path-rhcsa-module-6-processes"
+        "path-rhcsa-module-6-processes",
+        "concept-process-control"
       ],
       "tags_ar": [
         "RHCSA reference",
@@ -18523,7 +18593,8 @@
         "10"
       ],
       "related_entities": [
-        "path-rhcsa-module-9-storage"
+        "path-rhcsa-module-9-storage",
+        "concept-filesystems-swap-resizing"
       ],
       "tags_ar": [
         "RHCSA reference",
@@ -18800,7 +18871,8 @@
       ],
       "related_entities": [
         "legacy-text-sed-replace",
-        "path-rhcsa-module-1-basics"
+        "path-rhcsa-module-1-basics",
+        "concept-regular-expressions"
       ],
       "tags_ar": [
         "RHCSA reference",
@@ -18933,7 +19005,8 @@
         "10"
       ],
       "related_entities": [
-        "path-rhcsa-module-1-basics"
+        "path-rhcsa-module-1-basics",
+        "concept-shell-scripting"
       ],
       "tags_ar": [
         "RHCSA reference",
@@ -19259,7 +19332,8 @@
         "10"
       ],
       "related_entities": [
-        "path-rhcsa-module-9-storage"
+        "path-rhcsa-module-9-storage",
+        "concept-nfs-autofs"
       ],
       "tags_ar": [
         "RHCSA reference",
@@ -19380,7 +19454,8 @@
       "related_entities": [
         "legacy-text-sort",
         "legacy-text-uniq",
-        "path-rhcsa-module-1-basics"
+        "path-rhcsa-module-1-basics",
+        "concept-regular-expressions"
       ],
       "tags_ar": [
         "RHCSA reference",
@@ -19486,7 +19561,8 @@
         "10"
       ],
       "related_entities": [
-        "path-rhcsa-module-1-basics"
+        "path-rhcsa-module-1-basics",
+        "concept-shell-scripting"
       ],
       "tags_ar": [
         "RHCSA reference",
@@ -19645,7 +19721,8 @@
       "related_entities": [
         "legacy-file-stat",
         "path-rhcsa-module-2-filesystem",
-        "path-rhcsa-module-3-permissions"
+        "path-rhcsa-module-3-permissions",
+        "concept-inodes-links"
       ],
       "tags_ar": [
         "RHCSA reference",
@@ -19973,7 +20050,8 @@
         "10"
       ],
       "related_entities": [
-        "path-rhcsa-module-9-storage"
+        "path-rhcsa-module-9-storage",
+        "concept-filesystems-swap-resizing"
       ],
       "tags_ar": [
         "RHCSA reference",
@@ -20302,7 +20380,8 @@
         "10"
       ],
       "related_entities": [
-        "path-rhcsa-module-1-basics"
+        "path-rhcsa-module-1-basics",
+        "concept-shell-scripting"
       ],
       "tags_ar": [
         "RHCSA reference",
@@ -20379,7 +20458,8 @@
       "related_entities": [
         "legacy-sys-time",
         "legacy-sys-set-timezone",
-        "path-rhcsa-module-7-services"
+        "path-rhcsa-module-7-services",
+        "concept-logs-time"
       ],
       "tags_ar": [
         "RHCSA reference",
@@ -20439,7 +20519,8 @@
       "related_entities": [
         "legacy-proc-top",
         "path-rhcsa-module-6-processes",
-        "path-rhcsa-module-12-troubleshooting"
+        "path-rhcsa-module-12-troubleshooting",
+        "concept-process-control"
       ],
       "tags_ar": [
         "RHCSA reference",
@@ -20706,7 +20787,8 @@
         "10"
       ],
       "related_entities": [
-        "path-rhcsa-module-6-processes"
+        "path-rhcsa-module-6-processes",
+        "concept-process-control"
       ],
       "tags_ar": [
         "RHCSA reference",
@@ -20818,7 +20900,9 @@
       ],
       "related_entities": [
         "legacy-disk-umount",
-        "path-rhcsa-module-9-storage"
+        "path-rhcsa-module-9-storage",
+        "concept-persistent-mounts",
+        "concept-nfs-autofs"
       ],
       "tags_ar": [
         "RHCSA reference",
@@ -20937,7 +21021,8 @@
         "10"
       ],
       "related_entities": [
-        "path-rhcsa-module-1-basics"
+        "path-rhcsa-module-1-basics",
+        "concept-regular-expressions"
       ],
       "tags_ar": [
         "RHCSA reference",
@@ -21888,7 +21973,8 @@
       ],
       "related_entities": [
         "legacy-disk-xfs-grow",
-        "path-rhcsa-module-9-storage"
+        "path-rhcsa-module-9-storage",
+        "concept-filesystems-swap-resizing"
       ],
       "tags_ar": [
         "RHCSA reference",
@@ -22235,6 +22321,16 @@
       "estimated_hours": 6,
       "modules": [
         {
+          "entity_id": "concept-shell-scripting",
+          "required": true,
+          "note_ar": "A core concept for understanding this module."
+        },
+        {
+          "entity_id": "concept-regular-expressions",
+          "required": true,
+          "note_ar": "A core concept for understanding this module."
+        },
+        {
           "entity_id": "cmd-bash",
           "objective_ar": "Understand `bash` and apply its RHCSA-relevant use cases in this module.",
           "optional": false
@@ -22476,6 +22572,11 @@
       "difficulty": "beginner",
       "estimated_hours": 5,
       "modules": [
+        {
+          "entity_id": "concept-inodes-links",
+          "required": true,
+          "note_ar": "A core concept for understanding this module."
+        },
         {
           "entity_id": "cmd-pwd",
           "objective_ar": "Understand `pwd` and apply its RHCSA-relevant use cases in this module.",
@@ -22998,6 +23099,11 @@
       "estimated_hours": 5,
       "modules": [
         {
+          "entity_id": "concept-process-control",
+          "required": true,
+          "note_ar": "A core concept for understanding this module."
+        },
+        {
           "entity_id": "cmd-ps",
           "objective_ar": "Understand `ps` and apply its RHCSA-relevant use cases in this module.",
           "optional": false
@@ -23116,7 +23222,8 @@
         "cmd-lsof",
         "cmd-tuned-adm",
         "cmd-uptime",
-        "cmd-vmstat"
+        "cmd-vmstat",
+        "concept-process-control"
       ],
       "tags_ar": [
         "RHCSA path",
@@ -23158,6 +23265,26 @@
       "difficulty": "intermediate",
       "estimated_hours": 7,
       "modules": [
+        {
+          "entity_id": "concept-persistent-configuration",
+          "required": true,
+          "note_ar": "A core concept for understanding this module."
+        },
+        {
+          "entity_id": "concept-boot-process",
+          "required": true,
+          "note_ar": "A core concept for understanding this module."
+        },
+        {
+          "entity_id": "concept-logs-time",
+          "required": true,
+          "note_ar": "A core concept for understanding this module."
+        },
+        {
+          "entity_id": "concept-task-scheduling",
+          "required": true,
+          "note_ar": "A core concept for understanding this module."
+        },
         {
           "entity_id": "cmd-systemctl",
           "objective_ar": "Understand `systemctl` and apply its RHCSA-relevant use cases in this module.",
@@ -23271,7 +23398,9 @@
         "cmd-grub2-editenv",
         "cmd-grub2-mkconfig",
         "cmd-grubby",
-        "cmd-shutdown"
+        "cmd-shutdown",
+        "concept-persistent-configuration",
+        "concept-boot-process"
       ],
       "tags_ar": [
         "RHCSA path",
@@ -23314,6 +23443,11 @@
       "difficulty": "intermediate",
       "estimated_hours": 6,
       "modules": [
+        {
+          "entity_id": "concept-name-resolution",
+          "required": true,
+          "note_ar": "A core concept for understanding this module."
+        },
         {
           "entity_id": "cmd-ip",
           "objective_ar": "Understand `ip` and apply its RHCSA-relevant use cases in this module.",
@@ -23433,7 +23567,8 @@
         "cmd-scp",
         "cmd-sftp",
         "cmd-ssh-copy-id",
-        "cmd-ssh-keygen"
+        "cmd-ssh-keygen",
+        "concept-persistent-configuration"
       ],
       "tags_ar": [
         "RHCSA path",
@@ -23495,6 +23630,21 @@
       "difficulty": "intermediate",
       "estimated_hours": 9,
       "modules": [
+        {
+          "entity_id": "concept-persistent-mounts",
+          "required": true,
+          "note_ar": "A core concept for understanding this module."
+        },
+        {
+          "entity_id": "concept-filesystems-swap-resizing",
+          "required": true,
+          "note_ar": "A core concept for understanding this module."
+        },
+        {
+          "entity_id": "concept-nfs-autofs",
+          "required": true,
+          "note_ar": "A core concept for understanding this module."
+        },
         {
           "entity_id": "cmd-lsblk",
           "objective_ar": "Understand `lsblk` and apply its RHCSA-relevant use cases in this module.",
@@ -24162,6 +24312,710 @@
         "Training module"
       ],
       "status": "reviewed"
+    },
+    {
+      "id": "concept-persistent-configuration",
+      "entity_type": "concept",
+      "title_ar": "Runtime vs Persistent Configuration",
+      "summary_ar": "The difference between a change that works now and a change that survives a reboot.",
+      "category": "concepts",
+      "keywords_ar": [
+        "runtime persistent configuration",
+        "survive reboot",
+        "systemctl start enable",
+        "firewall-cmd permanent",
+        "fstab",
+        "nmcli connection profile"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-systemctl",
+        "cmd-firewall-cmd",
+        "cmd-mount",
+        "cmd-nmcli",
+        "path-rhcsa-module-7-services",
+        "path-rhcsa-module-8-networking",
+        "path-rhcsa-module-9-storage",
+        "concept-rhel-image-mode"
+      ],
+      "tags_ar": [
+        "Concept",
+        "RHCSA",
+        "Persistence"
+      ],
+      "status": "reviewed",
+      "definition_ar": "Some commands change only the current runtime state. Persistence requires a saved file, profile, or permanent option that is applied again during boot.",
+      "why_it_matters_ar": "A configuration is not complete merely because it works now; RHCSA tasks and production systems require it to remain correct after a reboot.",
+      "key_points_ar": [
+        "systemctl start activates a unit now, while enable connects it to boot; many tasks require both.",
+        "firewall-cmd changes runtime state by default; --permanent changes saved configuration and a reload applies it.",
+        "mount is temporary, while /etc/fstab describes boot-time mounts.",
+        "Saved NetworkManager connection profiles are persistent configuration, not only live interface state.",
+        "The strongest verification is to reload or reboot and confirm the intended result."
+      ],
+      "mental_model_ar": "Think in two layers: the state currently in memory and the configuration source that rebuilds that state at boot.",
+      "misconceptions_ar": [
+        "A successful command now does not prove that the change survives a reboot.",
+        "enable does not always start a service immediately, and --permanent does not apply a firewall rule immediately."
+      ]
+    },
+    {
+      "id": "concept-boot-process",
+      "entity_type": "concept",
+      "title_ar": "Boot Flow, GRUB, and systemd Targets",
+      "summary_ar": "How RHEL moves from the boot loader to the kernel, initramfs, systemd, and the selected target.",
+      "category": "concepts",
+      "keywords_ar": [
+        "boot process",
+        "GRUB2",
+        "kernel initramfs",
+        "systemd targets",
+        "rescue emergency",
+        "root recovery",
+        "grubby"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-grubby",
+        "cmd-grub2-mkconfig",
+        "cmd-grub2-editenv",
+        "cmd-systemctl",
+        "cmd-journalctl",
+        "cmd-chroot",
+        "path-rhcsa-module-7-services"
+      ],
+      "tags_ar": [
+        "Concept",
+        "RHCSA",
+        "Boot"
+      ],
+      "status": "reviewed",
+      "definition_ar": "Boot begins with firmware and GRUB2. After the kernel and initramfs prepare the system, systemd activates the target and its dependent units.",
+      "why_it_matters_ar": "Understanding each stage helps locate failures, enter recovery modes, change kernel arguments, and recover administrative access.",
+      "key_points_ar": [
+        "GRUB2 selects a boot entry and passes kernel arguments.",
+        "initramfs provides the early environment needed to discover storage and prepare the root filesystem.",
+        "A systemd target groups units required for an operating state; it is not one service.",
+        "A one-time GRUB edit differs from a persistent change made with grubby or configuration files.",
+        "rescue and emergency modes provide different levels of services for repair."
+      ],
+      "mental_model_ar": "Treat boot as a chain of hand-offs: each stage prepares the environment and transfers control to the next.",
+      "misconceptions_ar": [
+        "Not every boot failure is a GRUB failure; the fault may be in initramfs, a filesystem, or a systemd unit.",
+        "Editing kernel arguments for one boot does not make them persistent."
+      ]
+    },
+    {
+      "id": "concept-process-control",
+      "entity_type": "concept",
+      "title_ar": "Processes, Signals, and Scheduling Priority",
+      "summary_ar": "Understanding PIDs, process relationships, signals, job control, and scheduling priority.",
+      "category": "concepts",
+      "keywords_ar": [
+        "process PID PPID",
+        "signals",
+        "SIGTERM SIGKILL",
+        "nice renice",
+        "jobs bg fg",
+        "TuneD"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-ps",
+        "cmd-top",
+        "cmd-kill",
+        "cmd-pkill",
+        "cmd-nice",
+        "cmd-renice",
+        "cmd-jobs",
+        "cmd-tuned-adm",
+        "path-rhcsa-module-6-processes"
+      ],
+      "tags_ar": [
+        "Concept",
+        "RHCSA",
+        "Processes"
+      ],
+      "status": "reviewed",
+      "definition_ar": "A process is a running program with a PID, state, and resource usage. Administrators control processes with signals, job-control tools, and scheduling priority.",
+      "why_it_matters_ar": "An administrator must identify resource-heavy processes, stop them safely, and tune process or system behavior.",
+      "key_points_ar": [
+        "PID identifies a process and PPID links it to its parent.",
+        "SIGTERM requests an orderly shutdown; SIGKILL stops immediately and cannot be handled.",
+        "jobs, bg, and fg manage jobs owned by the current shell, not every process on the host.",
+        "A higher nice value normally means lower CPU scheduling priority.",
+        "TuneD applies a system-wide tuning profile, while nice and renice affect selected processes."
+      ],
+      "mental_model_ar": "A process is a worker with an identity and resources; a signal is a message, and nice influences access to CPU time.",
+      "misconceptions_ar": [
+        "Starting with kill -9 is not good troubleshooting; request an orderly shutdown first.",
+        "A brief CPU spike does not prove a sustained performance problem."
+      ]
+    },
+    {
+      "id": "concept-logs-time",
+      "entity_type": "concept",
+      "title_ar": "Logs, Time, and Timestamps",
+      "summary_ar": "How the system journal, log files, clock configuration, and Chrony support troubleshooting.",
+      "category": "concepts",
+      "keywords_ar": [
+        "journalctl journald",
+        "persistent journal",
+        "chrony timedatectl",
+        "timestamps",
+        "dmesg",
+        "log troubleshooting"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-journalctl",
+        "cmd-dmesg",
+        "cmd-logger",
+        "cmd-timedatectl",
+        "cmd-chronyc",
+        "path-rhcsa-module-7-services",
+        "path-rhcsa-module-12-troubleshooting"
+      ],
+      "tags_ar": [
+        "Concept",
+        "RHCSA",
+        "Logs"
+      ],
+      "status": "reviewed",
+      "definition_ar": "Logs record system and service events. Correct clock, timezone, and synchronization settings make those events comparable across services and hosts.",
+      "why_it_matters_ar": "Troubleshooting depends on sequence and timing; an incorrect clock or nonpersistent journal can hide the cause of a failure.",
+      "key_points_ar": [
+        "journalctl can filter by unit, boot, time range, and priority.",
+        "dmesg focuses on kernel messages and does not replace service logs.",
+        "The journal can be configured for persistence across reboots.",
+        "timedatectl displays local time settings, while Chrony synchronizes the clock with time sources.",
+        "Start with the incident time and narrow the logs instead of reading everything."
+      ],
+      "mental_model_ar": "Treat logs as one timeline: every event is useful only when its source, timestamp, and surrounding context are clear.",
+      "misconceptions_ar": [
+        "Reading only the last few lines can miss the first event that triggered later failures.",
+        "Setting the timezone does not prove that time synchronization is healthy."
+      ]
+    },
+    {
+      "id": "concept-task-scheduling",
+      "entity_type": "concept",
+      "title_ar": "Task Scheduling: at, cron, and systemd Timers",
+      "summary_ar": "Choosing the correct scheduler for one-time, recurring user, or recurring system tasks.",
+      "category": "concepts",
+      "keywords_ar": [
+        "at cron crontab",
+        "systemd timers",
+        "scheduled tasks",
+        "one time task",
+        "recurring task"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-at",
+        "cmd-atq",
+        "cmd-atrm",
+        "cmd-crontab",
+        "cmd-systemctl",
+        "cmd-journalctl",
+        "path-rhcsa-module-7-services"
+      ],
+      "tags_ar": [
+        "Concept",
+        "RHCSA",
+        "Scheduling"
+      ],
+      "status": "reviewed",
+      "definition_ar": "at runs a job once, cron runs commands on a repeating schedule, and systemd timers connect scheduling to service units and systemd management.",
+      "why_it_matters_ar": "The correct scheduler makes execution easier to verify, monitor, and maintain.",
+      "key_points_ar": [
+        "at is appropriate for one execution at a future time.",
+        "crontab is appropriate for simple recurring jobs in a user context.",
+        "A systemd timer activates a service unit and can be inspected with systemctl and journalctl.",
+        "Scheduled environments are often smaller than interactive shells; use clear paths and controlled variables.",
+        "Verify the schedule, execution result, and logs—not only the schedule syntax."
+      ],
+      "mental_model_ar": "A scheduler is an alarm that launches a command or unit at a defined time or condition.",
+      "misconceptions_ar": [
+        "A command that works interactively may fail from cron because PATH and environment differ.",
+        "A valid schedule does not prove that the job completed successfully."
+      ]
+    },
+    {
+      "id": "concept-shell-scripting",
+      "entity_type": "concept",
+      "title_ar": "Simple Shell Script Logic",
+      "summary_ar": "Building Bash scripts with conditions, loops, inputs, command output, and exit status.",
+      "category": "concepts",
+      "keywords_ar": [
+        "shell scripting",
+        "Bash scripts",
+        "if test brackets",
+        "for loop",
+        "positional parameters",
+        "exit status",
+        "command substitution",
+        "RHCSA scripts"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-bash",
+        "cmd-test",
+        "cmd-read",
+        "cmd-source",
+        "cmd-seq",
+        "cmd-printf",
+        "path-rhcsa-module-1-basics"
+      ],
+      "tags_ar": [
+        "Concept",
+        "RHCSA",
+        "Bash"
+      ],
+      "status": "reviewed",
+      "definition_ar": "A simple shell script combines commands in a repeatable file and adds decisions with conditions, loops, inputs, and command results.",
+      "why_it_matters_ar": "RHCSA objectives require small automation tasks that are clear, repeatable, and verifiable.",
+      "key_points_ar": [
+        "The shebang selects the interpreter, and execute permission affects how the file is launched.",
+        "Exit status 0 normally means success; other values indicate failure or another outcome.",
+        "if and test or [ ] evaluate conditions before selecting a branch.",
+        "Parameters such as $1 and $2 make scripts reusable instead of hard-coding values.",
+        "Quote variables when needed to avoid unwanted word splitting and expansion."
+      ],
+      "mental_model_ar": "A script is a recipe: inputs, decisions, repetition, commands, and a measurable exit result.",
+      "misconceptions_ar": [
+        "A longer script is not automatically better; clarity and verification matter more.",
+        "Running commands in sequence without checking results can continue after a critical failure."
+      ]
+    },
+    {
+      "id": "concept-regular-expressions",
+      "entity_type": "concept",
+      "title_ar": "Regular Expressions and Text Processing",
+      "summary_ar": "Using patterns to search and transform text with grep, sed, and awk.",
+      "category": "concepts",
+      "keywords_ar": [
+        "regular expressions regex",
+        "grep sed awk",
+        "anchors character classes",
+        "wildcards vs regex",
+        "text processing",
+        "RHCSA regex"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-grep",
+        "cmd-sed",
+        "cmd-awk",
+        "cmd-cut",
+        "cmd-sort",
+        "cmd-uniq",
+        "concept-pipelines",
+        "path-rhcsa-module-1-basics"
+      ],
+      "tags_ar": [
+        "Concept",
+        "RHCSA",
+        "Text"
+      ],
+      "status": "reviewed",
+      "definition_ar": "A regular expression is a small pattern language that describes the shape of matching text instead of only a fixed word.",
+      "why_it_matters_ar": "Logs, configuration files, and command output require precise filtering, and regular expressions are an explicit RHCSA skill.",
+      "key_points_ar": [
+        "A shell glob such as *.log matches filenames, while a regular expression matches patterns inside text.",
+        "^ anchors the beginning of a line and $ anchors the end.",
+        "Groups and character classes such as [0-9] describe alternatives compactly.",
+        "grep -E enables Extended Regular Expression syntax.",
+        "Correct quoting prevents the shell from interpreting pattern characters before the tool receives them."
+      ],
+      "mental_model_ar": "Do not search for the whole text; describe its fixed boundaries and variable sections, then let the tool match lines.",
+      "misconceptions_ar": [
+        "In a regular expression, * repeats the preceding item; it does not mean arbitrary text by itself.",
+        "A pattern that works as a shell glob may behave differently in grep."
+      ]
+    },
+    {
+      "id": "concept-persistent-mounts",
+      "entity_type": "concept",
+      "title_ar": "Persistent Mounts and /etc/fstab",
+      "summary_ar": "How fstab describes filesystems that should mount at boot by UUID or label.",
+      "category": "concepts",
+      "keywords_ar": [
+        "/etc/fstab",
+        "persistent mounts",
+        "UUID LABEL",
+        "mount at boot",
+        "findmnt",
+        "mount -a"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-mount",
+        "cmd-umount",
+        "cmd-findmnt",
+        "cmd-blkid",
+        "cmd-lsblk",
+        "path-rhcsa-module-9-storage"
+      ],
+      "tags_ar": [
+        "Concept",
+        "RHCSA",
+        "Storage"
+      ],
+      "status": "reviewed",
+      "definition_ar": "/etc/fstab records the filesystem source, mount point, type, options, and check order so mounts can be recreated automatically.",
+      "why_it_matters_ar": "A bad entry can leave data unavailable after boot and may disrupt the boot process.",
+      "key_points_ar": [
+        "UUID or LABEL is normally more stable than a device name that may change.",
+        "The mount-point directory must exist and be appropriate before testing.",
+        "mount -a helps validate most fstab entries without rebooting.",
+        "findmnt and blkid connect the active source to the saved entry.",
+        "systemd generates mount units from fstab during boot."
+      ],
+      "mental_model_ar": "fstab is a list of contracts: what to mount, where, with which type and options, and how it is checked.",
+      "misconceptions_ar": [
+        "A successful manual mount does not prove that the fstab entry is correct.",
+        "/dev/sdX is not always the most reliable identity for a persistent mount."
+      ]
+    },
+    {
+      "id": "concept-filesystems-swap-resizing",
+      "entity_type": "concept",
+      "title_ar": "Filesystems, Swap, and Resizing",
+      "summary_ar": "The relationship among storage devices, LVM, filesystems, swap, and safe expansion steps.",
+      "category": "concepts",
+      "keywords_ar": [
+        "XFS ext4 VFAT",
+        "swap",
+        "filesystem resize",
+        "lvextend xfs_growfs resize2fs",
+        "mkswap swapon"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-lvextend",
+        "cmd-xfs-growfs",
+        "cmd-resize2fs",
+        "cmd-mkswap",
+        "cmd-swapon",
+        "cmd-findmnt",
+        "concept-storage-stack",
+        "path-rhcsa-module-9-storage"
+      ],
+      "tags_ar": [
+        "Concept",
+        "RHCSA",
+        "Filesystems"
+      ],
+      "status": "reviewed",
+      "definition_ar": "Storage is layered: device or partition, optional PV/VG/LV, and then a filesystem or swap area that must be formatted and activated separately.",
+      "why_it_matters_ar": "Extending the wrong layer or forgetting to grow the filesystem leaves capacity unavailable and can risk data.",
+      "key_points_ar": [
+        "A larger LV does not automatically enlarge the filesystem unless a combined option is used.",
+        "XFS supports growth but not traditional shrinking.",
+        "ext4 uses different tools and behavior; never use a filesystem tool on the wrong type.",
+        "Swap requires mkswap and swapon, and persistence requires a correct fstab entry.",
+        "Verify each layer with lsblk, lvs, findmnt, and df before and after a change."
+      ],
+      "mental_model_ar": "Grow the outer container first, then grow the content inside it; every layer has its own verification and modification tool.",
+      "misconceptions_ar": [
+        "Increasing an LV does not guarantee that df immediately reports more space.",
+        "All filesystems do not have the same growth and shrink capabilities."
+      ]
+    },
+    {
+      "id": "concept-nfs-autofs",
+      "entity_type": "concept",
+      "title_ar": "NFS and autofs",
+      "summary_ar": "The difference between manual, persistent, and on-demand network filesystem mounts.",
+      "category": "concepts",
+      "keywords_ar": [
+        "NFS autofs",
+        "network filesystem",
+        "automounter",
+        "showmount",
+        "auto.master",
+        "network storage"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-showmount",
+        "cmd-mount",
+        "cmd-umount",
+        "cmd-automount",
+        "cmd-systemctl",
+        "cmd-findmnt",
+        "path-rhcsa-module-9-storage"
+      ],
+      "tags_ar": [
+        "Concept",
+        "RHCSA",
+        "NFS"
+      ],
+      "status": "reviewed",
+      "definition_ar": "NFS exposes a filesystem over the network. A client can mount it manually, persistently through fstab, or on demand through autofs.",
+      "why_it_matters_ar": "Administrators must provide network storage without unnecessarily tying client boot to server availability.",
+      "key_points_ar": [
+        "The client needs the server name, exported path, and a local mount point.",
+        "A manual mount is useful for testing; fstab provides a direct persistent mount.",
+        "autofs mounts a path when accessed and can unmount it after inactivity.",
+        "The master file selects maps, and a map connects a key to an NFS source and options.",
+        "Name resolution, firewall rules, and NFS services can all affect access."
+      ],
+      "mental_model_ar": "NFS makes a remote directory appear local; autofs waits to open the connection until the path is requested.",
+      "misconceptions_ar": [
+        "Seeing an export does not prove that permissions and network access allow a successful mount.",
+        "autofs does not copy the data locally; it manages on-demand mounts."
+      ]
+    },
+    {
+      "id": "concept-name-resolution",
+      "entity_type": "concept",
+      "title_ar": "Name Resolution and DNS in RHEL",
+      "summary_ar": "How the system converts hostnames to addresses through NSS, local files, DNS, and NetworkManager settings.",
+      "category": "concepts",
+      "keywords_ar": [
+        "DNS name resolution",
+        "/etc/hosts",
+        "/etc/resolv.conf",
+        "nsswitch.conf",
+        "getent hosts",
+        "dig host"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-getent",
+        "cmd-dig",
+        "cmd-host",
+        "cmd-nmcli",
+        "cmd-hostnamectl",
+        "cmd-ping",
+        "path-rhcsa-module-8-networking"
+      ],
+      "tags_ar": [
+        "Concept",
+        "RHCSA",
+        "Networking"
+      ],
+      "status": "reviewed",
+      "definition_ar": "Name resolution is the path used to convert a name to an address according to configured sources such as local files and DNS.",
+      "why_it_matters_ar": "Connectivity may work by IP while applications fail by name, so network reachability and resolver failures must be separated.",
+      "key_points_ar": [
+        "/etc/nsswitch.conf controls the source order used by system applications.",
+        "/etc/hosts provides static local mappings before or after DNS according to that order.",
+        "/etc/resolv.conf supplies DNS servers and search domains and is commonly managed by NetworkManager.",
+        "getent hosts tests the resolver path used by normal system applications.",
+        "dig and host query DNS more directly, so their results may differ from getent."
+      ],
+      "mental_model_ar": "A hostname is a question; NSS decides whom to ask and in which order, then returns the first valid answer.",
+      "misconceptions_ar": [
+        "A successful ping to an IP address does not prove that DNS works.",
+        "A successful dig query does not prove that an application uses the same answer when NSS or hosts order differs."
+      ]
+    },
+    {
+      "id": "concept-inodes-links",
+      "entity_type": "concept",
+      "title_ar": "Inodes, Hard Links, and Symbolic Links",
+      "summary_ar": "How filenames reference file data and how hard links differ from symbolic links.",
+      "category": "concepts",
+      "keywords_ar": [
+        "inode",
+        "hard link",
+        "symbolic link symlink",
+        "ln",
+        "file links",
+        "inode exhaustion"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-ln",
+        "cmd-stat",
+        "cmd-ls",
+        "cmd-df",
+        "cmd-find",
+        "path-rhcsa-module-2-filesystem"
+      ],
+      "tags_ar": [
+        "Concept",
+        "RHCSA",
+        "Filesystem"
+      ],
+      "status": "reviewed",
+      "definition_ar": "A filename is a directory entry that points to an inode. The inode stores metadata and connects names to file content.",
+      "why_it_matters_ar": "Links explain why content can survive removal of one name, why symlinks can break, and why file creation can fail even when blocks remain free.",
+      "key_points_ar": [
+        "A hard link is another name for the same inode and normally must stay on the same filesystem.",
+        "A symlink is a separate file containing a target path and can cross filesystems.",
+        "Removing one hard link does not remove content while another link or open process still references it.",
+        "A symlink becomes dangling when its target disappears or moves.",
+        "A filesystem can run out of inodes before it runs out of data blocks when it holds huge numbers of small files."
+      ],
+      "mental_model_ar": "A directory is a name book and an inode is the content identity card; a hard link adds a name, while a symlink stores an address.",
+      "misconceptions_ar": [
+        "A hard link is not an independent copy of a file.",
+        "Free megabytes alone do not prove that new files can still be created."
+      ]
+    },
+    {
+      "id": "concept-containers-podman",
+      "entity_type": "concept",
+      "title_ar": "Containers and Podman Management",
+      "summary_ar": "Understanding images, containers, registries, storage, and networking when running applications with Podman.",
+      "category": "concepts",
+      "keywords_ar": [
+        "containers Podman",
+        "container image registry",
+        "rootless containers",
+        "volumes ports",
+        "Containerfile",
+        "RHEL containers"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "concept-selinux",
+        "concept-firewalld",
+        "concept-storage-stack",
+        "concept-systemd",
+        "cmd-systemctl",
+        "path-rhel-admin",
+        "concept-rhel-image-mode"
+      ],
+      "tags_ar": [
+        "Concept",
+        "RH134",
+        "Podman",
+        "RHEL 10"
+      ],
+      "status": "reviewed",
+      "definition_ar": "An image is a mostly immutable template, a container is a running instance with a writable layer, and Podman manages images and containers without a permanently running central daemon.",
+      "why_it_matters_ar": "RHEL 10 RH134 includes running containers and managing container images as a core administration skill.",
+      "key_points_ar": [
+        "A registry stores images; pull downloads an image, and run creates a container from it.",
+        "A container is not a full virtual machine; it shares the host kernel while isolating processes and resources.",
+        "Rootless containers reduce privileges and use user-specific namespaces and storage.",
+        "Important data belongs in a volume or bind mount rather than only in the temporary writable container layer.",
+        "Port publishing, SELinux labeling, and firewall access are separate layers to verify."
+      ],
+      "mental_model_ar": "An image is a frozen recipe, a container is a running instance, and a volume preserves data outside the container lifecycle.",
+      "misconceptions_ar": [
+        "Removing a container can remove its writable layer, but it does not automatically remove the image or an independent volume.",
+        "A service running inside a container is not automatically reachable from the network."
+      ]
+    },
+    {
+      "id": "concept-rhel-image-mode",
+      "entity_type": "concept",
+      "title_ar": "Image Mode for RHEL and bootc",
+      "summary_ar": "Managing the RHEL operating system as an OCI image that can be built, tested, deployed, and transactionally updated.",
+      "category": "concepts",
+      "keywords_ar": [
+        "Image Mode for RHEL",
+        "bootc",
+        "rhel-bootc",
+        "OCI operating system image",
+        "Containerfile",
+        "transactional update rollback",
+        "RHEL 10 image mode"
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "10"
+      ],
+      "related_entities": [
+        "concept-containers-podman",
+        "concept-package-management",
+        "concept-systemd",
+        "concept-storage-stack",
+        "concept-persistent-configuration",
+        "path-rhel-admin"
+      ],
+      "tags_ar": [
+        "Concept",
+        "RH134",
+        "Image Mode",
+        "RHEL 10"
+      ],
+      "status": "reviewed",
+      "definition_ar": "Image Mode manages the operating system as a bootable OCI container image based on rhel-bootc, using container tools and workflows to build, deploy, and update it.",
+      "why_it_matters_ar": "RHEL 10 RH134 teaches students to create, use, install, and upgrade image-based RHEL systems, extending administration beyond package-only management.",
+      "key_points_ar": [
+        "Package Mode changes the system with RPM packages and dnf; Image Mode delivers an operating-system update as a new image.",
+        "A bootc image includes boot components such as the kernel, initramfs, and boot loader, not only application content.",
+        "A Containerfile describes system content at build time and the result can be tested and stored in a registry.",
+        "Updates are transactional and can roll back to a previous deployment.",
+        "After installation, the machine runs as a normal RHEL system rather than an application container; the root is immutable by default except areas such as /etc and /var."
+      ],
+      "mental_model_ar": "Instead of repairing every host manually, build the operating-system release as one tested artifact, deploy it, and switch between versions with rollback.",
+      "misconceptions_ar": [
+        "Image Mode does not mean that the final server runs inside an application container.",
+        "Installing packages directly at runtime is not the primary replacement for changing and rebuilding the image."
+      ]
     }
   ]
 }

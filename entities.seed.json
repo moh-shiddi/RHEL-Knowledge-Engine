@@ -2229,6 +2229,16 @@
       "estimated_hours": 16,
       "modules": [
         {
+          "entity_id": "concept-containers-podman",
+          "required": true,
+          "note_ar": "مفهوم أساسي لفهم مهارات هذه الوحدة."
+        },
+        {
+          "entity_id": "concept-rhel-image-mode",
+          "required": true,
+          "note_ar": "مفهوم أساسي لفهم مهارات هذه الوحدة."
+        },
+        {
           "entity_id": "concept-linux-users",
           "objective_ar": "فهم الحسابات والمجموعات.",
           "optional": false
@@ -12701,6 +12711,16 @@
       "estimated_hours": 6,
       "modules": [
         {
+          "entity_id": "concept-shell-scripting",
+          "required": true,
+          "note_ar": "مفهوم أساسي لفهم مهارات هذه الوحدة."
+        },
+        {
+          "entity_id": "concept-regular-expressions",
+          "required": true,
+          "note_ar": "مفهوم أساسي لفهم مهارات هذه الوحدة."
+        },
+        {
           "entity_id": "cmd-bash",
           "objective_ar": "فهم أمر bash وتطبيق استخداماته المطلوبة في هذه الوحدة.",
           "optional": false
@@ -12935,6 +12955,11 @@
       "difficulty": "beginner",
       "estimated_hours": 5,
       "modules": [
+        {
+          "entity_id": "concept-inodes-links",
+          "required": true,
+          "note_ar": "مفهوم أساسي لفهم مهارات هذه الوحدة."
+        },
         {
           "entity_id": "cmd-pwd",
           "objective_ar": "فهم أمر pwd وتطبيق استخداماته المطلوبة في هذه الوحدة.",
@@ -13443,6 +13468,11 @@
       "estimated_hours": 5,
       "modules": [
         {
+          "entity_id": "concept-process-control",
+          "required": true,
+          "note_ar": "مفهوم أساسي لفهم مهارات هذه الوحدة."
+        },
+        {
           "entity_id": "cmd-ps",
           "objective_ar": "فهم أمر ps وتطبيق استخداماته المطلوبة في هذه الوحدة.",
           "optional": false
@@ -13598,6 +13628,26 @@
       "estimated_hours": 7,
       "modules": [
         {
+          "entity_id": "concept-persistent-configuration",
+          "required": true,
+          "note_ar": "مفهوم أساسي لفهم مهارات هذه الوحدة."
+        },
+        {
+          "entity_id": "concept-boot-process",
+          "required": true,
+          "note_ar": "مفهوم أساسي لفهم مهارات هذه الوحدة."
+        },
+        {
+          "entity_id": "concept-logs-time",
+          "required": true,
+          "note_ar": "مفهوم أساسي لفهم مهارات هذه الوحدة."
+        },
+        {
+          "entity_id": "concept-task-scheduling",
+          "required": true,
+          "note_ar": "مفهوم أساسي لفهم مهارات هذه الوحدة."
+        },
+        {
           "entity_id": "cmd-systemctl",
           "objective_ar": "فهم أمر systemctl وتطبيق استخداماته المطلوبة في هذه الوحدة.",
           "optional": false
@@ -13748,6 +13798,11 @@
       "difficulty": "intermediate",
       "estimated_hours": 6,
       "modules": [
+        {
+          "entity_id": "concept-name-resolution",
+          "required": true,
+          "note_ar": "مفهوم أساسي لفهم مهارات هذه الوحدة."
+        },
         {
           "entity_id": "cmd-ip",
           "objective_ar": "فهم أمر ip وتطبيق استخداماته المطلوبة في هذه الوحدة.",
@@ -13923,6 +13978,21 @@
       "difficulty": "intermediate",
       "estimated_hours": 9,
       "modules": [
+        {
+          "entity_id": "concept-persistent-mounts",
+          "required": true,
+          "note_ar": "مفهوم أساسي لفهم مهارات هذه الوحدة."
+        },
+        {
+          "entity_id": "concept-filesystems-swap-resizing",
+          "required": true,
+          "note_ar": "مفهوم أساسي لفهم مهارات هذه الوحدة."
+        },
+        {
+          "entity_id": "concept-nfs-autofs",
+          "required": true,
+          "note_ar": "مفهوم أساسي لفهم مهارات هذه الوحدة."
+        },
         {
           "entity_id": "cmd-lsblk",
           "objective_ar": "فهم أمر lsblk وتطبيق استخداماته المطلوبة في هذه الوحدة.",
@@ -14575,6 +14645,717 @@
         "وحدة تدريبية"
       ],
       "status": "reviewed"
+    },
+    {
+      "id": "concept-persistent-configuration",
+      "entity_type": "concept",
+      "title_ar": "الإعداد المؤقت مقابل الإعداد الدائم",
+      "summary_ar": "الفرق بين تغيير يعمل في الجلسة الحالية وتغيير يبقى صحيحًا بعد إعادة التشغيل.",
+      "category": "concepts",
+      "keywords_ar": [
+        "الإعداد المؤقت مقابل الإعداد الدائم",
+        "runtime persistent configuration",
+        "إعدادات تبقى بعد إعادة التشغيل",
+        "systemctl start enable",
+        "firewall-cmd permanent",
+        "fstab",
+        "nmcli connection"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-systemctl",
+        "cmd-firewall-cmd",
+        "cmd-mount",
+        "cmd-nmcli",
+        "path-rhcsa-module-7-services",
+        "path-rhcsa-module-8-networking",
+        "path-rhcsa-module-9-storage"
+      ],
+      "tags_ar": [
+        "مفهوم",
+        "RHCSA",
+        "الاستمرارية"
+      ],
+      "status": "reviewed",
+      "definition_ar": "بعض الأوامر تغيّر الحالة الجارية فقط، بينما تحتاج الاستمرارية إلى ملف إعداد أو ملف تعريف أو خيار دائم يعاد تطبيقه عند الإقلاع.",
+      "why_it_matters_ar": "اختبار RHCSA والعمل الفعلي لا يكتفيان بنجاح الإعداد الآن؛ يجب أن يبقى النظام يعمل بالطريقة نفسها بعد إعادة التشغيل.",
+      "key_points_ar": [
+        "systemctl start يشغّل الوحدة الآن، بينما enable يربطها بالإقلاع؛ وقد تحتاج الاثنين معًا.",
+        "firewall-cmd يغيّر طبقة التشغيل افتراضيًا، أما --permanent فيعدّل الإعداد المحفوظ ويحتاج reload لتطبيقه.",
+        "mount يركّب نظام الملفات مؤقتًا، بينما /etc/fstab يصف التركيب عند الإقلاع.",
+        "اتصالات NetworkManager المحفوظة عبر nmcli تمثل ملفات تعريف دائمة وليست مجرد حالة لحظية.",
+        "التحقق الحقيقي هو إعادة قراءة الإعداد أو إعادة التشغيل ثم التأكد من النتيجة."
+      ],
+      "mental_model_ar": "تخيّل طبقتين: حالة موجودة في الذاكرة الآن، ومصدر إعداد يعيد بناء هذه الحالة عند الإقلاع.",
+      "misconceptions_ar": [
+        "نجاح الأمر الآن لا يعني أن التغيير سيبقى بعد إعادة التشغيل.",
+        "enable لا يعني دائمًا أن الخدمة بدأت الآن، و--permanent لا يعني أن القاعدة طُبقت فورًا."
+      ]
+    },
+    {
+      "id": "concept-boot-process",
+      "entity_type": "concept",
+      "title_ar": "مسار الإقلاع وGRUB وSystemd Targets",
+      "summary_ar": "كيف ينتقل RHEL من محمّل الإقلاع إلى النواة ثم إلى systemd والوحدات المستهدفة.",
+      "category": "concepts",
+      "keywords_ar": [
+        "مسار الإقلاع",
+        "GRUB2",
+        "kernel initramfs",
+        "systemd targets",
+        "rescue emergency",
+        "استعادة root",
+        "grubby"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-grubby",
+        "cmd-grub2-mkconfig",
+        "cmd-grub2-editenv",
+        "cmd-systemctl",
+        "cmd-journalctl",
+        "cmd-chroot",
+        "path-rhcsa-module-7-services"
+      ],
+      "tags_ar": [
+        "مفهوم",
+        "RHCSA",
+        "الإقلاع"
+      ],
+      "status": "reviewed",
+      "definition_ar": "يبدأ الإقلاع من firmware ثم GRUB2، وبعد تحميل kernel وinitramfs تنتقل السيطرة إلى systemd لتفعيل target والوحدات التابعة له.",
+      "why_it_matters_ar": "فهم المراحل يسمح بتحديد مكان العطل والدخول إلى أوضاع الإنقاذ وتعديل وسيطات النواة واستعادة الوصول الإداري.",
+      "key_points_ar": [
+        "GRUB2 يختار مدخل الإقلاع ويمرر وسيطات النواة.",
+        "initramfs يوفّر بيئة مبكرة للوصول إلى التخزين وتجهيز نظام الجذر.",
+        "systemd target يجمع الوحدات المطلوبة لحالة تشغيل معينة ولا يمثل خدمة واحدة.",
+        "التعديل المؤقت من شاشة GRUB يختلف عن التعديل الدائم باستخدام grubby أو ملفات الإعداد.",
+        "rescue وemergency يقدمان بيئتين مختلفتين للتشخيص والإصلاح."
+      ],
+      "mental_model_ar": "تعامل مع الإقلاع كسلسلة تسليم: كل مرحلة تجهّز البيئة ثم تسلم التحكم للمرحلة التالية.",
+      "misconceptions_ar": [
+        "كل مشكلة إقلاع ليست مشكلة GRUB؛ قد تكون في initramfs أو نظام الملفات أو وحدة systemd.",
+        "تعديل وسيطات النواة لجلسة واحدة لا يجعلها إعدادًا دائمًا."
+      ]
+    },
+    {
+      "id": "concept-process-control",
+      "entity_type": "concept",
+      "title_ar": "العمليات والإشارات والأولويات",
+      "summary_ar": "فهم PID والعلاقات بين العمليات والإشارات وJob Control وأولوية الجدولة.",
+      "category": "concepts",
+      "keywords_ar": [
+        "العمليات والإشارات والأولويات",
+        "process PID PPID",
+        "signals",
+        "SIGTERM SIGKILL",
+        "nice renice",
+        "jobs bg fg",
+        "TuneD"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-ps",
+        "cmd-top",
+        "cmd-kill",
+        "cmd-pkill",
+        "cmd-nice",
+        "cmd-renice",
+        "cmd-jobs",
+        "cmd-tuned-adm",
+        "path-rhcsa-module-6-processes"
+      ],
+      "tags_ar": [
+        "مفهوم",
+        "RHCSA",
+        "العمليات"
+      ],
+      "status": "reviewed",
+      "definition_ar": "العملية برنامج قيد التنفيذ له PID وحالة وموارد، ويمكن التحكم فيه عبر الإشارات وأولوية الجدولة وأدوات إدارة الوظائف.",
+      "why_it_matters_ar": "مسؤول النظام يحتاج إلى تحديد العملية المسببة للضغط، إيقافها بأقل ضرر، وضبط أولوية التنفيذ أو ملف التوليف.",
+      "key_points_ar": [
+        "PID يعرّف العملية وPPID يربطها بالعملية الأب.",
+        "SIGTERM يطلب الإنهاء المنظم، بينما SIGKILL يوقف العملية فورًا ولا يمكنها التعامل معه.",
+        "jobs وbg وfg تدير وظائف shell الحالية، وليست بديلًا عن رؤية كل عمليات النظام.",
+        "كلما زادت قيمة nice انخفضت أولوية CPU عادةً.",
+        "TuneD يطبق ملف توليف شامل، بينما nice وrenice يؤثران في عملية أو مجموعة عمليات."
+      ],
+      "mental_model_ar": "العملية كعامل له رقم وهوية وموارد؛ الإشارة رسالة إليه، وnice يحدد مدى أولوية حصوله على وقت المعالج.",
+      "misconceptions_ar": [
+        "البدء بـ kill -9 ليس أسلوب التشخيص الصحيح؛ جرّب الإنهاء المنظم أولًا.",
+        "ارتفاع CPU للحظة لا يثبت وجود مشكلة مستمرة."
+      ]
+    },
+    {
+      "id": "concept-logs-time",
+      "entity_type": "concept",
+      "title_ar": "السجلات والوقت والطابع الزمني",
+      "summary_ar": "العلاقة بين systemd journal وملفات السجل ووقت النظام ومزامنة Chrony.",
+      "category": "concepts",
+      "keywords_ar": [
+        "السجلات والوقت",
+        "journalctl journald",
+        "persistent journal",
+        "chrony timedatectl",
+        "timestamps",
+        "dmesg",
+        "log troubleshooting"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-journalctl",
+        "cmd-dmesg",
+        "cmd-logger",
+        "cmd-timedatectl",
+        "cmd-chronyc",
+        "path-rhcsa-module-7-services",
+        "path-rhcsa-module-12-troubleshooting"
+      ],
+      "tags_ar": [
+        "مفهوم",
+        "RHCSA",
+        "السجلات"
+      ],
+      "status": "reviewed",
+      "definition_ar": "السجلات تسجل أحداث النظام والخدمات، بينما دقة الوقت والمنطقة الزمنية والمزامنة تحدد إمكانية ربط الأحداث ببعضها بصورة صحيحة.",
+      "why_it_matters_ar": "التشخيص يعتمد على التسلسل الزمني؛ ساعة غير صحيحة أو journal غير محفوظ قد يخفي سبب المشكلة.",
+      "key_points_ar": [
+        "journalctl يستطيع التصفية حسب الوحدة والوقت والأولوية والإقلاع.",
+        "dmesg يركز على رسائل kernel ولا يغني عن سجل الخدمة.",
+        "يمكن ضبط journal ليبقى بعد إعادة التشغيل بدل الاكتفاء ببيانات مؤقتة.",
+        "timedatectl يعرض إعداد الوقت والمنطقة، وChrony يتولى المزامنة مع مصادر الوقت.",
+        "ابدأ التشخيص من زمن حدوث المشكلة ثم ضيّق النتائج بدل قراءة السجل كاملًا."
+      ],
+      "mental_model_ar": "اعتبر السجلات خطًا زمنيًا موحدًا؛ كل حدث مفيد فقط إذا كان مصدره ووقته وسياقه واضحًا.",
+      "misconceptions_ar": [
+        "قراءة آخر أسطر السجل فقط قد تفوّت الحدث الأول الذي سبب سلسلة الأعطال.",
+        "ضبط المنطقة الزمنية لا يعني بالضرورة أن مزامنة الساعة تعمل."
+      ]
+    },
+    {
+      "id": "concept-task-scheduling",
+      "entity_type": "concept",
+      "title_ar": "جدولة المهام: at وcron وSystemd Timers",
+      "summary_ar": "اختيار الأداة المناسبة لمهمة لمرة واحدة أو مهمة دورية للمستخدم أو للنظام.",
+      "category": "concepts",
+      "keywords_ar": [
+        "جدولة المهام",
+        "at cron crontab",
+        "systemd timers",
+        "مهمة دورية",
+        "مهمة لمرة واحدة",
+        "scheduled tasks"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-at",
+        "cmd-atq",
+        "cmd-atrm",
+        "cmd-crontab",
+        "cmd-systemctl",
+        "cmd-journalctl",
+        "path-rhcsa-module-7-services"
+      ],
+      "tags_ar": [
+        "مفهوم",
+        "RHCSA",
+        "الجدولة"
+      ],
+      "status": "reviewed",
+      "definition_ar": "at ينفذ مهمة مرة واحدة، وcron يشغل أوامر وفق جدول متكرر، وsystemd timers تربط الجدولة بوحدات systemd وإدارتها وسجلاتها.",
+      "why_it_matters_ar": "اختيار المجدول الصحيح يقلل الأخطاء ويجعل التنفيذ قابلًا للتحقق والمراقبة.",
+      "key_points_ar": [
+        "at مناسب لتشغيل واحد في وقت مستقبلي.",
+        "crontab مناسب للمهام الدورية البسيطة ضمن سياق مستخدم.",
+        "systemd timer يفعّل service unit ويمكن تتبعه عبر systemctl وjournalctl.",
+        "بيئة المهمة المجدولة غالبًا أقل من بيئة shell التفاعلية؛ استخدم مسارات واضحة ومتغيرات مضبوطة.",
+        "تحقق من الجدول ومن نتيجة التنفيذ والسجل، لا من صحة الصياغة فقط."
+      ],
+      "mental_model_ar": "المجدول لا ينفذ الفكرة؛ هو منبّه يطلق أمرًا أو وحدة في وقت أو شرط محدد.",
+      "misconceptions_ar": [
+        "نجاح الأمر يدويًا لا يضمن نجاحه من cron بسبب اختلاف PATH والبيئة.",
+        "كتابة الجدول لا تثبت أن المهمة نُفذت بنجاح."
+      ]
+    },
+    {
+      "id": "concept-shell-scripting",
+      "entity_type": "concept",
+      "title_ar": "منطق Shell Scripts البسيطة",
+      "summary_ar": "بناء سكربتات Bash باستخدام الشروط والحلقات والمدخلات وحالة الخروج.",
+      "category": "concepts",
+      "keywords_ar": [
+        "Shell scripting",
+        "Bash scripts",
+        "if test brackets",
+        "for loop",
+        "positional parameters",
+        "exit status",
+        "command substitution",
+        "سكربتات RHCSA"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-bash",
+        "cmd-test",
+        "cmd-read",
+        "cmd-source",
+        "cmd-seq",
+        "cmd-printf",
+        "path-rhcsa-module-1-basics"
+      ],
+      "tags_ar": [
+        "مفهوم",
+        "RHCSA",
+        "Bash"
+      ],
+      "status": "reviewed",
+      "definition_ar": "السكربت البسيط يجمع أوامر shell في ملف قابل للتكرار، ويضيف منطقًا باستخدام الشروط والحلقات والمدخلات ونتائج الأوامر.",
+      "why_it_matters_ar": "أهداف RHCSA تتطلب أتمتة مهام صغيرة بطريقة واضحة وقابلة للتحقق بدل تكرار الأوامر يدويًا.",
+      "key_points_ar": [
+        "shebang يحدد المفسر، وصلاحية التنفيذ تحدد طريقة تشغيل الملف.",
+        "حالة الخروج 0 تعني نجاحًا عادةً، والقيم الأخرى تشير إلى فشل أو حالة مختلفة.",
+        "if وtest أو [ ] تختبر شروطًا قبل تنفيذ فرع معين.",
+        "المعاملات $1 و$2 والمدخلات تسمح بإعادة استخدام السكربت بدل تثبيت القيم داخله.",
+        "ضع المتغيرات بين علامات اقتباس عند الحاجة لتجنب تقسيم الكلمات والتمدد غير المقصود."
+      ],
+      "mental_model_ar": "السكربت وصفة: مدخلات، قرارات، تكرار، أوامر، ثم نتيجة يمكن قياسها بحالة الخروج.",
+      "misconceptions_ar": [
+        "السكربت الطويل ليس بالضرورة أفضل؛ الوضوح والتحقق أهم.",
+        "تشغيل الأوامر بالتسلسل دون فحص نتائجها قد يجعل السكربت يكمل بعد فشل خطوة أساسية."
+      ]
+    },
+    {
+      "id": "concept-regular-expressions",
+      "entity_type": "concept",
+      "title_ar": "Regular Expressions ومعالجة النصوص",
+      "summary_ar": "استخدام الأنماط للبحث الدقيق في النصوص مع grep وsed وawk.",
+      "category": "concepts",
+      "keywords_ar": [
+        "regular expressions regex",
+        "grep sed awk",
+        "anchors character classes",
+        "wildcards vs regex",
+        "تحليل النصوص",
+        "RHCSA regex"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-grep",
+        "cmd-sed",
+        "cmd-awk",
+        "cmd-cut",
+        "cmd-sort",
+        "cmd-uniq",
+        "concept-pipelines",
+        "path-rhcsa-module-1-basics"
+      ],
+      "tags_ar": [
+        "مفهوم",
+        "RHCSA",
+        "النصوص"
+      ],
+      "status": "reviewed",
+      "definition_ar": "التعبير النمطي لغة مصغرة تصف شكل النص المطلوب بدل البحث عن كلمة ثابتة فقط.",
+      "why_it_matters_ar": "السجلات وملفات الإعداد ومخرجات الأوامر تحتاج إلى تصفية دقيقة، والتعبيرات النمطية جزء مباشر من مهارات RHCSA.",
+      "key_points_ar": [
+        "Shell glob مثل *.log يطابق أسماء الملفات، بينما regex يطابق أنماطًا داخل النص.",
+        "^ يثبت بداية السطر و$ يثبت نهايته.",
+        "المجموعات والفئات مثل [0-9] تقلل الحاجة إلى كتابة كل احتمال.",
+        "grep -E يستخدم Extended Regular Expressions بصياغة أوسع.",
+        "الاقتباس الصحيح يمنع shell من تفسير الرموز قبل وصولها إلى الأداة."
+      ],
+      "mental_model_ar": "لا تبحث عن النص كاملًا؛ صف حدوده وأجزائه المتغيرة ثم دع الأداة تطابق الأسطر.",
+      "misconceptions_ar": [
+        "النجمة في regex لا تعني أي نص بمفردها؛ بل تكرر العنصر السابق.",
+        "نمط يعمل في shell glob قد لا يعمل بالطريقة نفسها داخل grep."
+      ]
+    },
+    {
+      "id": "concept-persistent-mounts",
+      "entity_type": "concept",
+      "title_ar": "التركيب الدائم وملف /etc/fstab",
+      "summary_ar": "كيف يصف fstab أنظمة الملفات التي يجب تركيبها عند الإقلاع باستخدام UUID أو LABEL.",
+      "category": "concepts",
+      "keywords_ar": [
+        "/etc/fstab",
+        "persistent mounts",
+        "UUID LABEL",
+        "mount at boot",
+        "findmnt",
+        "mount -a",
+        "التركيب الدائم"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-mount",
+        "cmd-umount",
+        "cmd-findmnt",
+        "cmd-blkid",
+        "cmd-lsblk",
+        "path-rhcsa-module-9-storage"
+      ],
+      "tags_ar": [
+        "مفهوم",
+        "RHCSA",
+        "التخزين"
+      ],
+      "status": "reviewed",
+      "definition_ar": "يحدد /etc/fstab مصدر نظام الملفات ونقطة التركيب والنوع والخيارات وترتيب الفحص لكي يعاد التركيب تلقائيًا.",
+      "why_it_matters_ar": "إدخال خاطئ قد يمنع خدمة أو نظام ملفات من الظهور بعد الإقلاع، وقد يعطل عملية الإقلاع نفسها.",
+      "key_points_ar": [
+        "استخدام UUID أو LABEL أكثر ثباتًا من الاعتماد على اسم جهاز قد يتغير.",
+        "نقطة التركيب يجب أن تكون موجودة ومناسبة قبل الاختبار.",
+        "mount -a يساعد على اختبار معظم إدخالات fstab دون إعادة تشغيل.",
+        "findmnt وblkid يربطان بين المصدر الفعلي والإدخال المكتوب.",
+        "systemd يحول إدخالات fstab إلى وحدات تركيب أثناء الإقلاع."
+      ],
+      "mental_model_ar": "fstab قائمة عقود: ماذا نركب، وأين، وبأي نوع وخيارات، ومتى نفحصه.",
+      "misconceptions_ar": [
+        "نجاح mount اليدوي لا يعني أن إدخال fstab صحيح.",
+        "اسم /dev/sdX ليس دائمًا الهوية الأكثر موثوقية للتركيب الدائم."
+      ]
+    },
+    {
+      "id": "concept-filesystems-swap-resizing",
+      "entity_type": "concept",
+      "title_ar": "أنظمة الملفات وSwap والتوسعة",
+      "summary_ar": "العلاقة بين جهاز التخزين وLVM ونظام الملفات وSwap وخطوات التوسعة الآمنة.",
+      "category": "concepts",
+      "keywords_ar": [
+        "XFS ext4 VFAT",
+        "swap",
+        "filesystem resize",
+        "lvextend xfs_growfs resize2fs",
+        "mkswap swapon",
+        "توسعة نظام الملفات"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-lvextend",
+        "cmd-xfs-growfs",
+        "cmd-resize2fs",
+        "cmd-mkswap",
+        "cmd-swapon",
+        "cmd-findmnt",
+        "concept-storage-stack",
+        "path-rhcsa-module-9-storage"
+      ],
+      "tags_ar": [
+        "مفهوم",
+        "RHCSA",
+        "أنظمة الملفات"
+      ],
+      "status": "reviewed",
+      "definition_ar": "التخزين طبقات مستقلة: جهاز أو قسم، ثم PV/VG/LV عند استخدام LVM، ثم نظام ملفات أو Swap يحتاج إلى تهيئة وتفعيل منفصلين.",
+      "why_it_matters_ar": "توسيع الطبقة الخطأ أو نسيان توسيع نظام الملفات يجعل المساحة غير ظاهرة وقد يعرّض البيانات للخطر.",
+      "key_points_ar": [
+        "إنشاء LV أكبر لا يوسّع نظام الملفات داخله تلقائيًا إلا عند استخدام خيار يجمع الخطوتين.",
+        "XFS يدعم التوسعة لكنه لا يدعم التصغير بالطريقة التقليدية.",
+        "ext4 له أدوات وسلوك مختلف عن XFS؛ لا تستخدم أداة نظام ملفات على نوع آخر.",
+        "Swap يحتاج mkswap ثم swapon، والاستمرارية تحتاج إدخالًا صحيحًا في fstab.",
+        "تحقق من كل طبقة باستخدام lsblk وlvs وfindmnt وdf قبل وبعد التغيير."
+      ],
+      "mental_model_ar": "كبّر الوعاء الخارجي أولًا ثم وسّع المحتوى الداخلي؛ كل طبقة لها أداة تحقق وأداة تعديل.",
+      "misconceptions_ar": [
+        "زيادة حجم LV لا تعني أن df سيعرض المساحة مباشرة.",
+        "كل أنظمة الملفات لا تملك قدرات التوسعة والتصغير نفسها."
+      ]
+    },
+    {
+      "id": "concept-nfs-autofs",
+      "entity_type": "concept",
+      "title_ar": "NFS وautofs",
+      "summary_ar": "الفرق بين تركيب تخزين شبكي يدويًا أو دائمًا أو عند الطلب باستخدام automounter.",
+      "category": "concepts",
+      "keywords_ar": [
+        "NFS autofs",
+        "network filesystem",
+        "automounter",
+        "showmount",
+        "auto.master",
+        "network storage",
+        "تخزين شبكي"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-showmount",
+        "cmd-mount",
+        "cmd-umount",
+        "cmd-automount",
+        "cmd-systemctl",
+        "cmd-findmnt",
+        "path-rhcsa-module-9-storage"
+      ],
+      "tags_ar": [
+        "مفهوم",
+        "RHCSA",
+        "NFS"
+      ],
+      "status": "reviewed",
+      "definition_ar": "NFS يعرّض نظام ملفات عبر الشبكة، ويمكن للعميل تركيبه يدويًا أو عبر fstab أو تشغيله عند الوصول باستخدام autofs.",
+      "why_it_matters_ar": "المسؤول يحتاج إلى توفير التخزين الشبكي دون جعل العميل يعتمد دائمًا على توفر الخادم أثناء الإقلاع.",
+      "key_points_ar": [
+        "العميل يحتاج إلى اسم الخادم والمسار المصدّر ونقطة تركيب محلية.",
+        "التركيب اليدوي مناسب للاختبار، وfstab مناسب للتركيب الدائم المباشر.",
+        "autofs يركّب المسار عند الاستخدام ويفكّه بعد الخمول وفق الخريطة.",
+        "ملف master يحدد الخرائط، والخريطة تربط المفتاح بمصدر NFS وخياراته.",
+        "حل الاسم والجدار الناري وخدمة NFS كلها قد تؤثر في نجاح التركيب."
+      ],
+      "mental_model_ar": "NFS يجعل مجلدًا بعيدًا يبدو محليًا، وautofs يؤجل فتح الباب حتى يطلب المستخدم المسار.",
+      "misconceptions_ar": [
+        "ظهور التصدير لا يثبت أن الصلاحيات أو الشبكة تسمح بالوصول الفعلي.",
+        "autofs لا ينسخ البيانات إلى الجهاز؛ هو يدير التركيب عند الطلب."
+      ]
+    },
+    {
+      "id": "concept-name-resolution",
+      "entity_type": "concept",
+      "title_ar": "حل الأسماء وDNS في RHEL",
+      "summary_ar": "كيف يحول النظام اسم المضيف إلى عنوان عبر NSS وhosts وDNS وإعداد NetworkManager.",
+      "category": "concepts",
+      "keywords_ar": [
+        "DNS name resolution",
+        "/etc/hosts",
+        "/etc/resolv.conf",
+        "nsswitch.conf",
+        "getent hosts",
+        "dig host",
+        "حل أسماء الأجهزة"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-getent",
+        "cmd-dig",
+        "cmd-host",
+        "cmd-nmcli",
+        "cmd-hostnamectl",
+        "cmd-ping",
+        "path-rhcsa-module-8-networking"
+      ],
+      "tags_ar": [
+        "مفهوم",
+        "RHCSA",
+        "الشبكات"
+      ],
+      "status": "reviewed",
+      "definition_ar": "حل الأسماء هو المسار الذي يستخدمه النظام لتحويل اسم إلى عنوان وفق ترتيب المصادر المحدد، مثل الملفات المحلية وDNS.",
+      "why_it_matters_ar": "قد تكون الشبكة تعمل بالعناوين بينما تفشل التطبيقات بالأسماء، لذلك يجب فصل مشكلة الاتصال عن مشكلة resolver.",
+      "key_points_ar": [
+        "/etc/nsswitch.conf يحدد ترتيب مصادر البحث التي تستخدمها تطبيقات النظام.",
+        "/etc/hosts يقدم تعيينات محلية ثابتة قبل أو بعد DNS حسب الترتيب.",
+        "/etc/resolv.conf يحدد خوادم DNS ونطاقات البحث وغالبًا تديره NetworkManager.",
+        "getent hosts يختبر مسار حل الأسماء الذي تستخدمه تطبيقات النظام.",
+        "dig وhost يستجوبان DNS مباشرة وقد تختلف نتيجتهما عن getent."
+      ],
+      "mental_model_ar": "اسم المضيف سؤال؛ NSS يقرر من نسأل وبأي ترتيب، ثم يعيد أول إجابة صالحة.",
+      "misconceptions_ar": [
+        "نجاح ping لعنوان IP لا يعني أن DNS يعمل.",
+        "نجاح dig لا يثبت أن التطبيق يستخدم النتيجة نفسها إذا كان ترتيب NSS أو hosts مختلفًا."
+      ]
+    },
+    {
+      "id": "concept-inodes-links",
+      "entity_type": "concept",
+      "title_ar": "Inodes والروابط الصلبة والرمزية",
+      "summary_ar": "كيف تربط أسماء الملفات ببياناتها، وما الفرق بين hard link وsymbolic link.",
+      "category": "concepts",
+      "keywords_ar": [
+        "inode",
+        "hard link",
+        "symbolic link symlink",
+        "ln",
+        "file links",
+        "inode exhaustion",
+        "روابط لينكس"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-ln",
+        "cmd-stat",
+        "cmd-ls",
+        "cmd-df",
+        "cmd-find",
+        "path-rhcsa-module-2-filesystem"
+      ],
+      "tags_ar": [
+        "مفهوم",
+        "RHCSA",
+        "نظام الملفات"
+      ],
+      "status": "reviewed",
+      "definition_ar": "اسم الملف هو مدخل في مجلد يشير إلى inode؛ الـinode يحمل البيانات الوصفية ويربط الاسم بمحتوى الملف.",
+      "why_it_matters_ar": "فهم الروابط يفسر لماذا قد يبقى المحتوى بعد حذف اسم، ولماذا قد ينكسر symlink، ولماذا ينفد عدد الملفات رغم وجود مساحة.",
+      "key_points_ar": [
+        "hard link اسم إضافي للـinode نفسه وعادةً يجب أن يكون داخل نظام الملفات نفسه.",
+        "symlink ملف مستقل يحتوي مسار الهدف ويمكن أن يعبر أنظمة الملفات.",
+        "حذف أحد hard links لا يحذف المحتوى ما دام رابط آخر أو عملية مفتوحة تشير إليه.",
+        "symlink يصبح dangling إذا اختفى الهدف أو تغير مساره.",
+        "يمكن أن تنفد inodes قبل امتلاء كتل البيانات عند وجود عدد ضخم من الملفات الصغيرة."
+      ],
+      "mental_model_ar": "المجلد دفتر أسماء، والـinode بطاقة هوية للمحتوى؛ hard link اسم ثانٍ للبطاقة نفسها، وsymlink ورقة تحمل عنوانًا.",
+      "misconceptions_ar": [
+        "hard link ليس نسخة مستقلة من الملف.",
+        "المساحة الحرة بالميغابايت لا تكفي للحكم على القدرة على إنشاء ملفات جديدة."
+      ]
+    },
+    {
+      "id": "concept-containers-podman",
+      "entity_type": "concept",
+      "title_ar": "الحاويات وإدارة Podman",
+      "summary_ar": "فهم الصور والحاويات والسجلات والتخزين والشبكات عند تشغيل تطبيقات مع Podman.",
+      "category": "concepts",
+      "keywords_ar": [
+        "Containers Podman",
+        "container image registry",
+        "rootless containers",
+        "volumes ports",
+        "Containerfile",
+        "الحاويات في RHEL"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "concept-selinux",
+        "concept-firewalld",
+        "concept-storage-stack",
+        "concept-systemd",
+        "cmd-systemctl",
+        "path-rhel-admin"
+      ],
+      "tags_ar": [
+        "مفهوم",
+        "RH134",
+        "Podman",
+        "RHEL 10"
+      ],
+      "status": "reviewed",
+      "definition_ar": "الصورة قالب غير متغير نسبيًا، والحاوية نسخة تشغيل مع طبقة قابلة للكتابة، وPodman يدير الصور والحاويات دون الحاجة إلى daemon مركزي دائم.",
+      "why_it_matters_ar": "RH134 في RHEL 10 يتضمن تشغيل الحاويات وإدارة صورها، وهي مهارة أساسية لفهم نشر التطبيقات الحديثة.",
+      "key_points_ar": [
+        "registry يخزن الصور، وpull يجلب صورة، وrun ينشئ حاوية منها.",
+        "الحاوية ليست آلة افتراضية كاملة؛ تشارك kernel المضيف مع عزل العمليات والموارد.",
+        "الحاويات rootless تقلل الامتيازات وتستخدم نطاقات المستخدم والتخزين الخاص به.",
+        "البيانات المهمة تحتاج volume أو bind mount بدل الاعتماد على طبقة الحاوية المؤقتة.",
+        "نشر المنفذ وSELinux والجدار الناري ثلاث طبقات مختلفة يجب التحقق منها عند الوصول للخدمة."
+      ],
+      "mental_model_ar": "الصورة وصفة مجمدة، والحاوية تشغيل فعلي للوصفة، والـvolume مكان مستقل يحفظ البيانات خارج دورة حياة الحاوية.",
+      "misconceptions_ar": [
+        "حذف الحاوية قد يحذف طبقتها القابلة للكتابة لكنه لا يحذف الصورة أو volume مستقل تلقائيًا.",
+        "تشغيل الخدمة داخل الحاوية لا يعني أنها متاحة من الشبكة دون نشر منفذ وضبط الحماية."
+      ]
+    },
+    {
+      "id": "concept-rhel-image-mode",
+      "entity_type": "concept",
+      "title_ar": "Image Mode for RHEL وbootc",
+      "summary_ar": "إدارة نظام RHEL نفسه كصورة OCI قابلة للبناء والاختبار والنشر والتحديث المعاملي.",
+      "category": "concepts",
+      "keywords_ar": [
+        "Image Mode for RHEL",
+        "bootc",
+        "rhel-bootc",
+        "OCI operating system image",
+        "Containerfile",
+        "transactional update rollback",
+        "RHEL 10 image mode"
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "10"
+      ],
+      "related_entities": [
+        "concept-containers-podman",
+        "concept-package-management",
+        "concept-systemd",
+        "concept-storage-stack",
+        "concept-persistent-configuration",
+        "path-rhel-admin"
+      ],
+      "tags_ar": [
+        "مفهوم",
+        "RH134",
+        "Image Mode",
+        "RHEL 10"
+      ],
+      "status": "reviewed",
+      "definition_ar": "Image Mode يدير نظام التشغيل كصورة حاوية OCI قابلة للإقلاع مبنية على rhel-bootc، ثم ينشرها ويحدثها باستخدام أدوات وأساليب الحاويات.",
+      "why_it_matters_ar": "منهج RH134 في RHEL 10 يقدم بناء واستخدام وتثبيت وترقية الأنظمة المبنية على الصور، وهو تحول مهم عن الإدارة بالحزم فقط.",
+      "key_points_ar": [
+        "Package Mode يعدّل النظام بالحزم وdnf، بينما Image Mode ينشر تحديث النظام كصورة جديدة.",
+        "صورة bootc تحتوي مكونات الإقلاع مثل kernel وinitramfs وboot loader، وليست مجرد صورة تطبيق UBI.",
+        "Containerfile يصف محتوى النظام أثناء البناء ويمكن اختباره وتخزينه في registry.",
+        "التحديثات معاملية وتدعم الرجوع إلى نشر سابق عند الحاجة.",
+        "بعد التثبيت يعمل الجهاز كنظام RHEL عادي وليس كحاوية تطبيق، مع جذر غير قابل للتغيير افتراضيًا باستثناء مناطق مثل /etc و/var."
+      ],
+      "mental_model_ar": "بدل إصلاح كل خادم يدويًا، ابنِ إصدار النظام كقطعة واحدة، اختبره، انشره، ثم بدّل بين الإصدارات بصورة قابلة للرجوع.",
+      "misconceptions_ar": [
+        "Image Mode لا يعني أن الخادم النهائي يعمل داخل حاوية تطبيق.",
+        "تثبيت حزمة مباشرة وقت التشغيل ليس البديل الأساسي عن تعديل الصورة وإعادة بنائها."
+      ]
     }
   ]
 }
