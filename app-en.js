@@ -416,10 +416,10 @@ class KnowledgeEngineApp {
   async loadData() {
     try {
       const [knowledgeResponse, intentResponse, doctorResponse, diagnosticResponse] = await Promise.all([
-        fetch("knowledge-en.json", { cache: "no-store" }),
-        fetch("intents-en.json", { cache: "no-store" }),
-        fetch("doctor-data-en.json", { cache: "no-store" }),
-        fetch("diagnostic-patterns-en.json", { cache: "no-store" })
+        fetch("knowledge-en.json?v=20260722-rhcsa-search-en2", { cache: "no-store" }),
+        fetch("intents-en.json?v=20260722-rhcsa-search-en2", { cache: "no-store" }),
+        fetch("doctor-data-en.json?v=20260722-rhcsa-search-en2", { cache: "no-store" }),
+        fetch("diagnostic-patterns-en.json?v=20260722-rhcsa-search-en2", { cache: "no-store" })
       ]);
       if (!knowledgeResponse.ok) throw new Error(`knowledge.json HTTP ${knowledgeResponse.status}`);
       if (!intentResponse.ok) throw new Error(`intents.json HTTP ${intentResponse.status}`);

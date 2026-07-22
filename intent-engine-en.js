@@ -13,6 +13,7 @@
       this.minimumScore = Number(this.config.minimum_score || 18);
       this.aliasToCanonical = new Map();
       this.technicalTerms = new Set();
+      this.commandTokens = new Set();
       this.buildDictionary();
     }
 
@@ -45,6 +46,26 @@
       for (const item of [...(this.config.known_services || []), ...(this.config.known_packages || [])]) {
         this.technicalTerms.add(this.normalize(item));
       }
+
+      // Protect real command names from fuzzy correction. Without this,
+      // commands such as "pvcreate", "vgcreate", and "lvcreate" can be
+      // incorrectly shortened to the generic word "create" before search.
+      for (const entity of this.entities) {
+        if (entity.entity_type !== "command") continue;
+
+        const candidates = [
+          entity.command_name,
+          String(entity.id || "").replace(/^cmd-/, ""),
+          String(entity.syntax || "").trim().split(/\s+/)[0]
+        ];
+
+        for (const candidate of candidates) {
+          const normalized = this.normalize(candidate);
+          if (!normalized || normalized.includes(" ")) continue;
+          this.commandTokens.add(normalized);
+          this.technicalTerms.add(normalized);
+        }
+      }
     }
 
     tokenize(value) {
@@ -68,6 +89,10 @@
 
       const tokens = normalized.split(" ").filter(Boolean);
       const correctedTokens = tokens.map(token => {
+        // An exact command token is authoritative and must never be passed
+        // through alias or edit-distance correction.
+        if (this.commandTokens.has(token)) return token;
+
         const stripped = token.startsWith("ال") && token.length > 4 ? token.slice(2) : token;
         const direct = this.aliasToCanonical.get(token) || this.aliasToCanonical.get(stripped);
         if (direct) {
