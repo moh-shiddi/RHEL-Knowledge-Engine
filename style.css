@@ -1695,3 +1695,54 @@ html[dir="rtl"] .wf-library-controls > input.wf-command-search {
 html[dir="ltr"] .wf-library-controls > input.wf-command-search {
   text-align: left;
 }
+
+/* =========================================================
+   Workflow example cards — prevent long titles from overflowing
+   ========================================================= */
+
+.workflow-launch__examples {
+  min-width: 0;
+}
+
+.workflow-launch__examples button {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.workflow-launch__examples button > span:not(:first-child) {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.workflow-launch__examples strong {
+  display: block;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: clamp(.72rem, .78vw, .86rem);
+  line-height: 1.25;
+}
+
+.workflow-launch__examples small {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 1250px) {
+  .workflow-launch__examples {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .workflow-launch__examples {
+    grid-template-columns: 1fr;
+  }
+}
+
