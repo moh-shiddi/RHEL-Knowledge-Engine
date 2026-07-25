@@ -9,6 +9,25 @@ ENTITIES_FILE = ROOT / "entities.seed.json"
 OUTPUT_FILE = ROOT / "knowledge.json"
 
 COMMAND_PAGE_MAP = {
+    "ksvalidator": "cmd-ksvalidator",
+    "hammer": "cmd-hammer",
+    "satellite-maintain": "cmd-satellite-maintain",
+    "insights-client": "cmd-insights-client",
+    "rhc": "cmd-rhc",
+    "ansible": "cmd-ansible",
+    "ansible-playbook": "cmd-ansible-playbook",
+    "ansible-inventory": "cmd-ansible-inventory",
+    "ansible-vault": "cmd-ansible-vault",
+    "ansible-navigator": "cmd-ansible-navigator",
+    "ansible-builder": "cmd-ansible-builder",
+    "oscap": "cmd-oscap",
+    "autotailor": "cmd-autotailor",
+    "composer-cli": "cmd-composer-cli",
+    "leapp": "cmd-leapp",
+    "rpm-ostree": "cmd-rpm-ostree",
+    "bootc": "cmd-bootc",
+    "podman": "cmd-podman",
+
     "at": "cmd-at",
     "atq": "cmd-atq",
     "atrm": "cmd-atrm",

@@ -35,6 +35,16 @@
     "subscription": "اشتراك ومستودعات Red Hat",
     "scheduling": "الجدولة والمهام",
     "web_servers": "خوادم الويب",
+    "advanced_provisioning": "التثبيت والأتمتة المتقدمة",
+    "satellite": "الإدارة المركزية وRed Hat Satellite",
+    "lightspeed": "Red Hat Lightspeed وInsights",
+    "automation": "الأتمتة وAnsible",
+    "compliance": "الامتثال وOpenSCAP",
+    "web_console": "Cockpit ووحدة تحكم الويب",
+    "image_building": "بناء صور النظام",
+    "upgrades": "الترقيات الكبرى",
+    "image_mode": "Image Mode وOSTree",
+    "containers": "الحاويات وPodman",
     "concepts": "المفاهيم الأساسية",
     "learning": "مسارات التعلم",
     "reference": "مرجع الأوامر"
@@ -790,6 +800,1683 @@
       ],
       "tags_ar": [
         "مسار عملي"
+      ]
+    },
+    {
+      "id": "task-validate-kickstart",
+      "title_ar": "إنشاء والتحقق من Kickstart",
+      "summary_ar": "إنشاء ملف Kickstart ومراجعة الأقسام وفحص الصياغة.",
+      "category": "advanced_provisioning",
+      "keywords_ar": [
+        "إنشاء والتحقق من Kickstart",
+        "إنشاء ملف Kickstart ومراجعة الأقسام وفحص الصياغة.",
+        "أريد تجهيز ملف تثبيت آلي"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "tags_ar": [
+        "مسار عملي",
+        "Kickstart"
+      ],
+      "status": "reviewed",
+      "content_level": "workflow",
+      "goal_ar": "أريد تجهيز ملف تثبيت آلي",
+      "estimated_minutes": 15,
+      "risk": "medium",
+      "prerequisites_ar": [
+        "تحديد إصدار RHEL"
+      ],
+      "variables": [],
+      "steps": [
+        {
+          "id": "copy",
+          "title_ar": "استخدام ملف سابق",
+          "command": "sudo cp /root/anaconda-ks.cfg server.ks",
+          "explanation_ar": "ينسخ نقطة بداية.",
+          "requires_sudo": true,
+          "risk": "medium",
+          "optional": false,
+          "expected_result_ar": "ملف قابل للتحرير.",
+          "notes_ar": ""
+        },
+        {
+          "id": "edit",
+          "title_ar": "تحرير الملف",
+          "command": "vim server.ks",
+          "explanation_ar": "راجع التخزين والشبكة والحزم وScripts.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "إعدادات مقصودة.",
+          "notes_ar": ""
+        },
+        {
+          "id": "protect",
+          "title_ar": "حماية الملف",
+          "command": "chmod 600 server.ks",
+          "explanation_ar": "يحمي الأسرار.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Mode 600.",
+          "notes_ar": ""
+        },
+        {
+          "id": "validate",
+          "title_ar": "فحص الصياغة",
+          "command": "ksvalidator -v RHEL10 server.ks",
+          "explanation_ar": "يفحص الصياغة.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "لا أخطاء.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "إعادة الفحص",
+          "command": "ksvalidator -v RHEL10 server.ks",
+          "expected_result_ar": "Exit 0.",
+          "requires_sudo": false
+        }
+      ],
+      "rollback_ar": [],
+      "common_errors": [],
+      "files": [],
+      "ports": [],
+      "safety_notes_ar": [
+        "اختبر على VM قابلة للمسح."
+      ],
+      "sources": [],
+      "entity_type": "task",
+      "related_entities": [
+        "cmd-ksvalidator",
+        "task-launch-kickstart",
+        "troubleshoot-kickstart",
+        "path-advanced-rhel-administration",
+        "cmd-cp",
+        "cmd-vim",
+        "cmd-chmod",
+        "concept-kickstart-automation"
+      ]
+    },
+    {
+      "id": "task-launch-kickstart",
+      "title_ar": "بدء تثبيت Kickstart",
+      "summary_ar": "نشر الملف وتمرير inst.ks ومتابعة التثبيت.",
+      "category": "advanced_provisioning",
+      "keywords_ar": [
+        "بدء تثبيت Kickstart",
+        "نشر الملف وتمرير inst.ks ومتابعة التثبيت.",
+        "أريد تشغيل تثبيت RHEL آلي"
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "tags_ar": [
+        "مسار عملي",
+        "Kickstart"
+      ],
+      "status": "reviewed",
+      "content_level": "workflow",
+      "goal_ar": "أريد تشغيل تثبيت RHEL آلي",
+      "estimated_minutes": 20,
+      "risk": "high",
+      "prerequisites_ar": [
+        "ملف صالح ونسخة احتياطية"
+      ],
+      "variables": [
+        {
+          "name": "KS_URL",
+          "label_ar": "عنوان Kickstart",
+          "example": "https://server/ks.cfg",
+          "required": true
+        }
+      ],
+      "steps": [
+        {
+          "id": "url",
+          "title_ar": "فحص الملف",
+          "command": "curl -fI <KS_URL>",
+          "explanation_ar": "يتحقق من الوصول.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "HTTP success.",
+          "notes_ar": ""
+        },
+        {
+          "id": "boot",
+          "title_ar": "إضافة Boot Option",
+          "command": "inst.ks=<KS_URL>",
+          "explanation_ar": "أضفها إلى GRUB أو PXE.",
+          "requires_sudo": false,
+          "risk": "high",
+          "optional": false,
+          "expected_result_ar": "Anaconda يجلب الملف.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "فحص النظام",
+          "command": "test -f /root/anaconda-ks.cfg",
+          "expected_result_ar": "ملف موجود.",
+          "requires_sudo": false
+        }
+      ],
+      "rollback_ar": [],
+      "common_errors": [],
+      "files": [],
+      "ports": [],
+      "safety_notes_ar": [
+        "قد يمسح التثبيت الأقراص."
+      ],
+      "sources": [],
+      "entity_type": "task",
+      "related_entities": [
+        "cmd-ksvalidator",
+        "task-validate-kickstart",
+        "troubleshoot-kickstart",
+        "path-advanced-rhel-administration",
+        "cmd-curl",
+        "concept-kickstart-automation"
+      ]
+    },
+    {
+      "id": "task-register-satellite",
+      "title_ar": "تسجيل مضيف في Satellite",
+      "summary_ar": "تثبيت شهادة المستهلك والتسجيل بـActivation Key والتحقق من المحتوى.",
+      "category": "satellite",
+      "keywords_ar": [
+        "تسجيل مضيف في Satellite",
+        "تثبيت شهادة المستهلك والتسجيل بـActivation Key والتحقق من المحتوى.",
+        "أريد ربط RHEL بـSatellite"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "tags_ar": [
+        "مسار عملي",
+        "Satellite"
+      ],
+      "status": "reviewed",
+      "content_level": "workflow",
+      "goal_ar": "أريد ربط RHEL بـSatellite",
+      "estimated_minutes": 15,
+      "risk": "medium",
+      "prerequisites_ar": [
+        "DNS ووقت صحيحان"
+      ],
+      "variables": [
+        {
+          "name": "SATELLITE",
+          "label_ar": "اسم Satellite",
+          "example": "satellite.example.com",
+          "required": true
+        },
+        {
+          "name": "ORG",
+          "label_ar": "المؤسسة",
+          "example": "Org",
+          "required": true
+        },
+        {
+          "name": "KEY",
+          "label_ar": "Activation Key",
+          "example": "rhel-prod",
+          "required": true
+        }
+      ],
+      "steps": [
+        {
+          "id": "cert",
+          "title_ar": "تثبيت الشهادة",
+          "command": "sudo rpm -Uvh https://<SATELLITE>/pub/katello-ca-consumer-latest.noarch.rpm",
+          "explanation_ar": "يثبت الثقة.",
+          "requires_sudo": true,
+          "risk": "medium",
+          "optional": false,
+          "expected_result_ar": "Package installed.",
+          "notes_ar": ""
+        },
+        {
+          "id": "register",
+          "title_ar": "التسجيل",
+          "command": "sudo subscription-manager register --org=<ORG> --activationkey=<KEY>",
+          "explanation_ar": "يسجل المضيف.",
+          "requires_sudo": true,
+          "risk": "medium",
+          "optional": false,
+          "expected_result_ar": "Registered.",
+          "notes_ar": ""
+        },
+        {
+          "id": "repos",
+          "title_ar": "فحص المستودعات",
+          "command": "sudo subscription-manager repos --list-enabled",
+          "explanation_ar": "يعرض المحتوى.",
+          "requires_sudo": true,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Expected repos.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "عرض الهوية",
+          "command": "sudo subscription-manager identity",
+          "expected_result_ar": "Identity.",
+          "requires_sudo": true
+        }
+      ],
+      "rollback_ar": [
+        "sudo subscription-manager unregister"
+      ],
+      "common_errors": [],
+      "files": [
+        "/etc/rhsm/"
+      ],
+      "ports": [
+        443
+      ],
+      "safety_notes_ar": [],
+      "sources": [],
+      "entity_type": "task",
+      "related_entities": [
+        "cmd-hammer",
+        "cmd-satellite-maintain",
+        "task-satellite-content",
+        "task-satellite-remote-job",
+        "troubleshoot-satellite",
+        "path-advanced-rhel-administration",
+        "cmd-rpm",
+        "cmd-subscription-manager",
+        "concept-satellite-management"
+      ]
+    },
+    {
+      "id": "task-satellite-content",
+      "title_ar": "بناء دورة محتوى Satellite",
+      "summary_ar": "إنشاء Lifecycle Environments ونشر Content View وترويجه.",
+      "category": "satellite",
+      "keywords_ar": [
+        "بناء دورة محتوى Satellite",
+        "إنشاء Lifecycle Environments ونشر Content View وترويجه.",
+        "أريد Content View وبيئات Dev/Test/Prod"
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "tags_ar": [
+        "مسار عملي",
+        "Satellite"
+      ],
+      "status": "reviewed",
+      "content_level": "workflow",
+      "goal_ar": "أريد Content View وبيئات Dev/Test/Prod",
+      "estimated_minutes": 25,
+      "risk": "high",
+      "prerequisites_ar": [],
+      "variables": [
+        {
+          "name": "ORG",
+          "label_ar": "المؤسسة",
+          "example": "Org",
+          "required": true
+        },
+        {
+          "name": "CV",
+          "label_ar": "Content View",
+          "example": "RHEL10_Base",
+          "required": true
+        }
+      ],
+      "steps": [
+        {
+          "id": "env",
+          "title_ar": "إنشاء بيئة",
+          "command": "hammer lifecycle-environment create --name Development --prior Library --organization <ORG>",
+          "explanation_ar": "ينشئ المرحلة.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Created.",
+          "notes_ar": ""
+        },
+        {
+          "id": "publish",
+          "title_ar": "نشر View",
+          "command": "hammer content-view publish --name <CV> --organization <ORG>",
+          "explanation_ar": "يثبت نسخة.",
+          "requires_sudo": false,
+          "risk": "high",
+          "optional": false,
+          "expected_result_ar": "Version created.",
+          "notes_ar": ""
+        },
+        {
+          "id": "promote",
+          "title_ar": "ترويج النسخة",
+          "command": "hammer content-view version promote --content-view <CV> --version <VERSION> --to-lifecycle-environment Development --organization <ORG>",
+          "explanation_ar": "يتيح المحتوى.",
+          "requires_sudo": false,
+          "risk": "high",
+          "optional": false,
+          "expected_result_ar": "Promoted.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "عرض النسخ",
+          "command": "hammer content-view version list --content-view <CV> --organization <ORG>",
+          "expected_result_ar": "Versions.",
+          "requires_sudo": false
+        }
+      ],
+      "rollback_ar": [],
+      "common_errors": [],
+      "files": [],
+      "ports": [],
+      "safety_notes_ar": [
+        "لا تروج إلى Production دون اختبار."
+      ],
+      "sources": [],
+      "entity_type": "task",
+      "related_entities": [
+        "cmd-hammer",
+        "cmd-satellite-maintain",
+        "task-register-satellite",
+        "task-satellite-remote-job",
+        "troubleshoot-satellite",
+        "path-advanced-rhel-administration",
+        "concept-satellite-management"
+      ]
+    },
+    {
+      "id": "task-satellite-remote-job",
+      "title_ar": "تشغيل وظيفة بعيدة من Satellite",
+      "summary_ar": "معاينة Search Query وتشغيل Job Template ومراجعة النتائج.",
+      "category": "satellite",
+      "keywords_ar": [
+        "تشغيل وظيفة بعيدة من Satellite",
+        "معاينة Search Query وتشغيل Job Template ومراجعة النتائج.",
+        "أريد تنفيذ أمر على مجموعة مضيفين"
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "tags_ar": [
+        "مسار عملي",
+        "Satellite"
+      ],
+      "status": "reviewed",
+      "content_level": "workflow",
+      "goal_ar": "أريد تنفيذ أمر على مجموعة مضيفين",
+      "estimated_minutes": 12,
+      "risk": "high",
+      "prerequisites_ar": [],
+      "variables": [
+        {
+          "name": "QUERY",
+          "label_ar": "Search Query",
+          "example": "hostgroup = web",
+          "required": true
+        },
+        {
+          "name": "COMMAND",
+          "label_ar": "الأمر",
+          "example": "uname -r",
+          "required": true
+        }
+      ],
+      "steps": [
+        {
+          "id": "preview",
+          "title_ar": "معاينة الهدف",
+          "command": "hammer host list --search <QUERY>",
+          "explanation_ar": "يعرض المضيفين.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Expected hosts.",
+          "notes_ar": ""
+        },
+        {
+          "id": "run",
+          "title_ar": "تشغيل الوظيفة",
+          "command": "hammer job-invocation create --job-template 'Run Command - Script Default' --inputs command='<COMMAND>' --search-query '<QUERY>'",
+          "explanation_ar": "ينشئ Job.",
+          "requires_sudo": false,
+          "risk": "high",
+          "optional": false,
+          "expected_result_ar": "Job ID.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "عرض الوظيفة",
+          "command": "hammer job-invocation info --id <JOB_ID>",
+          "expected_result_ar": "Host results.",
+          "requires_sudo": false
+        }
+      ],
+      "rollback_ar": [],
+      "common_errors": [],
+      "files": [],
+      "ports": [],
+      "safety_notes_ar": [
+        "ابدأ بأمر قراءة ومجموعة صغيرة."
+      ],
+      "sources": [],
+      "entity_type": "task",
+      "related_entities": [
+        "cmd-hammer",
+        "cmd-satellite-maintain",
+        "task-register-satellite",
+        "task-satellite-content",
+        "troubleshoot-satellite",
+        "path-advanced-rhel-administration",
+        "concept-satellite-management"
+      ]
+    },
+    {
+      "id": "task-register-lightspeed",
+      "title_ar": "تسجيل مضيف في Lightspeed",
+      "summary_ar": "التحقق من الهوية ثم التسجيل والرفع وربط Remediations.",
+      "category": "lightspeed",
+      "keywords_ar": [
+        "تسجيل مضيف في Lightspeed",
+        "التحقق من الهوية ثم التسجيل والرفع وربط Remediations.",
+        "أريد ظهور النظام في Inventory"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "tags_ar": [
+        "مسار عملي",
+        "Lightspeed"
+      ],
+      "status": "reviewed",
+      "content_level": "workflow",
+      "goal_ar": "أريد ظهور النظام في Inventory",
+      "estimated_minutes": 10,
+      "risk": "medium",
+      "prerequisites_ar": [],
+      "variables": [
+        {
+          "name": "NAME",
+          "label_ar": "اسم العرض",
+          "example": "web01",
+          "required": true
+        }
+      ],
+      "steps": [
+        {
+          "id": "identity",
+          "title_ar": "فحص الهوية",
+          "command": "sudo subscription-manager identity",
+          "explanation_ar": "يتحقق من الاشتراك.",
+          "requires_sudo": true,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Identity.",
+          "notes_ar": ""
+        },
+        {
+          "id": "register",
+          "title_ar": "التسجيل",
+          "command": "sudo insights-client --register --display-name <NAME>",
+          "explanation_ar": "يسجل ويرفع بيانات.",
+          "requires_sudo": true,
+          "risk": "medium",
+          "optional": false,
+          "expected_result_ar": "Registered.",
+          "notes_ar": ""
+        },
+        {
+          "id": "rhc",
+          "title_ar": "ربط التنفيذ",
+          "command": "sudo rhc connect",
+          "explanation_ar": "يفعل Tasks وRemediations.",
+          "requires_sudo": true,
+          "risk": "medium",
+          "optional": false,
+          "expected_result_ar": "Connected.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "فحص الحالة",
+          "command": "sudo insights-client --status",
+          "expected_result_ar": "Registered.",
+          "requires_sudo": true
+        }
+      ],
+      "rollback_ar": [],
+      "common_errors": [],
+      "files": [],
+      "ports": [],
+      "safety_notes_ar": [
+        "راجع سياسة جمع البيانات."
+      ],
+      "sources": [],
+      "entity_type": "task",
+      "related_entities": [
+        "cmd-insights-client",
+        "cmd-rhc",
+        "path-advanced-rhel-administration",
+        "cmd-subscription-manager",
+        "concept-lightspeed-insights"
+      ]
+    },
+    {
+      "id": "task-run-ansible",
+      "title_ar": "تشغيل Ansible Playbook بأمان",
+      "summary_ar": "فحص Inventory والصياغة ثم Check Mode والتنفيذ المحدود.",
+      "category": "automation",
+      "keywords_ar": [
+        "تشغيل Ansible Playbook بأمان",
+        "فحص Inventory والصياغة ثم Check Mode والتنفيذ المحدود.",
+        "أريد تنفيذ أتمتة على مجموعة أنظمة"
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "tags_ar": [
+        "مسار عملي",
+        "Ansible"
+      ],
+      "status": "reviewed",
+      "content_level": "workflow",
+      "goal_ar": "أريد تنفيذ أتمتة على مجموعة أنظمة",
+      "estimated_minutes": 20,
+      "risk": "high",
+      "prerequisites_ar": [],
+      "variables": [
+        {
+          "name": "INV",
+          "label_ar": "Inventory",
+          "example": "inventory.ini",
+          "required": true
+        },
+        {
+          "name": "PLAY",
+          "label_ar": "Playbook",
+          "example": "site.yml",
+          "required": true
+        },
+        {
+          "name": "LIMIT",
+          "label_ar": "مجموعة الاختبار",
+          "example": "test",
+          "required": true
+        }
+      ],
+      "steps": [
+        {
+          "id": "inventory",
+          "title_ar": "فحص Inventory",
+          "command": "ansible-inventory -i <INV> --graph",
+          "explanation_ar": "يعرض الهدف.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Correct hosts.",
+          "notes_ar": ""
+        },
+        {
+          "id": "syntax",
+          "title_ar": "فحص الصياغة",
+          "command": "ansible-playbook -i <INV> <PLAY> --syntax-check",
+          "explanation_ar": "يكشف أخطاء البناء.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "No errors.",
+          "notes_ar": ""
+        },
+        {
+          "id": "check",
+          "title_ar": "معاينة",
+          "command": "ansible-playbook -i <INV> <PLAY> --check --diff --limit <LIMIT>",
+          "explanation_ar": "يعرض التغيير.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Expected changes.",
+          "notes_ar": ""
+        },
+        {
+          "id": "run",
+          "title_ar": "تنفيذ محدود",
+          "command": "ansible-playbook -i <INV> <PLAY> --limit <LIMIT>",
+          "explanation_ar": "يطبق الحالة.",
+          "requires_sudo": false,
+          "risk": "high",
+          "optional": false,
+          "expected_result_ar": "failed=0.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "إعادة Check",
+          "command": "ansible-playbook -i <INV> <PLAY> --check --limit <LIMIT>",
+          "expected_result_ar": "changed=0.",
+          "requires_sudo": false
+        }
+      ],
+      "rollback_ar": [],
+      "common_errors": [],
+      "files": [],
+      "ports": [],
+      "safety_notes_ar": [
+        "راجع --limit قبل التنفيذ."
+      ],
+      "sources": [],
+      "entity_type": "task",
+      "related_entities": [
+        "cmd-ansible",
+        "cmd-ansible-playbook",
+        "cmd-ansible-inventory",
+        "cmd-ansible-vault",
+        "path-advanced-rhel-administration",
+        "concept-ansible-core"
+      ]
+    },
+    {
+      "id": "task-build-execution-environment",
+      "title_ar": "بناء Ansible Execution Environment",
+      "summary_ar": "تعريف الاعتماديات وبناء الصورة واختبارها بـansible-navigator.",
+      "category": "automation",
+      "keywords_ar": [
+        "بناء Ansible Execution Environment",
+        "تعريف الاعتماديات وبناء الصورة واختبارها بـansible-navigator.",
+        "أريد بيئة تشغيل موحدة للأتمتة"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "tags_ar": [
+        "مسار عملي",
+        "AAP"
+      ],
+      "status": "reviewed",
+      "content_level": "workflow",
+      "goal_ar": "أريد بيئة تشغيل موحدة للأتمتة",
+      "estimated_minutes": 20,
+      "risk": "medium",
+      "prerequisites_ar": [],
+      "variables": [],
+      "steps": [
+        {
+          "id": "build",
+          "title_ar": "بناء الصورة",
+          "command": "ansible-builder build -f execution-environment.yml -t corp-ee:1.0",
+          "explanation_ar": "يجمع الاعتماديات.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Image built.",
+          "notes_ar": ""
+        },
+        {
+          "id": "inspect",
+          "title_ar": "فحص الصورة",
+          "command": "podman image inspect corp-ee:1.0",
+          "explanation_ar": "يتحقق من Metadata.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Image metadata.",
+          "notes_ar": ""
+        },
+        {
+          "id": "test",
+          "title_ar": "تشغيل اختبار",
+          "command": "ansible-navigator run test.yml -i inventory.ini --eei corp-ee:1.0 --mode stdout",
+          "explanation_ar": "يتحقق من المحتوى.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Successful recap.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "عرض الصورة",
+          "command": "podman images corp-ee",
+          "expected_result_ar": "Image tag.",
+          "requires_sudo": false
+        }
+      ],
+      "rollback_ar": [],
+      "common_errors": [],
+      "files": [],
+      "ports": [],
+      "safety_notes_ar": [
+        "ثبت إصدارات الاعتماديات."
+      ],
+      "sources": [],
+      "entity_type": "task",
+      "related_entities": [
+        "cmd-ansible-navigator",
+        "cmd-ansible-builder",
+        "path-advanced-rhel-administration",
+        "cmd-podman",
+        "concept-aap-platform"
+      ]
+    },
+    {
+      "id": "task-openscap-scan",
+      "title_ar": "فحص امتثال OpenSCAP",
+      "summary_ar": "عرض Profiles وتشغيل فحص ينتج XML وتقرير HTML.",
+      "category": "compliance",
+      "keywords_ar": [
+        "فحص امتثال OpenSCAP",
+        "عرض Profiles وتشغيل فحص ينتج XML وتقرير HTML.",
+        "أريد تقييم النظام مقابل Baseline أمني"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "tags_ar": [
+        "مسار عملي",
+        "OpenSCAP"
+      ],
+      "status": "reviewed",
+      "content_level": "workflow",
+      "goal_ar": "أريد تقييم النظام مقابل Baseline أمني",
+      "estimated_minutes": 15,
+      "risk": "low",
+      "prerequisites_ar": [],
+      "variables": [
+        {
+          "name": "DATASTREAM",
+          "label_ar": "Data Stream",
+          "example": "/usr/share/xml/scap/ssg/content/ssg-rhel10-ds.xml",
+          "required": true
+        },
+        {
+          "name": "PROFILE",
+          "label_ar": "Profile ID",
+          "example": "xccdf_org.ssgproject.content_profile_cis",
+          "required": true
+        }
+      ],
+      "steps": [
+        {
+          "id": "info",
+          "title_ar": "عرض Profiles",
+          "command": "oscap info <DATASTREAM>",
+          "explanation_ar": "يعرض المعرفات.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Profiles.",
+          "notes_ar": ""
+        },
+        {
+          "id": "scan",
+          "title_ar": "تنفيذ الفحص",
+          "command": "sudo oscap xccdf eval --profile <PROFILE> --results results.xml --report report.html <DATASTREAM>",
+          "explanation_ar": "يقيم النظام.",
+          "requires_sudo": true,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Reports created.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "فحص الملفات",
+          "command": "test -s results.xml && test -s report.html",
+          "expected_result_ar": "Files exist.",
+          "requires_sudo": false
+        }
+      ],
+      "rollback_ar": [],
+      "common_errors": [],
+      "files": [],
+      "ports": [],
+      "safety_notes_ar": [
+        "احمِ التقرير لأنه يكشف إعدادات."
+      ],
+      "sources": [],
+      "entity_type": "task",
+      "related_entities": [
+        "cmd-oscap",
+        "cmd-autotailor",
+        "task-openscap-remediate",
+        "troubleshoot-openscap",
+        "path-advanced-rhel-administration",
+        "concept-openscap-compliance"
+      ]
+    },
+    {
+      "id": "task-openscap-remediate",
+      "title_ar": "تخصيص ومعالجة OpenSCAP",
+      "summary_ar": "إنشاء Tailoring ثم فحص أولي ومعالجة وإعادة تقييم.",
+      "category": "compliance",
+      "keywords_ar": [
+        "تخصيص ومعالجة OpenSCAP",
+        "إنشاء Tailoring ثم فحص أولي ومعالجة وإعادة تقييم.",
+        "أريد تطبيق Baseline مع استثناءات معتمدة"
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "tags_ar": [
+        "مسار عملي",
+        "OpenSCAP"
+      ],
+      "status": "reviewed",
+      "content_level": "workflow",
+      "goal_ar": "أريد تطبيق Baseline مع استثناءات معتمدة",
+      "estimated_minutes": 30,
+      "risk": "high",
+      "prerequisites_ar": [],
+      "variables": [],
+      "steps": [
+        {
+          "id": "tailor",
+          "title_ar": "إنشاء Tailoring",
+          "command": "autotailor --unselect=<RULE> --output=tailoring.xml --tailored-profile-id=corp <DATASTREAM> <BASE_PROFILE>",
+          "explanation_ar": "يخصص السياسة.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "File created.",
+          "notes_ar": ""
+        },
+        {
+          "id": "before",
+          "title_ar": "فحص أولي",
+          "command": "sudo oscap xccdf eval --tailoring-file tailoring.xml --profile corp --report before.html <DATASTREAM>",
+          "explanation_ar": "يسجل الحالة.",
+          "requires_sudo": true,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Baseline report.",
+          "notes_ar": ""
+        },
+        {
+          "id": "remediate",
+          "title_ar": "تطبيق المعالجة",
+          "command": "sudo oscap xccdf eval --tailoring-file tailoring.xml --profile corp --remediate <DATASTREAM>",
+          "explanation_ar": "يغير الإعدادات.",
+          "requires_sudo": true,
+          "risk": "high",
+          "optional": false,
+          "expected_result_ar": "Completed.",
+          "notes_ar": ""
+        },
+        {
+          "id": "after",
+          "title_ar": "إعادة الفحص",
+          "command": "sudo oscap xccdf eval --tailoring-file tailoring.xml --profile corp --report after.html <DATASTREAM>",
+          "explanation_ar": "يقيس النتيجة.",
+          "requires_sudo": true,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "After report.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "مقارنة التقارير",
+          "command": "ls -lh before.html after.html",
+          "expected_result_ar": "Two reports.",
+          "requires_sudo": false
+        }
+      ],
+      "rollback_ar": [],
+      "common_errors": [],
+      "files": [],
+      "ports": [],
+      "safety_notes_ar": [
+        "خذ Snapshot واختبر خارج الإنتاج."
+      ],
+      "sources": [],
+      "entity_type": "task",
+      "related_entities": [
+        "cmd-oscap",
+        "cmd-autotailor",
+        "task-openscap-scan",
+        "troubleshoot-openscap",
+        "path-advanced-rhel-administration",
+        "concept-openscap-compliance"
+      ]
+    },
+    {
+      "id": "task-enable-cockpit",
+      "title_ar": "تفعيل RHEL Web Console",
+      "summary_ar": "تثبيت Cockpit وتفعيل Socket وفتح Firewall والتحقق من HTTPS.",
+      "category": "web_console",
+      "keywords_ar": [
+        "تفعيل RHEL Web Console",
+        "تثبيت Cockpit وتفعيل Socket وفتح Firewall والتحقق من HTTPS.",
+        "أريد إدارة النظام عبر Cockpit"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "tags_ar": [
+        "مسار عملي",
+        "Cockpit"
+      ],
+      "status": "reviewed",
+      "content_level": "workflow",
+      "goal_ar": "أريد إدارة النظام عبر Cockpit",
+      "estimated_minutes": 10,
+      "risk": "medium",
+      "prerequisites_ar": [],
+      "variables": [],
+      "steps": [
+        {
+          "id": "install",
+          "title_ar": "تثبيت Cockpit",
+          "command": "sudo dnf install cockpit",
+          "explanation_ar": "يثبت الواجهة.",
+          "requires_sudo": true,
+          "risk": "medium",
+          "optional": false,
+          "expected_result_ar": "Installed.",
+          "notes_ar": ""
+        },
+        {
+          "id": "enable",
+          "title_ar": "تفعيل Socket",
+          "command": "sudo systemctl enable --now cockpit.socket",
+          "explanation_ar": "يبدأ Socket Activation.",
+          "requires_sudo": true,
+          "risk": "medium",
+          "optional": false,
+          "expected_result_ar": "Active.",
+          "notes_ar": ""
+        },
+        {
+          "id": "fw",
+          "title_ar": "فتح Firewall",
+          "command": "sudo firewall-cmd --permanent --add-service=cockpit && sudo firewall-cmd --reload",
+          "explanation_ar": "يفتح الوصول.",
+          "requires_sudo": true,
+          "risk": "medium",
+          "optional": false,
+          "expected_result_ar": "success.",
+          "notes_ar": ""
+        },
+        {
+          "id": "test",
+          "title_ar": "اختبار HTTPS",
+          "command": "curl -kI https://localhost:9090",
+          "explanation_ar": "يتحقق من الواجهة.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "HTTP response.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "حالة Socket",
+          "command": "systemctl is-active cockpit.socket",
+          "expected_result_ar": "active",
+          "requires_sudo": false
+        }
+      ],
+      "rollback_ar": [],
+      "common_errors": [],
+      "files": [],
+      "ports": [
+        9090
+      ],
+      "safety_notes_ar": [
+        "قيد الوصول بشبكة الإدارة."
+      ],
+      "sources": [],
+      "entity_type": "task",
+      "related_entities": [
+        "path-advanced-rhel-administration",
+        "cmd-dnf",
+        "cmd-systemctl",
+        "cmd-firewall-cmd",
+        "cmd-curl",
+        "concept-rhel-web-console"
+      ]
+    },
+    {
+      "id": "task-image-builder",
+      "title_ar": "بناء صورة باستخدام Image Builder",
+      "summary_ar": "رفع Blueprint وحل الاعتماديات وبدء Compose وتنزيل Artifact.",
+      "category": "image_building",
+      "keywords_ar": [
+        "بناء صورة باستخدام Image Builder",
+        "رفع Blueprint وحل الاعتماديات وبدء Compose وتنزيل Artifact.",
+        "أريد تحويل Blueprint إلى صورة RHEL"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "tags_ar": [
+        "مسار عملي",
+        "Image Builder"
+      ],
+      "status": "reviewed",
+      "content_level": "workflow",
+      "goal_ar": "أريد تحويل Blueprint إلى صورة RHEL",
+      "estimated_minutes": 25,
+      "risk": "medium",
+      "prerequisites_ar": [],
+      "variables": [],
+      "steps": [
+        {
+          "id": "push",
+          "title_ar": "رفع Blueprint",
+          "command": "sudo composer-cli blueprints push server.toml",
+          "explanation_ar": "يحفظ Blueprint.",
+          "requires_sudo": true,
+          "risk": "medium",
+          "optional": false,
+          "expected_result_ar": "Pushed.",
+          "notes_ar": ""
+        },
+        {
+          "id": "deps",
+          "title_ar": "حل الاعتماديات",
+          "command": "sudo composer-cli blueprints depsolve server",
+          "explanation_ar": "يتحقق من الحزم.",
+          "requires_sudo": true,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Success.",
+          "notes_ar": ""
+        },
+        {
+          "id": "start",
+          "title_ar": "بدء Compose",
+          "command": "sudo composer-cli compose start server qcow2",
+          "explanation_ar": "يبدأ البناء.",
+          "requires_sudo": true,
+          "risk": "medium",
+          "optional": false,
+          "expected_result_ar": "UUID.",
+          "notes_ar": ""
+        },
+        {
+          "id": "status",
+          "title_ar": "متابعة الحالة",
+          "command": "sudo composer-cli compose status",
+          "explanation_ar": "يعرض FINISHED.",
+          "requires_sudo": true,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "FINISHED.",
+          "notes_ar": ""
+        },
+        {
+          "id": "download",
+          "title_ar": "تنزيل الصورة",
+          "command": "sudo composer-cli compose image <UUID>",
+          "explanation_ar": "ينزل Artifact.",
+          "requires_sudo": true,
+          "risk": "medium",
+          "optional": false,
+          "expected_result_ar": "Image file.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "فحص الملف",
+          "command": "ls -lh <IMAGE>",
+          "expected_result_ar": "Non-zero file.",
+          "requires_sudo": false
+        }
+      ],
+      "rollback_ar": [],
+      "common_errors": [],
+      "files": [],
+      "ports": [],
+      "safety_notes_ar": [
+        "اختبر الصورة على VM."
+      ],
+      "sources": [],
+      "entity_type": "task",
+      "related_entities": [
+        "cmd-composer-cli",
+        "path-advanced-rhel-administration",
+        "concept-image-builder-composer"
+      ]
+    },
+    {
+      "id": "task-leapp-preupgrade",
+      "title_ar": "تشغيل Leapp Preupgrade",
+      "summary_ar": "تحديث النظام وتشغيل التقييم وقراءة Inhibitors وAnswerfile.",
+      "category": "upgrades",
+      "keywords_ar": [
+        "تشغيل Leapp Preupgrade",
+        "تحديث النظام وتشغيل التقييم وقراءة Inhibitors وAnswerfile.",
+        "أريد تقييم جاهزية الترقية"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "tags_ar": [
+        "مسار عملي",
+        "Leapp"
+      ],
+      "status": "reviewed",
+      "content_level": "workflow",
+      "goal_ar": "أريد تقييم جاهزية الترقية",
+      "estimated_minutes": 20,
+      "risk": "low",
+      "prerequisites_ar": [],
+      "variables": [],
+      "steps": [
+        {
+          "id": "pre",
+          "title_ar": "تشغيل التقييم",
+          "command": "sudo leapp preupgrade",
+          "explanation_ar": "ينشئ التقرير.",
+          "requires_sudo": true,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Report created.",
+          "notes_ar": ""
+        },
+        {
+          "id": "report",
+          "title_ar": "قراءة التقرير",
+          "command": "less /var/log/leapp/leapp-report.txt",
+          "explanation_ar": "يعرض المخاطر.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Action list.",
+          "notes_ar": ""
+        },
+        {
+          "id": "answer",
+          "title_ar": "فحص Answerfile",
+          "command": "sudo cat /var/log/leapp/answerfile",
+          "explanation_ar": "يكشف الإجابات الناقصة.",
+          "requires_sudo": true,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "No unanswered.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "عدد الموانع",
+          "command": "grep -c 'inhibitor' /var/log/leapp/leapp-report.txt",
+          "expected_result_ar": "0.",
+          "requires_sudo": false
+        }
+      ],
+      "rollback_ar": [],
+      "common_errors": [],
+      "files": [],
+      "ports": [],
+      "safety_notes_ar": [
+        "لا تتجاهل تحذيرًا عالي الخطورة."
+      ],
+      "sources": [],
+      "entity_type": "task",
+      "related_entities": [
+        "cmd-leapp",
+        "task-leapp-upgrade",
+        "troubleshoot-leapp",
+        "path-advanced-rhel-administration",
+        "cmd-less",
+        "cmd-cat",
+        "concept-leapp-upgrade"
+      ]
+    },
+    {
+      "id": "task-leapp-upgrade",
+      "title_ar": "تنفيذ ترقية Leapp",
+      "summary_ar": "إعادة التقييم وتجهيز المعاملة وإعادة التشغيل والتحقق من الإصدار.",
+      "category": "upgrades",
+      "keywords_ar": [
+        "تنفيذ ترقية Leapp",
+        "إعادة التقييم وتجهيز المعاملة وإعادة التشغيل والتحقق من الإصدار.",
+        "أريد الترقية إلى الإصدار الرئيسي التالي"
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "tags_ar": [
+        "مسار عملي",
+        "Leapp"
+      ],
+      "status": "reviewed",
+      "content_level": "workflow",
+      "goal_ar": "أريد الترقية إلى الإصدار الرئيسي التالي",
+      "estimated_minutes": 45,
+      "risk": "high",
+      "prerequisites_ar": [
+        "Backup مختبر ونافذة صيانة"
+      ],
+      "variables": [],
+      "steps": [
+        {
+          "id": "upgrade",
+          "title_ar": "تجهيز الترقية",
+          "command": "sudo leapp upgrade",
+          "explanation_ar": "يبني بيئة الترقية.",
+          "requires_sudo": true,
+          "risk": "high",
+          "optional": false,
+          "expected_result_ar": "Prepared.",
+          "notes_ar": ""
+        },
+        {
+          "id": "reboot",
+          "title_ar": "بدء الترقية",
+          "command": "sudo systemctl reboot",
+          "explanation_ar": "يقلع إلى بيئة Leapp.",
+          "requires_sudo": true,
+          "risk": "high",
+          "optional": false,
+          "expected_result_ar": "System returns.",
+          "notes_ar": ""
+        },
+        {
+          "id": "release",
+          "title_ar": "فحص الإصدار",
+          "command": "cat /etc/redhat-release",
+          "explanation_ar": "يعرض الإصدار الجديد.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Target release.",
+          "notes_ar": ""
+        },
+        {
+          "id": "failed",
+          "title_ar": "فحص الخدمات",
+          "command": "systemctl --failed",
+          "explanation_ar": "يكشف المشاكل.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "No unexpected failures.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "فحص الحزم",
+          "command": "sudo dnf check",
+          "expected_result_ar": "No dependency issues.",
+          "requires_sudo": true
+        }
+      ],
+      "rollback_ar": [],
+      "common_errors": [],
+      "files": [],
+      "ports": [],
+      "safety_notes_ar": [
+        "لا تعتمد على Downgrade للحزم كخطة رجوع."
+      ],
+      "sources": [],
+      "entity_type": "task",
+      "related_entities": [
+        "cmd-leapp",
+        "task-leapp-preupgrade",
+        "troubleshoot-leapp",
+        "path-advanced-rhel-administration",
+        "cmd-systemctl",
+        "cmd-cat",
+        "concept-leapp-upgrade"
+      ]
+    },
+    {
+      "id": "task-bootc-update",
+      "title_ar": "تحديث ورجوع bootc",
+      "summary_ar": "عرض المرجع وتنزيل التحديث وإعادة التشغيل أو Rollback.",
+      "category": "image_mode",
+      "keywords_ar": [
+        "تحديث ورجوع bootc",
+        "عرض المرجع وتنزيل التحديث وإعادة التشغيل أو Rollback.",
+        "أريد تحديث نظام Image Mode بأمان"
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "9",
+        "10"
+      ],
+      "tags_ar": [
+        "مسار عملي",
+        "bootc"
+      ],
+      "status": "reviewed",
+      "content_level": "workflow",
+      "goal_ar": "أريد تحديث نظام Image Mode بأمان",
+      "estimated_minutes": 20,
+      "risk": "high",
+      "prerequisites_ar": [],
+      "variables": [],
+      "steps": [
+        {
+          "id": "status",
+          "title_ar": "عرض الحالة",
+          "command": "bootc status --verbose",
+          "explanation_ar": "يسجل المرجع الحالي.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Current deployment.",
+          "notes_ar": ""
+        },
+        {
+          "id": "download",
+          "title_ar": "تنزيل فقط",
+          "command": "sudo bootc upgrade --download-only",
+          "explanation_ar": "يجهز التحديث.",
+          "requires_sudo": true,
+          "risk": "medium",
+          "optional": false,
+          "expected_result_ar": "Pending deployment.",
+          "notes_ar": ""
+        },
+        {
+          "id": "reboot",
+          "title_ar": "تطبيق التحديث",
+          "command": "sudo systemctl reboot",
+          "explanation_ar": "يقلع إلى الجديد.",
+          "requires_sudo": true,
+          "risk": "high",
+          "optional": false,
+          "expected_result_ar": "System returns.",
+          "notes_ar": ""
+        },
+        {
+          "id": "rollback",
+          "title_ar": "تجهيز Rollback",
+          "command": "sudo bootc rollback",
+          "explanation_ar": "يختار السابق.",
+          "requires_sudo": true,
+          "risk": "high",
+          "optional": true,
+          "expected_result_ar": "Rollback staged.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "فحص الحالة",
+          "command": "bootc status --verbose",
+          "expected_result_ar": "Booted deployment.",
+          "requires_sudo": false
+        }
+      ],
+      "rollback_ar": [],
+      "common_errors": [],
+      "files": [],
+      "ports": [],
+      "safety_notes_ar": [
+        "راجع تغييرات /etc بعد Rollback."
+      ],
+      "sources": [],
+      "entity_type": "task",
+      "related_entities": [
+        "concept-rhel-image-mode",
+        "cmd-bootc",
+        "troubleshoot-bootc",
+        "cmd-systemctl"
+      ]
+    },
+    {
+      "id": "task-bootc-build",
+      "title_ar": "بناء صورة قرص من bootc",
+      "summary_ar": "جلب صورة المصدر وتشغيل bootc-image-builder وفحص Artifact.",
+      "category": "image_mode",
+      "keywords_ar": [
+        "بناء صورة قرص من bootc",
+        "جلب صورة المصدر وتشغيل bootc-image-builder وفحص Artifact.",
+        "أريد QCOW2 أو ISO من صورة bootc"
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "9",
+        "10"
+      ],
+      "tags_ar": [
+        "مسار عملي",
+        "bootc"
+      ],
+      "status": "reviewed",
+      "content_level": "workflow",
+      "goal_ar": "أريد QCOW2 أو ISO من صورة bootc",
+      "estimated_minutes": 30,
+      "risk": "high",
+      "prerequisites_ar": [],
+      "variables": [
+        {
+          "name": "IMAGE",
+          "label_ar": "صورة bootc",
+          "example": "quay.example/rhel/web:1",
+          "required": true
+        }
+      ],
+      "steps": [
+        {
+          "id": "pull",
+          "title_ar": "جلب المصدر",
+          "command": "sudo podman pull <IMAGE>",
+          "explanation_ar": "يجعل الصورة محلية.",
+          "requires_sudo": true,
+          "risk": "medium",
+          "optional": false,
+          "expected_result_ar": "Pulled.",
+          "notes_ar": ""
+        },
+        {
+          "id": "build",
+          "title_ar": "تشغيل Builder",
+          "command": "sudo podman run --rm --privileged -v ./output:/output -v /var/lib/containers/storage:/var/lib/containers/storage registry.redhat.io/rhel10/bootc-image-builder:latest --type qcow2 <IMAGE>",
+          "explanation_ar": "يبني Artifact.",
+          "requires_sudo": true,
+          "risk": "high",
+          "optional": false,
+          "expected_result_ar": "Build complete.",
+          "notes_ar": ""
+        },
+        {
+          "id": "list",
+          "title_ar": "عرض النتيجة",
+          "command": "find output -type f -ls",
+          "explanation_ar": "يعرض الملف.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Artifact exists.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "حجم output",
+          "command": "du -sh output",
+          "expected_result_ar": "Reasonable size.",
+          "requires_sudo": false
+        }
+      ],
+      "rollback_ar": [],
+      "common_errors": [],
+      "files": [],
+      "ports": [],
+      "safety_notes_ar": [
+        "نفذ Builder على Build Host مخصص."
+      ],
+      "sources": [],
+      "entity_type": "task",
+      "related_entities": [
+        "concept-rhel-image-mode",
+        "cmd-bootc-image-builder",
+        "cmd-podman",
+        "cmd-find"
+      ]
+    },
+    {
+      "id": "task-podman-rootless",
+      "title_ar": "تشغيل خدمة Rootless بـPodman",
+      "summary_ar": "جلب صورة وإنشاء Volume وتشغيل الحاوية ونشر منفذ وفحص السجل.",
+      "category": "containers",
+      "keywords_ar": [
+        "تشغيل خدمة Rootless بـPodman",
+        "جلب صورة وإنشاء Volume وتشغيل الحاوية ونشر منفذ وفحص السجل.",
+        "أريد تشغيل تطبيق داخل حاوية دون Root"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "tags_ar": [
+        "مسار عملي",
+        "Podman"
+      ],
+      "status": "reviewed",
+      "content_level": "workflow",
+      "goal_ar": "أريد تشغيل تطبيق داخل حاوية دون Root",
+      "estimated_minutes": 12,
+      "risk": "medium",
+      "prerequisites_ar": [],
+      "variables": [
+        {
+          "name": "IMAGE",
+          "label_ar": "صورة التطبيق",
+          "example": "registry.example/app:1",
+          "required": true
+        }
+      ],
+      "steps": [
+        {
+          "id": "pull",
+          "title_ar": "جلب الصورة",
+          "command": "podman pull <IMAGE>",
+          "explanation_ar": "ينزل الصورة.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Pulled.",
+          "notes_ar": ""
+        },
+        {
+          "id": "volume",
+          "title_ar": "إنشاء Volume",
+          "command": "podman volume create appdata",
+          "explanation_ar": "يحفظ البيانات.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Created.",
+          "notes_ar": ""
+        },
+        {
+          "id": "run",
+          "title_ar": "تشغيل الحاوية",
+          "command": "podman run -d --name web -p 8080:8080 -v appdata:/var/lib/app:Z <IMAGE>",
+          "explanation_ar": "يشغل Rootless.",
+          "requires_sudo": false,
+          "risk": "medium",
+          "optional": false,
+          "expected_result_ar": "Container ID.",
+          "notes_ar": ""
+        },
+        {
+          "id": "logs",
+          "title_ar": "فحص السجل",
+          "command": "podman logs --tail 100 web",
+          "explanation_ar": "يكشف الأخطاء.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "No critical errors.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "عرض الحالة",
+          "command": "podman ps --filter name=web",
+          "expected_result_ar": "Up.",
+          "requires_sudo": false
+        }
+      ],
+      "rollback_ar": [],
+      "common_errors": [],
+      "files": [],
+      "ports": [
+        8080
+      ],
+      "safety_notes_ar": [
+        "استخدم :Z وفق SELinux."
+      ],
+      "sources": [],
+      "entity_type": "task",
+      "related_entities": [
+        "concept-containers-podman",
+        "cmd-podman"
       ]
     },
     {
@@ -10334,7 +12021,8 @@
         "legacy-pkg-rpm-query",
         "legacy-pkg-rpm-files",
         "path-rhcsa-module-5-packages",
-        "path-rhcsa-module-12-troubleshooting"
+        "path-rhcsa-module-12-troubleshooting",
+        "task-register-satellite"
       ],
       "tags_ar": [
         "مرجع",
@@ -10691,6 +12379,7 @@
         "legacy-fw-reload",
         "concept-network-stack",
         "path-rhcsa-module-11-firewalld",
+        "task-enable-cockpit",
         "concept-persistent-configuration"
       ],
       "tags_ar": [
@@ -11175,6 +12864,7 @@
         "concept-pipelines",
         "path-rhcsa-module-1-basics",
         "path-rhcsa-module-12-troubleshooting",
+        "task-bootc-build",
         "concept-inodes-links"
       ],
       "tags_ar": [
@@ -11350,7 +13040,8 @@
         "create-user-with-admin-access",
         "legacy-perm-chmod-symbolic",
         "legacy-perm-chmod-octal",
-        "path-rhcsa-module-3-permissions"
+        "path-rhcsa-module-3-permissions",
+        "task-validate-kickstart"
       ],
       "tags_ar": [
         "مرجع",
@@ -12400,6 +14091,7 @@
       "related_entities": [
         "path-rhel-beginner",
         "path-rhel-troubleshooting",
+        "path-advanced-rhel-administration",
         "concept-selinux",
         "concept-firewalld",
         "concept-storage-stack",
@@ -12518,7 +14210,8 @@
       "related_entities": [
         "path-rhel-admin",
         "troubleshoot-systemd-service",
-        "concept-ssh"
+        "concept-ssh",
+        "path-advanced-rhel-administration"
       ],
       "tags_ar": [
         "مسار تعلم"
@@ -13723,7 +15416,9 @@
       "related_entities": [
         "legacy-text-cat",
         "legacy-sys-os-release",
-        "path-rhcsa-module-1-basics"
+        "path-rhcsa-module-1-basics",
+        "task-leapp-preupgrade",
+        "task-leapp-upgrade"
       ],
       "tags_ar": [
         "مرجع RHCSA",
@@ -14220,7 +15915,8 @@
       "related_entities": [
         "legacy-file-cp",
         "legacy-file-cp-dir",
-        "path-rhcsa-module-2-filesystem"
+        "path-rhcsa-module-2-filesystem",
+        "task-validate-kickstart"
       ],
       "tags_ar": [
         "مرجع RHCSA",
@@ -14355,7 +16051,9 @@
         "path-rhcsa-module-8-networking",
         "path-rhcsa-module-11-firewalld",
         "path-rhcsa-module-12-troubleshooting",
-        "install-nginx-web-server"
+        "install-nginx-web-server",
+        "task-launch-kickstart",
+        "task-enable-cockpit"
       ],
       "tags_ar": [
         "مرجع RHCSA",
@@ -16875,7 +18573,8 @@
       ],
       "related_entities": [
         "legacy-text-less",
-        "path-rhcsa-module-1-basics"
+        "path-rhcsa-module-1-basics",
+        "task-leapp-preupgrade"
       ],
       "tags_ar": [
         "مرجع RHCSA",
@@ -20481,7 +22180,9 @@
         "legacy-sub-register",
         "legacy-sub-repos",
         "legacy-sub-enable-repo",
-        "path-rhcsa-module-5-packages"
+        "path-rhcsa-module-5-packages",
+        "task-register-satellite",
+        "task-register-lightspeed"
       ],
       "tags_ar": [
         "مرجع RHCSA",
@@ -22144,7 +23845,8 @@
         "10"
       ],
       "related_entities": [
-        "path-rhcsa-module-2-filesystem"
+        "path-rhcsa-module-2-filesystem",
+        "task-validate-kickstart"
       ],
       "tags_ar": [
         "مرجع RHCSA",
@@ -25591,6 +27293,9 @@
         "concept-systemd",
         "cmd-systemctl",
         "path-rhel-admin",
+        "cmd-podman",
+        "task-podman-rootless",
+        "path-advanced-rhel-administration",
         "concept-rhel-image-mode"
       ],
       "tags_ar": [
@@ -25632,6 +27337,7 @@
       ],
       "difficulty": "advanced",
       "supported_versions": [
+        "9",
         "10"
       ],
       "related_entities": [
@@ -25640,7 +27346,16 @@
         "concept-systemd",
         "concept-storage-stack",
         "concept-persistent-configuration",
-        "path-rhel-admin"
+        "path-rhel-admin",
+        "cmd-bootc",
+        "cmd-bootc-image-builder",
+        "task-bootc-update",
+        "task-bootc-build",
+        "concept-rpm-ostree",
+        "path-advanced-rhel-administration",
+        "concept-rhel-management-models",
+        "cmd-rpm-ostree",
+        "troubleshoot-bootc"
       ],
       "tags_ar": [
         "مفهوم",
@@ -25662,6 +27377,2536 @@
       "misconceptions_ar": [
         "Image Mode لا يعني أن الخادم النهائي يعمل داخل حاوية تطبيق.",
         "تثبيت حزمة مباشرة وقت التشغيل ليس البديل الأساسي عن تعديل الصورة وإعادة بنائها."
+      ]
+    },
+    {
+      "id": "concept-kickstart-automation",
+      "entity_type": "concept",
+      "title_ar": "Kickstart وAnaconda للتثبيت الآلي",
+      "summary_ar": "أتمتة تثبيت RHEL من ملف يحدد التخزين والشبكة والحزم والمستخدمين والـScripts.",
+      "category": "advanced_provisioning",
+      "keywords_ar": [
+        "Kickstart وAnaconda للتثبيت الآلي",
+        "أتمتة تثبيت RHEL من ملف يحدد التخزين والشبكة والحزم والمستخدمين والـScripts.",
+        "Kickstart",
+        "Anaconda",
+        "ksvalidator",
+        "inst.ks",
+        "PXE",
+        "%packages",
+        "%pre",
+        "%post",
+        "يتكون من أوامر وأقسام مثل %packages و%pre و%post.",
+        "الخيار inst.ks= يحدد مكان ملف Kickstart.",
+        "ملف /root/anaconda-ks.cfg نقطة بداية بعد مراجعته وتنظيفه.",
+        "ksvalidator يفحص الصياغة والخيارات المهجورة ولا يضمن نجاح التثبيت.",
+        "PXE أو UEFI HTTP Boot يمكن أن يؤتمت الإقلاع والتثبيت كاملًا."
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-ksvalidator",
+        "task-validate-kickstart",
+        "task-launch-kickstart",
+        "troubleshoot-kickstart",
+        "path-advanced-rhel-administration"
+      ],
+      "tags_ar": [
+        "مفهوم",
+        "Kickstart",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "definition_ar": "Kickstart ملف إعداد يقرأه مثبت Anaconda لتحويل قرارات التثبيت اليدوية إلى عملية قابلة للتكرار.",
+      "why_it_matters_ar": "يوحد بناء الخوادم ويدعم التثبيت المحلي والشبكي وPXE وHTTP Boot.",
+      "key_points_ar": [
+        "يتكون من أوامر وأقسام مثل %packages و%pre و%post.",
+        "الخيار inst.ks= يحدد مكان ملف Kickstart.",
+        "ملف /root/anaconda-ks.cfg نقطة بداية بعد مراجعته وتنظيفه.",
+        "ksvalidator يفحص الصياغة والخيارات المهجورة ولا يضمن نجاح التثبيت.",
+        "PXE أو UEFI HTTP Boot يمكن أن يؤتمت الإقلاع والتثبيت كاملًا."
+      ],
+      "mental_model_ar": "Kickstart عقد التثبيت، وAnaconda هو المنفذ.",
+      "misconceptions_ar": [
+        "نجاح validator لا يثبت صلاحية التخزين أو Scripts.",
+        "نشر anaconda-ks.cfg قد يكشف أسرارًا."
+      ]
+    },
+    {
+      "id": "concept-satellite-management",
+      "entity_type": "concept",
+      "title_ar": "Red Hat Satellite وإدارة دورة المضيف والمحتوى",
+      "summary_ar": "إدارة مركزية للتسجيل والمحتوى والتوفير والتنفيذ البعيد عبر Satellite وCapsule.",
+      "category": "satellite",
+      "keywords_ar": [
+        "Red Hat Satellite وإدارة دورة المضيف والمحتوى",
+        "إدارة مركزية للتسجيل والمحتوى والتوفير والتنفيذ البعيد عبر Satellite وCapsule.",
+        "Satellite Server",
+        "Capsule",
+        "Content Views",
+        "Lifecycle Environments",
+        "Activation Keys",
+        "Hammer",
+        "Remote Execution",
+        "Satellite Server نقطة التحكم المركزية.",
+        "Capsule يوزع المحتوى والخدمات في المواقع البعيدة.",
+        "Content View يثبت نسخة محتوى قابلة للترويج.",
+        "Lifecycle Environments تفصل Development وTest وProduction.",
+        "Activation Keys تؤتمت التسجيل وربط المحتوى.",
+        "Hammer وAPI وRemote Execution تدعم الإدارة الآلية."
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-hammer",
+        "cmd-satellite-maintain",
+        "task-register-satellite",
+        "task-satellite-content",
+        "task-satellite-remote-job",
+        "troubleshoot-satellite",
+        "path-advanced-rhel-administration",
+        "concept-rhel-management-models"
+      ],
+      "tags_ar": [
+        "مفهوم",
+        "Satellite",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "definition_ar": "Satellite منصة مؤسسية تجمع إدارة المضيفين والمستودعات وContent Views ودورات الحياة والتوفير والوظائف البعيدة.",
+      "why_it_matters_ar": "توفر محتوى مضبوطًا وصلاحيات وتدقيقًا وخدمات موزعة للأساطيل الكبيرة.",
+      "key_points_ar": [
+        "Satellite Server نقطة التحكم المركزية.",
+        "Capsule يوزع المحتوى والخدمات في المواقع البعيدة.",
+        "Content View يثبت نسخة محتوى قابلة للترويج.",
+        "Lifecycle Environments تفصل Development وTest وProduction.",
+        "Activation Keys تؤتمت التسجيل وربط المحتوى.",
+        "Hammer وAPI وRemote Execution تدعم الإدارة الآلية."
+      ],
+      "mental_model_ar": "Satellite برج التحكم، وCapsules محطات إقليمية، والمضيفون يستهلكون المحتوى المعتمد.",
+      "misconceptions_ar": [
+        "مزامنة المستودع لا تعني وصوله لكل مضيف.",
+        "Promote لا يثبت الحزم تلقائيًا."
+      ]
+    },
+    {
+      "id": "concept-lightspeed-insights",
+      "entity_type": "concept",
+      "title_ar": "Red Hat Lightspeed وInsights",
+      "summary_ar": "تحليلات للمخزون والتوصيات والثغرات والامتثال والبرمجيات الخبيثة وخطط المعالجة.",
+      "category": "lightspeed",
+      "keywords_ar": [
+        "Red Hat Lightspeed وInsights",
+        "تحليلات للمخزون والتوصيات والثغرات والامتثال والبرمجيات الخبيثة وخطط المعالجة.",
+        "Red Hat Lightspeed",
+        "Insights",
+        "Advisor",
+        "Vulnerability",
+        "Compliance",
+        "Malware",
+        "Remediations",
+        "Inventory",
+        "insights-client يجمع ويرفع البيانات.",
+        "Inventory ينظم الأنظمة والمجموعات والحقائق.",
+        "Advisor يقدم توصيات تشغيلية.",
+        "Vulnerability وCompliance وMalware تغطي مجالات أمنية مختلفة.",
+        "Remediations تنشئ خطط إصلاح قابلة للتنفيذ.",
+        "يمكن ضبط جمع البيانات والاستثناءات."
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-insights-client",
+        "cmd-rhc",
+        "task-register-lightspeed",
+        "path-advanced-rhel-administration",
+        "concept-rhel-management-models"
+      ],
+      "tags_ar": [
+        "مفهوم",
+        "Lightspeed",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "definition_ar": "Lightspeed، المعروف سابقًا باسم Insights، يجمع حقائق مضبوطة من RHEL ويحوّلها إلى مخزون وتحليلات وتوصيات.",
+      "why_it_matters_ar": "يكشف مخاطر الأسطول استباقيًا بدل انتظار الأعطال على كل خادم.",
+      "key_points_ar": [
+        "insights-client يجمع ويرفع البيانات.",
+        "Inventory ينظم الأنظمة والمجموعات والحقائق.",
+        "Advisor يقدم توصيات تشغيلية.",
+        "Vulnerability وCompliance وMalware تغطي مجالات أمنية مختلفة.",
+        "Remediations تنشئ خطط إصلاح قابلة للتنفيذ.",
+        "يمكن ضبط جمع البيانات والاستثناءات."
+      ],
+      "mental_model_ar": "العميل يرسل حقائق، والخدمة تربطها بمعرفة Red Hat وتعيد توصيات.",
+      "misconceptions_ar": [
+        "المعالجة لا تستبدل Change Management.",
+        "الخدمة لا تعني رفع كل ملفات النظام."
+      ]
+    },
+    {
+      "id": "concept-ansible-core",
+      "entity_type": "concept",
+      "title_ar": "أساسيات أتمتة Ansible",
+      "summary_ar": "إدارة الحالة المطلوبة عبر Inventory وModules وPlaybooks وVariables وRoles وCollections.",
+      "category": "automation",
+      "keywords_ar": [
+        "أساسيات أتمتة Ansible",
+        "إدارة الحالة المطلوبة عبر Inventory وModules وPlaybooks وVariables وRoles وCollections.",
+        "Ansible",
+        "Inventory",
+        "Modules",
+        "Tasks",
+        "Playbooks",
+        "Idempotency",
+        "Roles",
+        "Collections",
+        "Vault",
+        "Inventory يحدد المضيفين والمجموعات والمتغيرات.",
+        "Module ينفذ وظيفة، وTask يستدعيها، وPlay يربطها بالمضيفين.",
+        "Idempotency تمنع تغييرًا إضافيًا عند تحقق الحالة.",
+        "Handlers تعمل عند حدوث تغيير فعلي.",
+        "Roles وCollections تنظمان المحتوى القابل لإعادة الاستخدام.",
+        "Vault يحمي الأسرار."
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-ansible",
+        "cmd-ansible-playbook",
+        "cmd-ansible-inventory",
+        "cmd-ansible-vault",
+        "task-run-ansible",
+        "path-advanced-rhel-administration",
+        "concept-rhel-management-models"
+      ],
+      "tags_ar": [
+        "مفهوم",
+        "Ansible",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "definition_ar": "Ansible محرك أتمتة يطبق مهامًا على مضيفين داخل Inventory باستخدام وحدات وPlaybooks مكتوبة بصيغة YAML.",
+      "why_it_matters_ar": "يحوّل إجراءات الإدارة المتكررة إلى كود قابل للمراجعة وإعادة التنفيذ على عدد كبير من الأنظمة.",
+      "key_points_ar": [
+        "Inventory يحدد المضيفين والمجموعات والمتغيرات.",
+        "Module ينفذ وظيفة، وTask يستدعيها، وPlay يربطها بالمضيفين.",
+        "Idempotency تمنع تغييرًا إضافيًا عند تحقق الحالة.",
+        "Handlers تعمل عند حدوث تغيير فعلي.",
+        "Roles وCollections تنظمان المحتوى القابل لإعادة الاستخدام.",
+        "Vault يحمي الأسرار."
+      ],
+      "mental_model_ar": "Playbook وصف للحالة المطلوبة وليس مجرد قائمة أوامر.",
+      "misconceptions_ar": [
+        "استخدام shell لكل شيء يفقد مزايا الوحدات.",
+        "الأسرار النصية لا تنتمي إلى Git."
+      ]
+    },
+    {
+      "id": "concept-aap-platform",
+      "entity_type": "concept",
+      "title_ar": "Red Hat Ansible Automation Platform",
+      "summary_ar": "تشغيل الأتمتة مؤسسيًا عبر Controller وExecution Environments وAutomation Hub وRBAC.",
+      "category": "automation",
+      "keywords_ar": [
+        "Red Hat Ansible Automation Platform",
+        "تشغيل الأتمتة مؤسسيًا عبر Controller وExecution Environments وAutomation Hub وRBAC.",
+        "Ansible Automation Platform",
+        "Automation Controller",
+        "Execution Environments",
+        "Automation Hub",
+        "RBAC",
+        "Event-Driven Ansible",
+        "Automation Controller يدير Projects وInventories وCredentials وJob Templates.",
+        "Execution Environment صورة تحتوي ansible-core والاعتماديات.",
+        "Private Automation Hub يخزن المحتوى المعتمد.",
+        "RBAC يحدد من يرى أو يشغل أو يعدل الموارد.",
+        "ansible-navigator يشغل المحتوى داخل EE.",
+        "Event-Driven Ansible يربط الأحداث بـRulebooks وإجراءات."
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-ansible-navigator",
+        "cmd-ansible-builder",
+        "task-build-execution-environment",
+        "path-advanced-rhel-administration",
+        "concept-rhel-management-models"
+      ],
+      "tags_ar": [
+        "مفهوم",
+        "AAP",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "definition_ar": "AAP يضيف إدارة مركزية وتنفيذًا معزولًا وصلاحيات وتدقيقًا وتوزيع محتوى فوق Ansible.",
+      "why_it_matters_ar": "يسمح بتفويض وجدولة ومراقبة الأتمتة دون توزيع وصول مباشر وأسرار على كل مشغل.",
+      "key_points_ar": [
+        "Automation Controller يدير Projects وInventories وCredentials وJob Templates.",
+        "Execution Environment صورة تحتوي ansible-core والاعتماديات.",
+        "Private Automation Hub يخزن المحتوى المعتمد.",
+        "RBAC يحدد من يرى أو يشغل أو يعدل الموارد.",
+        "ansible-navigator يشغل المحتوى داخل EE.",
+        "Event-Driven Ansible يربط الأحداث بـRulebooks وإجراءات."
+      ],
+      "mental_model_ar": "المحتوى في Git، الاعتماديات في EE، والتنفيذ والتدقيق في Controller.",
+      "misconceptions_ar": [
+        "Controller لا يصلح Playbook سيئ التصميم.",
+        "Execution Environment ليست المضيف المُدار."
+      ]
+    },
+    {
+      "id": "concept-openscap-compliance",
+      "entity_type": "concept",
+      "title_ar": "OpenSCAP وSCAP Security Guide",
+      "summary_ar": "فحص توافق النظام وتوليد تقارير وتخصيص Profiles وتطبيق معالجة آلية.",
+      "category": "compliance",
+      "keywords_ar": [
+        "OpenSCAP وSCAP Security Guide",
+        "فحص توافق النظام وتوليد تقارير وتخصيص Profiles وتطبيق معالجة آلية.",
+        "OpenSCAP",
+        "oscap",
+        "SCAP Security Guide",
+        "XCCDF",
+        "OVAL",
+        "profiles",
+        "tailoring",
+        "remediation",
+        "oscap info يعرض Profiles.",
+        "oscap xccdf eval ينفذ الفحص.",
+        "يمكن إنشاء XML وHTML.",
+        "--remediate يغير إعداد النظام.",
+        "autotailor ينشئ Tailoring مستقلًا.",
+        "يجب مطابقة محتوى SCAP لإصدار RHEL."
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-oscap",
+        "cmd-autotailor",
+        "task-openscap-scan",
+        "task-openscap-remediate",
+        "troubleshoot-openscap",
+        "path-advanced-rhel-administration"
+      ],
+      "tags_ar": [
+        "مفهوم",
+        "OpenSCAP",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "definition_ar": "OpenSCAP يقيّم النظام مقابل محتوى امتثال مثل SCAP Security Guide باستخدام Profiles وقواعد XCCDF وOVAL.",
+      "why_it_matters_ar": "ينتج قياسًا وأدلة قابلة للتكرار بدل التدقيق اليدوي غير المتسق.",
+      "key_points_ar": [
+        "oscap info يعرض Profiles.",
+        "oscap xccdf eval ينفذ الفحص.",
+        "يمكن إنشاء XML وHTML.",
+        "--remediate يغير إعداد النظام.",
+        "autotailor ينشئ Tailoring مستقلًا.",
+        "يجب مطابقة محتوى SCAP لإصدار RHEL."
+      ],
+      "mental_model_ar": "السياسة مجموعة اختبارات، والProfile يختارها، وoscap يقيس المضيف.",
+      "misconceptions_ar": [
+        "Pass لا يعني الحماية من كل تهديد.",
+        "Remediation يحتاج اختبارًا وخطة رجوع."
+      ]
+    },
+    {
+      "id": "concept-rhel-web-console",
+      "entity_type": "concept",
+      "title_ar": "RHEL Web Console المبنية على Cockpit",
+      "summary_ar": "واجهة ويب لإدارة الخدمات والسجلات والشبكات والتخزين والحسابات والطرفية.",
+      "category": "web_console",
+      "keywords_ar": [
+        "RHEL Web Console المبنية على Cockpit",
+        "واجهة ويب لإدارة الخدمات والسجلات والشبكات والتخزين والحسابات والطرفية.",
+        "Cockpit",
+        "RHEL web console",
+        "cockpit.socket",
+        "9090",
+        "services",
+        "logs",
+        "storage",
+        "networking",
+        "تعمل عادة عبر cockpit.socket.",
+        "المنفذ الافتراضي 9090 عبر HTTPS.",
+        "الإضافات توسع التخزين والآلات الافتراضية والبرامج.",
+        "يمكن إدارة مضيفين بعيدين.",
+        "حسابات النظام وpolkit تظل مطبقة."
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "task-enable-cockpit",
+        "path-advanced-rhel-administration"
+      ],
+      "tags_ar": [
+        "مفهوم",
+        "Cockpit",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "definition_ar": "Cockpit واجهة تعتمد على خدمات RHEL وواجهاتها الحالية وتستخدم Socket Activation وHTTPS.",
+      "why_it_matters_ar": "تسهل الإدارة اليومية والتعليم وتربط حالة الخدمات بالسجلات والموارد.",
+      "key_points_ar": [
+        "تعمل عادة عبر cockpit.socket.",
+        "المنفذ الافتراضي 9090 عبر HTTPS.",
+        "الإضافات توسع التخزين والآلات الافتراضية والبرامج.",
+        "يمكن إدارة مضيفين بعيدين.",
+        "حسابات النظام وpolkit تظل مطبقة."
+      ],
+      "mental_model_ar": "Cockpit نافذة إلى systemd وNetworkManager والتخزين والJournal.",
+      "misconceptions_ar": [
+        "فتح المنفذ لا يكفي إذا كان Socket متوقفًا.",
+        "الواجهة لا تلغي فهم أثر التغييرات."
+      ]
+    },
+    {
+      "id": "concept-image-builder-composer",
+      "entity_type": "concept",
+      "title_ar": "RHEL Image Builder وComposer",
+      "summary_ar": "إنشاء صور RHEL مخصصة من Blueprint مع حزم وخدمات ومستخدمين وصيغ نشر متعددة.",
+      "category": "image_building",
+      "keywords_ar": [
+        "RHEL Image Builder وComposer",
+        "إنشاء صور RHEL مخصصة من Blueprint مع حزم وخدمات ومستخدمين وصيغ نشر متعددة.",
+        "RHEL Image Builder",
+        "osbuild-composer",
+        "composer-cli",
+        "Blueprint",
+        "TOML",
+        "Compose",
+        "qcow2",
+        "Blueprint يصف الحزم والتخصيصات.",
+        "Compose عملية بناء محددة ونتيجتها.",
+        "composer-cli يدير Blueprints وComposes.",
+        "أنواع الصور تعتمد على الإصدار والمعمارية.",
+        "واجهة Cockpit تقدم مسارًا رسوميًا.",
+        "يختلف عن bootc-image-builder."
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-composer-cli",
+        "task-image-builder",
+        "path-advanced-rhel-administration",
+        "concept-rhel-management-models"
+      ],
+      "tags_ar": [
+        "مفهوم",
+        "Image Builder",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "definition_ar": "Image Builder يحول Blueprint بصيغة TOML إلى صورة نظام مخصصة للـVM أو السحابة أو المثبت.",
+      "why_it_matters_ar": "يجعل إعداد النظام Artifact قابلًا لإعادة البناء والنشر.",
+      "key_points_ar": [
+        "Blueprint يصف الحزم والتخصيصات.",
+        "Compose عملية بناء محددة ونتيجتها.",
+        "composer-cli يدير Blueprints وComposes.",
+        "أنواع الصور تعتمد على الإصدار والمعمارية.",
+        "واجهة Cockpit تقدم مسارًا رسوميًا.",
+        "يختلف عن bootc-image-builder."
+      ],
+      "mental_model_ar": "Blueprint وصف، Compose تنفيذ، وArtifact نتيجة نشر.",
+      "misconceptions_ar": [
+        "تعديل Blueprint لا يغير صورة سابقة.",
+        "لا تخمن Image Type؛ اعرض الأنواع المدعومة."
+      ]
+    },
+    {
+      "id": "concept-leapp-upgrade",
+      "entity_type": "concept",
+      "title_ar": "الترقية الموضعية باستخدام Leapp",
+      "summary_ar": "تقييم وتنفيذ ترقية RHEL بين إصدارين رئيسيين متتاليين مع Reports وInhibitors.",
+      "category": "upgrades",
+      "keywords_ar": [
+        "الترقية الموضعية باستخدام Leapp",
+        "تقييم وتنفيذ ترقية RHEL بين إصدارين رئيسيين متتاليين مع Reports وInhibitors.",
+        "Leapp",
+        "preupgrade",
+        "inhibitor",
+        "answerfile",
+        "RHEL 8 to 9",
+        "RHEL 9 to 10",
+        "المسار يكون بين إصدارات متتالية.",
+        "preupgrade يولد leapp-report.",
+        "Inhibitor يمنع الترقية.",
+        "answerfile يسجل القرارات المطلوبة.",
+        "upgrade يجهز المعاملة ثم يحتاج Reboot.",
+        "الرجوع يعتمد على Backup أو Snapshot."
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-leapp",
+        "task-leapp-preupgrade",
+        "task-leapp-upgrade",
+        "troubleshoot-leapp",
+        "path-advanced-rhel-administration"
+      ],
+      "tags_ar": [
+        "مفهوم",
+        "Leapp",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "definition_ar": "Leapp يفحص النظام ويجهز بيئة ترقية لاستبدال الإصدار الحالي بالإصدار الرئيسي التالي المدعوم.",
+      "why_it_matters_ar": "يسمح بالترقية دون إعادة تثبيت لكنه يحتاج تحضيرًا ونسخًا احتياطيًا.",
+      "key_points_ar": [
+        "المسار يكون بين إصدارات متتالية.",
+        "preupgrade يولد leapp-report.",
+        "Inhibitor يمنع الترقية.",
+        "answerfile يسجل القرارات المطلوبة.",
+        "upgrade يجهز المعاملة ثم يحتاج Reboot.",
+        "الرجوع يعتمد على Backup أو Snapshot."
+      ],
+      "mental_model_ar": "Leapp بوابة فحص ثم معاملة ترقية؛ لا تعبر قبل زوال الموانع.",
+      "misconceptions_ar": [
+        "لا يمكن القفز من 8 إلى 10 مباشرة.",
+        "نجاح الفحص لا يستبدل النسخ الاحتياطي."
+      ]
+    },
+    {
+      "id": "concept-rpm-ostree",
+      "entity_type": "concept",
+      "title_ar": "rpm-ostree والانتقال إلى bootc",
+      "summary_ar": "إدارة Deployments ذرية في أجيال RHEL for Edge السابقة وفهم مسار الانتقال إلى Image Mode.",
+      "category": "image_mode",
+      "keywords_ar": [
+        "rpm-ostree والانتقال إلى bootc",
+        "إدارة Deployments ذرية في أجيال RHEL for Edge السابقة وفهم مسار الانتقال إلى Image Mode.",
+        "rpm-ostree",
+        "OSTree",
+        "deployments",
+        "rollback",
+        "package layering",
+        "RHEL for Edge",
+        "bootc migration",
+        "status يعرض Deployments.",
+        "upgrade ينشئ Deployment جديدًا.",
+        "rollback يحدد إصدارًا سابقًا.",
+        "Package Layering يزيد اختلاف المضيف.",
+        "bootc هو المسار الحديث.",
+        "rpm-ostree غير مدعوم لتعديل أنظمة bootc."
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9"
+      ],
+      "related_entities": [
+        "cmd-rpm-ostree",
+        "cmd-bootc",
+        "concept-rhel-image-mode",
+        "path-advanced-rhel-administration"
+      ],
+      "tags_ar": [
+        "مفهوم",
+        "rpm-ostree",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "definition_ar": "rpm-ostree يجمع OSTree وRPM metadata لإنشاء حالات نظام قابلة للإقلاع والرجوع.",
+      "why_it_matters_ar": "مهم للأنظمة القديمة ولتخطيط الانتقال إلى bootc.",
+      "key_points_ar": [
+        "status يعرض Deployments.",
+        "upgrade ينشئ Deployment جديدًا.",
+        "rollback يحدد إصدارًا سابقًا.",
+        "Package Layering يزيد اختلاف المضيف.",
+        "bootc هو المسار الحديث.",
+        "rpm-ostree غير مدعوم لتعديل أنظمة bootc."
+      ],
+      "mental_model_ar": "كل تحديث شريحة نظام جديدة، والإقلاع يختار الشريحة.",
+      "misconceptions_ar": [
+        "ليس مدير حزم تقليديًا مثل dnf.",
+        "لا تستخدمه لتعديل bootc."
+      ]
+    },
+    {
+      "id": "concept-rhel-management-models",
+      "entity_type": "concept",
+      "title_ar": "نماذج إدارة RHEL المتقدمة",
+      "summary_ar": "اختيار متى تستخدم الحزم أو Ansible أو الصور أو Satellite أو Lightspeed.",
+      "category": "concepts",
+      "keywords_ar": [
+        "نماذج إدارة RHEL المتقدمة",
+        "اختيار متى تستخدم الحزم أو Ansible أو الصور أو Satellite أو Lightspeed.",
+        "Package Mode",
+        "configuration management",
+        "Image Mode",
+        "fleet management",
+        "drift",
+        "desired state",
+        "Package Mode مرن للتعديل المباشر.",
+        "Ansible يطبق الحالة المطلوبة.",
+        "Image Builder ينتج صورًا مخصصة.",
+        "bootc يجعل نظام التشغيل Artifact صورة.",
+        "Satellite يدير المحتوى والمضيفين.",
+        "Lightspeed يحلل المخاطر والتوصيات."
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "concept-ansible-core",
+        "concept-aap-platform",
+        "concept-image-builder-composer",
+        "concept-rhel-image-mode",
+        "concept-satellite-management",
+        "concept-lightspeed-insights",
+        "path-advanced-rhel-administration"
+      ],
+      "tags_ar": [
+        "مفهوم",
+        "Architecture",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "definition_ar": "إدارة RHEL قد تكون تعديلًا مباشرًا أو تطبيق Desired State أو نشر صورة كاملة أو إدارة أسطول مركزي.",
+      "why_it_matters_ar": "الاختيار الواعي يقلل Drift ويربط البناء والنشر والمراقبة والمعالجة.",
+      "key_points_ar": [
+        "Package Mode مرن للتعديل المباشر.",
+        "Ansible يطبق الحالة المطلوبة.",
+        "Image Builder ينتج صورًا مخصصة.",
+        "bootc يجعل نظام التشغيل Artifact صورة.",
+        "Satellite يدير المحتوى والمضيفين.",
+        "Lightspeed يحلل المخاطر والتوصيات."
+      ],
+      "mental_model_ar": "افصل المراحل إلى بناء ونشر وتكوين ومراقبة ومعالجة ثم اختر أداة لكل مرحلة.",
+      "misconceptions_ar": [
+        "Golden Image وحدها لا تمنع Drift.",
+        "المنصة المركزية لا تلغي Source of Truth."
+      ]
+    },
+    {
+      "id": "cmd-ksvalidator",
+      "entity_type": "command",
+      "title_ar": "مرجع أمر ksvalidator",
+      "summary_ar": "فحص صياغة Kickstart والخيارات المهجورة.",
+      "category": "advanced_provisioning",
+      "keywords_ar": [
+        "مرجع أمر ksvalidator",
+        "فحص صياغة Kickstart والخيارات المهجورة.",
+        "ksvalidator",
+        "ksvalidator [-v RHEL_VERSION] <KICKSTART_FILE>",
+        "ksvalidator -v RHEL10 server.ks"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "task-validate-kickstart",
+        "task-launch-kickstart",
+        "troubleshoot-kickstart",
+        "path-advanced-rhel-administration",
+        "concept-kickstart-automation"
+      ],
+      "tags_ar": [
+        "مرجع",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "command_name": "ksvalidator",
+      "purpose_ar": "فحص صياغة Kickstart والخيارات المهجورة.",
+      "syntax": "ksvalidator [-v RHEL_VERSION] <KICKSTART_FILE>",
+      "provided_by": "pykickstart",
+      "requires_sudo": false,
+      "risk": "low",
+      "options": [
+        {
+          "option": "-v RHEL10",
+          "description_ar": "التحقق وفق قواعد RHEL 10.",
+          "example": "ksvalidator -v RHEL10 server.ks"
+        },
+        {
+          "option": "--list-versions",
+          "description_ar": "عرض الإصدارات المدعومة.",
+          "example": "ksvalidator --list-versions"
+        }
+      ],
+      "examples": [
+        {
+          "title_ar": "فحص ملف",
+          "command": "ksvalidator -v RHEL10 server.ks",
+          "explanation_ar": "يفحص الصياغة المعروفة."
+        }
+      ],
+      "common_mistakes_ar": [
+        "لا يضمن نجاح التثبيت.",
+        "لا يفحص Scripts كاملًا."
+      ]
+    },
+    {
+      "id": "cmd-hammer",
+      "entity_type": "command",
+      "title_ar": "مرجع أمر hammer",
+      "summary_ar": "إدارة موارد Satellite من CLI.",
+      "category": "satellite",
+      "keywords_ar": [
+        "مرجع أمر hammer",
+        "إدارة موارد Satellite من CLI.",
+        "hammer",
+        "hammer <RESOURCE> <ACTION> [OPTIONS]",
+        "hammer host list --organization <ORG>"
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-satellite-maintain",
+        "task-register-satellite",
+        "task-satellite-content",
+        "task-satellite-remote-job",
+        "troubleshoot-satellite",
+        "path-advanced-rhel-administration",
+        "concept-satellite-management"
+      ],
+      "tags_ar": [
+        "مرجع",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "command_name": "hammer",
+      "purpose_ar": "إدارة موارد Satellite من CLI.",
+      "syntax": "hammer <RESOURCE> <ACTION> [OPTIONS]",
+      "provided_by": "Hammer CLI",
+      "requires_sudo": false,
+      "risk": "high",
+      "options": [
+        {
+          "option": "host list",
+          "description_ar": "عرض المضيفين.",
+          "example": "hammer host list"
+        },
+        {
+          "option": "content-view list",
+          "description_ar": "عرض Content Views.",
+          "example": "hammer content-view list"
+        },
+        {
+          "option": "job-invocation list",
+          "description_ar": "عرض الوظائف البعيدة.",
+          "example": "hammer job-invocation list"
+        }
+      ],
+      "examples": [
+        {
+          "title_ar": "عرض المضيفين",
+          "command": "hammer host list --organization <ORG>",
+          "explanation_ar": "يعرض مضيفي المؤسسة."
+        }
+      ],
+      "common_mistakes_ar": [
+        "نفذ الأوامر ضمن Organization الصحيحة."
+      ]
+    },
+    {
+      "id": "cmd-satellite-maintain",
+      "entity_type": "command",
+      "title_ar": "مرجع أمر satellite-maintain",
+      "summary_ar": "صيانة وفحص وترقية ونسخ Satellite احتياطيًا.",
+      "category": "satellite",
+      "keywords_ar": [
+        "مرجع أمر satellite-maintain",
+        "صيانة وفحص وترقية ونسخ Satellite احتياطيًا.",
+        "satellite-maintain",
+        "satellite-maintain <health|service|backup|upgrade> <ACTION>",
+        "sudo satellite-maintain health check"
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-hammer",
+        "task-register-satellite",
+        "task-satellite-content",
+        "task-satellite-remote-job",
+        "troubleshoot-satellite",
+        "path-advanced-rhel-administration",
+        "concept-satellite-management"
+      ],
+      "tags_ar": [
+        "مرجع",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "command_name": "satellite-maintain",
+      "purpose_ar": "صيانة وفحص وترقية ونسخ Satellite احتياطيًا.",
+      "syntax": "satellite-maintain <health|service|backup|upgrade> <ACTION>",
+      "provided_by": "foreman-maintain",
+      "requires_sudo": true,
+      "risk": "high",
+      "options": [
+        {
+          "option": "health check",
+          "description_ar": "فحص الصحة.",
+          "example": "sudo satellite-maintain health check"
+        },
+        {
+          "option": "service status",
+          "description_ar": "عرض الخدمات.",
+          "example": "sudo satellite-maintain service status"
+        },
+        {
+          "option": "upgrade check",
+          "description_ar": "فحص الجاهزية.",
+          "example": "sudo satellite-maintain upgrade check"
+        }
+      ],
+      "examples": [
+        {
+          "title_ar": "فحص الصحة",
+          "command": "sudo satellite-maintain health check",
+          "explanation_ar": "يشغل مجموعة الفحوصات."
+        }
+      ],
+      "common_mistakes_ar": [
+        "لا تشغل صيانة ثقيلة أثناء الإنتاج."
+      ]
+    },
+    {
+      "id": "cmd-insights-client",
+      "entity_type": "command",
+      "title_ar": "مرجع أمر insights-client",
+      "summary_ar": "تسجيل النظام وجمع بيانات Lightspeed ورفعها.",
+      "category": "lightspeed",
+      "keywords_ar": [
+        "مرجع أمر insights-client",
+        "تسجيل النظام وجمع بيانات Lightspeed ورفعها.",
+        "insights-client",
+        "insights-client [OPTIONS]",
+        "sudo insights-client"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-rhc",
+        "task-register-lightspeed",
+        "path-advanced-rhel-administration",
+        "concept-lightspeed-insights"
+      ],
+      "tags_ar": [
+        "مرجع",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "command_name": "insights-client",
+      "purpose_ar": "تسجيل النظام وجمع بيانات Lightspeed ورفعها.",
+      "syntax": "insights-client [OPTIONS]",
+      "provided_by": "insights-client",
+      "requires_sudo": true,
+      "risk": "medium",
+      "options": [
+        {
+          "option": "--register",
+          "description_ar": "تسجيل النظام.",
+          "example": "sudo insights-client --register"
+        },
+        {
+          "option": "--status",
+          "description_ar": "عرض الحالة.",
+          "example": "sudo insights-client --status"
+        },
+        {
+          "option": "--display-name NAME",
+          "description_ar": "تعيين اسم العرض.",
+          "example": "sudo insights-client --display-name web01"
+        }
+      ],
+      "examples": [
+        {
+          "title_ar": "رفع فوري",
+          "command": "sudo insights-client",
+          "explanation_ar": "يجمع ويرفع Archive."
+        }
+      ],
+      "common_mistakes_ar": [
+        "راجع إعدادات الخصوصية."
+      ]
+    },
+    {
+      "id": "cmd-rhc",
+      "entity_type": "command",
+      "title_ar": "مرجع أمر rhc",
+      "summary_ar": "ربط RHEL بخدمات Red Hat وتنفيذ Remediations.",
+      "category": "lightspeed",
+      "keywords_ar": [
+        "مرجع أمر rhc",
+        "ربط RHEL بخدمات Red Hat وتنفيذ Remediations.",
+        "rhc",
+        "rhc <connect|status|disconnect>",
+        "sudo rhc connect"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-insights-client",
+        "task-register-lightspeed",
+        "path-advanced-rhel-administration",
+        "concept-lightspeed-insights"
+      ],
+      "tags_ar": [
+        "مرجع",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "command_name": "rhc",
+      "purpose_ar": "ربط RHEL بخدمات Red Hat وتنفيذ Remediations.",
+      "syntax": "rhc <connect|status|disconnect>",
+      "provided_by": "rhc",
+      "requires_sudo": true,
+      "risk": "medium",
+      "options": [
+        {
+          "option": "connect",
+          "description_ar": "ربط الخدمات.",
+          "example": "sudo rhc connect"
+        },
+        {
+          "option": "status",
+          "description_ar": "عرض الحالة.",
+          "example": "sudo rhc status"
+        },
+        {
+          "option": "disconnect",
+          "description_ar": "فصل الاتصال.",
+          "example": "sudo rhc disconnect"
+        }
+      ],
+      "examples": [
+        {
+          "title_ar": "ربط النظام",
+          "command": "sudo rhc connect",
+          "explanation_ar": "يفعّل الاتصال."
+        }
+      ],
+      "common_mistakes_ar": [
+        "افهم أثر disconnect."
+      ]
+    },
+    {
+      "id": "cmd-ansible",
+      "entity_type": "command",
+      "title_ar": "مرجع أمر ansible",
+      "summary_ar": "تنفيذ مهمة Ad-hoc على Inventory.",
+      "category": "automation",
+      "keywords_ar": [
+        "مرجع أمر ansible",
+        "تنفيذ مهمة Ad-hoc على Inventory.",
+        "ansible",
+        "ansible <PATTERN> -i <INVENTORY> -m <MODULE> [-a ARGS]",
+        "ansible all -i inventory.ini -m ansible.builtin.ping"
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-ansible-playbook",
+        "cmd-ansible-inventory",
+        "cmd-ansible-vault",
+        "task-run-ansible",
+        "path-advanced-rhel-administration",
+        "concept-ansible-core"
+      ],
+      "tags_ar": [
+        "مرجع",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "command_name": "ansible",
+      "purpose_ar": "تنفيذ مهمة Ad-hoc على Inventory.",
+      "syntax": "ansible <PATTERN> -i <INVENTORY> -m <MODULE> [-a ARGS]",
+      "provided_by": "ansible-core",
+      "requires_sudo": false,
+      "risk": "high",
+      "options": [
+        {
+          "option": "-i FILE",
+          "description_ar": "تحديد Inventory.",
+          "example": "-i inventory.ini"
+        },
+        {
+          "option": "-m MODULE",
+          "description_ar": "تحديد Module.",
+          "example": "-m ansible.builtin.ping"
+        },
+        {
+          "option": "--check",
+          "description_ar": "معاينة التغيير.",
+          "example": "--check"
+        }
+      ],
+      "examples": [
+        {
+          "title_ar": "اختبار الاتصال",
+          "command": "ansible all -i inventory.ini -m ansible.builtin.ping",
+          "explanation_ar": "يعرض pong."
+        }
+      ],
+      "common_mistakes_ar": [
+        "راجع Pattern قبل التنفيذ."
+      ]
+    },
+    {
+      "id": "cmd-ansible-playbook",
+      "entity_type": "command",
+      "title_ar": "مرجع أمر ansible-playbook",
+      "summary_ar": "تشغيل Playbooks وفحصها وتقييد نطاقها.",
+      "category": "automation",
+      "keywords_ar": [
+        "مرجع أمر ansible-playbook",
+        "تشغيل Playbooks وفحصها وتقييد نطاقها.",
+        "ansible-playbook",
+        "ansible-playbook -i <INVENTORY> <PLAYBOOK> [OPTIONS]",
+        "ansible-playbook -i inventory.ini site.yml --check --diff --limit test"
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-ansible",
+        "cmd-ansible-inventory",
+        "cmd-ansible-vault",
+        "task-run-ansible",
+        "path-advanced-rhel-administration",
+        "concept-ansible-core"
+      ],
+      "tags_ar": [
+        "مرجع",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "command_name": "ansible-playbook",
+      "purpose_ar": "تشغيل Playbooks وفحصها وتقييد نطاقها.",
+      "syntax": "ansible-playbook -i <INVENTORY> <PLAYBOOK> [OPTIONS]",
+      "provided_by": "ansible-core",
+      "requires_sudo": false,
+      "risk": "high",
+      "options": [
+        {
+          "option": "--syntax-check",
+          "description_ar": "فحص الصياغة.",
+          "example": "--syntax-check"
+        },
+        {
+          "option": "--check",
+          "description_ar": "معاينة التغيير.",
+          "example": "--check"
+        },
+        {
+          "option": "--limit PATTERN",
+          "description_ar": "تقييد المضيفين.",
+          "example": "--limit test"
+        }
+      ],
+      "examples": [
+        {
+          "title_ar": "معاينة آمنة",
+          "command": "ansible-playbook -i inventory.ini site.yml --check --diff --limit test",
+          "explanation_ar": "يعرض التغيير المتوقع."
+        }
+      ],
+      "common_mistakes_ar": [
+        "لا تبدأ بـProduction."
+      ]
+    },
+    {
+      "id": "cmd-ansible-inventory",
+      "entity_type": "command",
+      "title_ar": "مرجع أمر ansible-inventory",
+      "summary_ar": "تحليل Inventory والمجموعات والمتغيرات.",
+      "category": "automation",
+      "keywords_ar": [
+        "مرجع أمر ansible-inventory",
+        "تحليل Inventory والمجموعات والمتغيرات.",
+        "ansible-inventory",
+        "ansible-inventory -i <INVENTORY> <--graph|--list|--host HOST>",
+        "ansible-inventory -i inventory.ini --graph"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-ansible",
+        "cmd-ansible-playbook",
+        "cmd-ansible-vault",
+        "task-run-ansible",
+        "path-advanced-rhel-administration",
+        "concept-ansible-core"
+      ],
+      "tags_ar": [
+        "مرجع",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "command_name": "ansible-inventory",
+      "purpose_ar": "تحليل Inventory والمجموعات والمتغيرات.",
+      "syntax": "ansible-inventory -i <INVENTORY> <--graph|--list|--host HOST>",
+      "provided_by": "ansible-core",
+      "requires_sudo": false,
+      "risk": "low",
+      "options": [
+        {
+          "option": "--graph",
+          "description_ar": "عرض المجموعات.",
+          "example": "--graph"
+        },
+        {
+          "option": "--host HOST",
+          "description_ar": "عرض متغيرات مضيف.",
+          "example": "--host web01"
+        }
+      ],
+      "examples": [
+        {
+          "title_ar": "عرض الرسم",
+          "command": "ansible-inventory -i inventory.ini --graph",
+          "explanation_ar": "يكشف بنية الهدف."
+        }
+      ],
+      "common_mistakes_ar": [
+        "راجع group_vars وhost_vars."
+      ]
+    },
+    {
+      "id": "cmd-ansible-vault",
+      "entity_type": "command",
+      "title_ar": "مرجع أمر ansible-vault",
+      "summary_ar": "تشفير الأسرار المستخدمة في Playbooks.",
+      "category": "automation",
+      "keywords_ar": [
+        "مرجع أمر ansible-vault",
+        "تشفير الأسرار المستخدمة في Playbooks.",
+        "ansible-vault",
+        "ansible-vault <create|encrypt|edit|view|rekey> <FILE>",
+        "ansible-vault create group_vars/all/vault.yml"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-ansible",
+        "cmd-ansible-playbook",
+        "cmd-ansible-inventory",
+        "task-run-ansible",
+        "path-advanced-rhel-administration",
+        "concept-ansible-core"
+      ],
+      "tags_ar": [
+        "مرجع",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "command_name": "ansible-vault",
+      "purpose_ar": "تشفير الأسرار المستخدمة في Playbooks.",
+      "syntax": "ansible-vault <create|encrypt|edit|view|rekey> <FILE>",
+      "provided_by": "ansible-core",
+      "requires_sudo": false,
+      "risk": "medium",
+      "options": [
+        {
+          "option": "create FILE",
+          "description_ar": "إنشاء ملف مشفر.",
+          "example": "ansible-vault create secrets.yml"
+        },
+        {
+          "option": "rekey FILE",
+          "description_ar": "تغيير كلمة المرور.",
+          "example": "ansible-vault rekey secrets.yml"
+        }
+      ],
+      "examples": [
+        {
+          "title_ar": "إنشاء أسرار",
+          "command": "ansible-vault create group_vars/all/vault.yml",
+          "explanation_ar": "ينشئ ملفًا مشفرًا."
+        }
+      ],
+      "common_mistakes_ar": [
+        "لا تخزن Vault password مع الملف."
+      ]
+    },
+    {
+      "id": "cmd-ansible-navigator",
+      "entity_type": "command",
+      "title_ar": "مرجع أمر ansible-navigator",
+      "summary_ar": "تشغيل واستكشاف Ansible داخل Execution Environment.",
+      "category": "automation",
+      "keywords_ar": [
+        "مرجع أمر ansible-navigator",
+        "تشغيل واستكشاف Ansible داخل Execution Environment.",
+        "ansible-navigator",
+        "ansible-navigator <run|inventory|collections|images> [ARGS]",
+        "ansible-navigator run site.yml -i inventory.ini --eei corp-ee:1.0 --mode stdout"
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-ansible-builder",
+        "task-build-execution-environment",
+        "path-advanced-rhel-administration",
+        "concept-aap-platform"
+      ],
+      "tags_ar": [
+        "مرجع",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "command_name": "ansible-navigator",
+      "purpose_ar": "تشغيل واستكشاف Ansible داخل Execution Environment.",
+      "syntax": "ansible-navigator <run|inventory|collections|images> [ARGS]",
+      "provided_by": "ansible-navigator",
+      "requires_sudo": false,
+      "risk": "high",
+      "options": [
+        {
+          "option": "run PLAYBOOK",
+          "description_ar": "تشغيل Playbook.",
+          "example": "ansible-navigator run site.yml"
+        },
+        {
+          "option": "--eei IMAGE",
+          "description_ar": "اختيار EE.",
+          "example": "--eei corp-ee:1.0"
+        },
+        {
+          "option": "--mode stdout",
+          "description_ar": "إخراج خطي.",
+          "example": "--mode stdout"
+        }
+      ],
+      "examples": [
+        {
+          "title_ar": "تشغيل داخل EE",
+          "command": "ansible-navigator run site.yml -i inventory.ini --eei corp-ee:1.0 --mode stdout",
+          "explanation_ar": "يشغل الاعتماديات الموحدة."
+        }
+      ],
+      "common_mistakes_ar": [
+        "طابق EE مع المشروع."
+      ]
+    },
+    {
+      "id": "cmd-ansible-builder",
+      "entity_type": "command",
+      "title_ar": "مرجع أمر ansible-builder",
+      "summary_ar": "بناء Execution Environment من Collections واعتماديات Python والنظام.",
+      "category": "automation",
+      "keywords_ar": [
+        "مرجع أمر ansible-builder",
+        "بناء Execution Environment من Collections واعتماديات Python والنظام.",
+        "ansible-builder",
+        "ansible-builder <create|build> -f execution-environment.yml [OPTIONS]",
+        "ansible-builder build -f execution-environment.yml -t corp-ee:1.0"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-ansible-navigator",
+        "task-build-execution-environment",
+        "path-advanced-rhel-administration",
+        "concept-aap-platform"
+      ],
+      "tags_ar": [
+        "مرجع",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "command_name": "ansible-builder",
+      "purpose_ar": "بناء Execution Environment من Collections واعتماديات Python والنظام.",
+      "syntax": "ansible-builder <create|build> -f execution-environment.yml [OPTIONS]",
+      "provided_by": "ansible-builder",
+      "requires_sudo": false,
+      "risk": "medium",
+      "options": [
+        {
+          "option": "build",
+          "description_ar": "بناء الصورة.",
+          "example": "ansible-builder build -t corp-ee:1.0"
+        },
+        {
+          "option": "-f FILE",
+          "description_ar": "تحديد التعريف.",
+          "example": "-f execution-environment.yml"
+        }
+      ],
+      "examples": [
+        {
+          "title_ar": "بناء EE",
+          "command": "ansible-builder build -f execution-environment.yml -t corp-ee:1.0",
+          "explanation_ar": "ينتج صورة تشغيل."
+        }
+      ],
+      "common_mistakes_ar": [
+        "ثبت إصدارات الاعتماديات."
+      ]
+    },
+    {
+      "id": "cmd-oscap",
+      "entity_type": "command",
+      "title_ar": "مرجع أمر oscap",
+      "summary_ar": "فحص امتثال SCAP وإنتاج تقارير ومعالجة.",
+      "category": "compliance",
+      "keywords_ar": [
+        "مرجع أمر oscap",
+        "فحص امتثال SCAP وإنتاج تقارير ومعالجة.",
+        "oscap",
+        "oscap <MODULE> <ACTION> [OPTIONS] <CONTENT>",
+        "sudo oscap xccdf eval --profile <PROFILE> --results results.xml --report report.html <DATASTREAM>"
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-autotailor",
+        "task-openscap-scan",
+        "task-openscap-remediate",
+        "troubleshoot-openscap",
+        "path-advanced-rhel-administration",
+        "concept-openscap-compliance"
+      ],
+      "tags_ar": [
+        "مرجع",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "command_name": "oscap",
+      "purpose_ar": "فحص امتثال SCAP وإنتاج تقارير ومعالجة.",
+      "syntax": "oscap <MODULE> <ACTION> [OPTIONS] <CONTENT>",
+      "provided_by": "openscap-scanner",
+      "requires_sudo": false,
+      "risk": "high",
+      "options": [
+        {
+          "option": "info",
+          "description_ar": "عرض Profiles.",
+          "example": "oscap info <DATASTREAM>"
+        },
+        {
+          "option": "xccdf eval",
+          "description_ar": "تنفيذ فحص.",
+          "example": "oscap xccdf eval --profile <PROFILE> <DATASTREAM>"
+        },
+        {
+          "option": "--remediate",
+          "description_ar": "تطبيق إصلاحات.",
+          "example": "--remediate"
+        }
+      ],
+      "examples": [
+        {
+          "title_ar": "فحص مع تقرير",
+          "command": "sudo oscap xccdf eval --profile <PROFILE> --results results.xml --report report.html <DATASTREAM>",
+          "explanation_ar": "ينتج XML وHTML."
+        }
+      ],
+      "common_mistakes_ar": [
+        "طابق المحتوى مع إصدار RHEL."
+      ]
+    },
+    {
+      "id": "cmd-autotailor",
+      "entity_type": "command",
+      "title_ar": "مرجع أمر autotailor",
+      "summary_ar": "تخصيص SCAP Profile دون تعديل المصدر.",
+      "category": "compliance",
+      "keywords_ar": [
+        "مرجع أمر autotailor",
+        "تخصيص SCAP Profile دون تعديل المصدر.",
+        "autotailor",
+        "autotailor [SELECTIONS] --output=<FILE> --tailored-profile-id=<ID> <DATASTREAM> <PROFILE>",
+        "autotailor --unselect=<RULE> --output=tailoring.xml --tailored-profile-id=corp <DATASTREAM> <PROFILE>"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-oscap",
+        "task-openscap-scan",
+        "task-openscap-remediate",
+        "troubleshoot-openscap",
+        "path-advanced-rhel-administration",
+        "concept-openscap-compliance"
+      ],
+      "tags_ar": [
+        "مرجع",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "command_name": "autotailor",
+      "purpose_ar": "تخصيص SCAP Profile دون تعديل المصدر.",
+      "syntax": "autotailor [SELECTIONS] --output=<FILE> --tailored-profile-id=<ID> <DATASTREAM> <PROFILE>",
+      "provided_by": "openscap-utils",
+      "requires_sudo": false,
+      "risk": "low",
+      "options": [
+        {
+          "option": "--select=RULE",
+          "description_ar": "اختيار قاعدة.",
+          "example": "--select=<RULE>"
+        },
+        {
+          "option": "--unselect=RULE",
+          "description_ar": "استثناء قاعدة.",
+          "example": "--unselect=<RULE>"
+        }
+      ],
+      "examples": [
+        {
+          "title_ar": "إنشاء Tailoring",
+          "command": "autotailor --unselect=<RULE> --output=tailoring.xml --tailored-profile-id=corp <DATASTREAM> <PROFILE>",
+          "explanation_ar": "ينشئ ملفًا مستقلًا."
+        }
+      ],
+      "common_mistakes_ar": [
+        "وثق كل استثناء."
+      ]
+    },
+    {
+      "id": "cmd-composer-cli",
+      "entity_type": "command",
+      "title_ar": "مرجع أمر composer-cli",
+      "summary_ar": "إدارة Blueprints وComposes وصور RHEL.",
+      "category": "image_building",
+      "keywords_ar": [
+        "مرجع أمر composer-cli",
+        "إدارة Blueprints وComposes وصور RHEL.",
+        "composer-cli",
+        "composer-cli <blueprints|compose> <ACTION> [ARGS]",
+        "sudo composer-cli compose start server qcow2"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "task-image-builder",
+        "path-advanced-rhel-administration",
+        "concept-image-builder-composer"
+      ],
+      "tags_ar": [
+        "مرجع",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "command_name": "composer-cli",
+      "purpose_ar": "إدارة Blueprints وComposes وصور RHEL.",
+      "syntax": "composer-cli <blueprints|compose> <ACTION> [ARGS]",
+      "provided_by": "composer-cli",
+      "requires_sudo": true,
+      "risk": "medium",
+      "options": [
+        {
+          "option": "blueprints push FILE",
+          "description_ar": "استيراد Blueprint.",
+          "example": "composer-cli blueprints push server.toml"
+        },
+        {
+          "option": "compose types",
+          "description_ar": "عرض الأنواع.",
+          "example": "composer-cli compose types"
+        },
+        {
+          "option": "compose start NAME TYPE",
+          "description_ar": "بدء البناء.",
+          "example": "composer-cli compose start server qcow2"
+        }
+      ],
+      "examples": [
+        {
+          "title_ar": "بدء QCOW2",
+          "command": "sudo composer-cli compose start server qcow2",
+          "explanation_ar": "يعيد UUID."
+        }
+      ],
+      "common_mistakes_ar": [
+        "نفذ depsolve أولًا."
+      ]
+    },
+    {
+      "id": "cmd-leapp",
+      "entity_type": "command",
+      "title_ar": "مرجع أمر leapp",
+      "summary_ar": "تقييم وتنفيذ الترقية الموضعية الرئيسية.",
+      "category": "upgrades",
+      "keywords_ar": [
+        "مرجع أمر leapp",
+        "تقييم وتنفيذ الترقية الموضعية الرئيسية.",
+        "leapp",
+        "leapp <preupgrade|upgrade|answer> [OPTIONS]",
+        "less /var/log/leapp/leapp-report.txt"
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "task-leapp-preupgrade",
+        "task-leapp-upgrade",
+        "troubleshoot-leapp",
+        "path-advanced-rhel-administration",
+        "concept-leapp-upgrade"
+      ],
+      "tags_ar": [
+        "مرجع",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "command_name": "leapp",
+      "purpose_ar": "تقييم وتنفيذ الترقية الموضعية الرئيسية.",
+      "syntax": "leapp <preupgrade|upgrade|answer> [OPTIONS]",
+      "provided_by": "leapp-upgrade",
+      "requires_sudo": true,
+      "risk": "high",
+      "options": [
+        {
+          "option": "preupgrade",
+          "description_ar": "تقييم الجاهزية.",
+          "example": "sudo leapp preupgrade"
+        },
+        {
+          "option": "upgrade",
+          "description_ar": "تجهيز الترقية.",
+          "example": "sudo leapp upgrade"
+        },
+        {
+          "option": "answer",
+          "description_ar": "تسجيل إجابة.",
+          "example": "sudo leapp answer --section <SECTION>.<KEY>=<VALUE>"
+        }
+      ],
+      "examples": [
+        {
+          "title_ar": "قراءة التقرير",
+          "command": "less /var/log/leapp/leapp-report.txt",
+          "explanation_ar": "يعرض الموانع."
+        }
+      ],
+      "common_mistakes_ar": [
+        "لا تنفذ Upgrade مع Inhibitors."
+      ]
+    },
+    {
+      "id": "cmd-rpm-ostree",
+      "entity_type": "command",
+      "title_ar": "مرجع أمر rpm-ostree",
+      "summary_ar": "إدارة Deployments في أنظمة OSTree القديمة.",
+      "category": "image_mode",
+      "keywords_ar": [
+        "مرجع أمر rpm-ostree",
+        "إدارة Deployments في أنظمة OSTree القديمة.",
+        "rpm-ostree",
+        "rpm-ostree <status|upgrade|rollback|install>",
+        "rpm-ostree status"
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9"
+      ],
+      "related_entities": [
+        "cmd-bootc",
+        "concept-rhel-image-mode",
+        "path-advanced-rhel-administration",
+        "concept-rpm-ostree"
+      ],
+      "tags_ar": [
+        "مرجع",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "command_name": "rpm-ostree",
+      "purpose_ar": "إدارة Deployments في أنظمة OSTree القديمة.",
+      "syntax": "rpm-ostree <status|upgrade|rollback|install>",
+      "provided_by": "rpm-ostree",
+      "requires_sudo": true,
+      "risk": "high",
+      "options": [
+        {
+          "option": "status",
+          "description_ar": "عرض Deployments.",
+          "example": "rpm-ostree status"
+        },
+        {
+          "option": "upgrade",
+          "description_ar": "تجهيز تحديث.",
+          "example": "sudo rpm-ostree upgrade"
+        },
+        {
+          "option": "rollback",
+          "description_ar": "تجهيز رجوع.",
+          "example": "sudo rpm-ostree rollback"
+        }
+      ],
+      "examples": [
+        {
+          "title_ar": "عرض الحالة",
+          "command": "rpm-ostree status",
+          "explanation_ar": "يعرض الحالي والسابق."
+        }
+      ],
+      "common_mistakes_ar": [
+        "لا تستخدمه لتعديل bootc."
+      ]
+    },
+    {
+      "id": "cmd-bootc",
+      "entity_type": "command",
+      "title_ar": "مرجع أمر bootc",
+      "summary_ar": "إدارة تحديثات وتحويلات ورجوع Image Mode.",
+      "category": "image_mode",
+      "keywords_ar": [
+        "مرجع أمر bootc",
+        "إدارة تحديثات وتحويلات ورجوع Image Mode.",
+        "bootc",
+        "bootc <status|update|upgrade|switch|rollback>",
+        "bootc status --verbose"
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "concept-rhel-image-mode",
+        "concept-rpm-ostree",
+        "task-bootc-update",
+        "troubleshoot-bootc",
+        "cmd-rpm-ostree"
+      ],
+      "tags_ar": [
+        "مرجع",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "command_name": "bootc",
+      "purpose_ar": "إدارة تحديثات وتحويلات ورجوع Image Mode.",
+      "syntax": "bootc <status|update|upgrade|switch|rollback>",
+      "provided_by": "bootc",
+      "requires_sudo": true,
+      "risk": "high",
+      "options": [
+        {
+          "option": "status --verbose",
+          "description_ar": "عرض الصورة وDeployments.",
+          "example": "bootc status --verbose"
+        },
+        {
+          "option": "upgrade --download-only",
+          "description_ar": "تنزيل وتجهيز فقط.",
+          "example": "sudo bootc upgrade --download-only"
+        },
+        {
+          "option": "rollback",
+          "description_ar": "تجهيز الرجوع.",
+          "example": "sudo bootc rollback"
+        }
+      ],
+      "examples": [
+        {
+          "title_ar": "فحص الحالة",
+          "command": "bootc status --verbose",
+          "explanation_ar": "يعرض المرجع والحالة."
+        }
+      ],
+      "common_mistakes_ar": [
+        "يحتاج التغيير غالبًا إلى Reboot."
+      ]
+    },
+    {
+      "id": "cmd-bootc-image-builder",
+      "entity_type": "command",
+      "title_ar": "مرجع أمر bootc-image-builder",
+      "summary_ar": "تحويل صورة bootc إلى QCOW2 أو raw أو ISO.",
+      "category": "image_mode",
+      "keywords_ar": [
+        "مرجع أمر bootc-image-builder",
+        "تحويل صورة bootc إلى QCOW2 أو raw أو ISO.",
+        "bootc-image-builder",
+        "podman run --privileged ... bootc-image-builder --type <TYPE> <IMAGE>",
+        "sudo podman run --rm --privileged -v ./output:/output -v /var/lib/containers/storage:/var/lib/containers/storage registry.redhat.io/rhel10/bootc-image-builder:latest --type qcow2 <IMAGE>"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "concept-rhel-image-mode",
+        "task-bootc-build",
+        "cmd-podman"
+      ],
+      "tags_ar": [
+        "مرجع",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "command_name": "bootc-image-builder",
+      "purpose_ar": "تحويل صورة bootc إلى QCOW2 أو raw أو ISO.",
+      "syntax": "podman run --privileged ... bootc-image-builder --type <TYPE> <IMAGE>",
+      "provided_by": "bootc-image-builder container image",
+      "requires_sudo": true,
+      "risk": "medium",
+      "options": [
+        {
+          "option": "--type qcow2",
+          "description_ar": "بناء QCOW2.",
+          "example": "--type qcow2"
+        },
+        {
+          "option": "--type raw",
+          "description_ar": "بناء Raw.",
+          "example": "--type raw"
+        },
+        {
+          "option": "--type iso",
+          "description_ar": "بناء ISO.",
+          "example": "--type iso"
+        }
+      ],
+      "examples": [
+        {
+          "title_ar": "بناء صورة",
+          "command": "sudo podman run --rm --privileged -v ./output:/output -v /var/lib/containers/storage:/var/lib/containers/storage registry.redhat.io/rhel10/bootc-image-builder:latest --type qcow2 <IMAGE>",
+          "explanation_ar": "ينتج Artifact."
+        }
+      ],
+      "common_mistakes_ar": [
+        "أتِح صورة المصدر محليًا."
+      ]
+    },
+    {
+      "id": "cmd-podman",
+      "entity_type": "command",
+      "title_ar": "مرجع أمر podman",
+      "summary_ar": "إدارة الصور والحاويات والVolumes والشبكات دون Daemon مركزي.",
+      "category": "containers",
+      "keywords_ar": [
+        "مرجع أمر podman",
+        "إدارة الصور والحاويات والVolumes والشبكات دون Daemon مركزي.",
+        "podman",
+        "podman <pull|run|ps|logs|build|volume|network> [OPTIONS]",
+        "podman ps -a"
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "concept-containers-podman",
+        "task-podman-rootless",
+        "cmd-bootc-image-builder",
+        "task-build-execution-environment",
+        "task-bootc-build"
+      ],
+      "tags_ar": [
+        "مرجع",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "command_name": "podman",
+      "purpose_ar": "إدارة الصور والحاويات والVolumes والشبكات دون Daemon مركزي.",
+      "syntax": "podman <pull|run|ps|logs|build|volume|network> [OPTIONS]",
+      "provided_by": "podman",
+      "requires_sudo": false,
+      "risk": "high",
+      "options": [
+        {
+          "option": "pull IMAGE",
+          "description_ar": "جلب صورة.",
+          "example": "podman pull <IMAGE>"
+        },
+        {
+          "option": "run",
+          "description_ar": "تشغيل حاوية.",
+          "example": "podman run -d --name web -p 8080:80 <IMAGE>"
+        },
+        {
+          "option": "build -t IMAGE .",
+          "description_ar": "بناء صورة.",
+          "example": "podman build -t myapp:1.0 ."
+        }
+      ],
+      "examples": [
+        {
+          "title_ar": "عرض الحاويات",
+          "command": "podman ps -a",
+          "explanation_ar": "يعرض العاملة والمتوقفة."
+        }
+      ],
+      "common_mistakes_ar": [
+        "لا تخزن البيانات المهمة في الطبقة المؤقتة."
+      ]
+    },
+    {
+      "id": "troubleshoot-kickstart",
+      "entity_type": "troubleshooting",
+      "title_ar": "تشخيص فشل Kickstart",
+      "summary_ar": "فصل أخطاء الصياغة عن مصدر الملف والتخزين وScripts وسجلات Anaconda.",
+      "category": "advanced_provisioning",
+      "keywords_ar": [
+        "تشخيص فشل Kickstart",
+        "فصل أخطاء الصياغة عن مصدر الملف والتخزين وScripts وسجلات Anaconda."
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-ksvalidator",
+        "task-validate-kickstart",
+        "task-launch-kickstart",
+        "path-advanced-rhel-administration",
+        "concept-kickstart-automation"
+      ],
+      "tags_ar": [
+        "حل مشكلة",
+        "Kickstart"
+      ],
+      "status": "reviewed",
+      "content_level": "troubleshooting",
+      "goal_ar": "التثبيت الآلي يفشل",
+      "estimated_minutes": 25,
+      "risk": "high",
+      "prerequisites_ar": [],
+      "variables": [],
+      "steps": [
+        {
+          "id": "syntax",
+          "title_ar": "فحص الصياغة",
+          "command": "ksvalidator -v RHEL10 <FILE>",
+          "explanation_ar": "يكشف الأخطاء.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "No errors.",
+          "notes_ar": ""
+        },
+        {
+          "id": "url",
+          "title_ar": "فحص المصدر",
+          "command": "curl -fI <URL>",
+          "explanation_ar": "يتحقق من الوصول.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "HTTP success.",
+          "notes_ar": ""
+        },
+        {
+          "id": "logs",
+          "title_ar": "فحص Anaconda",
+          "command": "less /tmp/anaconda.log",
+          "explanation_ar": "يعرض السبب.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Actionable error.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "اختبار VM",
+          "command": "echo test installation",
+          "expected_result_ar": "Successful install.",
+          "requires_sudo": false
+        }
+      ],
+      "rollback_ar": [
+        "استعد النسخة السابقة أو Snapshot."
+      ],
+      "common_errors": [],
+      "files": [
+        "/tmp/anaconda.log",
+        "/tmp/storage.log"
+      ],
+      "ports": [],
+      "safety_notes_ar": [
+        "استخدم VM قابلة للمسح."
+      ],
+      "sources": []
+    },
+    {
+      "id": "troubleshoot-satellite",
+      "entity_type": "troubleshooting",
+      "title_ar": "تشخيص فشل التسجيل في Satellite",
+      "summary_ar": "فحص DNS والوقت وTLS وشهادة المستهلك وActivation Key.",
+      "category": "satellite",
+      "keywords_ar": [
+        "تشخيص فشل التسجيل في Satellite",
+        "فحص DNS والوقت وTLS وشهادة المستهلك وActivation Key."
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-hammer",
+        "cmd-satellite-maintain",
+        "task-register-satellite",
+        "task-satellite-content",
+        "task-satellite-remote-job",
+        "path-advanced-rhel-administration",
+        "concept-satellite-management"
+      ],
+      "tags_ar": [
+        "حل مشكلة",
+        "Satellite"
+      ],
+      "status": "reviewed",
+      "content_level": "troubleshooting",
+      "goal_ar": "المضيف لا يسجل",
+      "estimated_minutes": 25,
+      "risk": "high",
+      "prerequisites_ar": [],
+      "variables": [],
+      "steps": [
+        {
+          "id": "dns",
+          "title_ar": "فحص DNS",
+          "command": "getent hosts <SATELLITE>",
+          "explanation_ar": "يكشف حل الاسم.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Correct address.",
+          "notes_ar": ""
+        },
+        {
+          "id": "time",
+          "title_ar": "فحص الوقت",
+          "command": "timedatectl status",
+          "explanation_ar": "يكشف انحراف TLS.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Synchronized.",
+          "notes_ar": ""
+        },
+        {
+          "id": "tls",
+          "title_ar": "فحص HTTPS",
+          "command": "curl -vk https://<SATELLITE>/pub/",
+          "explanation_ar": "يكشف الشهادة والاتصال.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Response.",
+          "notes_ar": ""
+        },
+        {
+          "id": "key",
+          "title_ar": "فحص المفتاح",
+          "command": "hammer activation-key info --name <KEY> --organization <ORG>",
+          "explanation_ar": "يتحقق من الارتباطات.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Valid key.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "فحص الهوية",
+          "command": "sudo subscription-manager identity",
+          "expected_result_ar": "Identity.",
+          "requires_sudo": true
+        }
+      ],
+      "rollback_ar": [
+        "استعد النسخة السابقة أو Snapshot."
+      ],
+      "common_errors": [],
+      "files": [],
+      "ports": [
+        443
+      ],
+      "safety_notes_ar": [],
+      "sources": []
+    },
+    {
+      "id": "troubleshoot-leapp",
+      "entity_type": "troubleshooting",
+      "title_ar": "تشخيص Leapp Inhibitors",
+      "summary_ar": "استخراج الموانع والإجابات المطلوبة ثم إعادة Preupgrade.",
+      "category": "upgrades",
+      "keywords_ar": [
+        "تشخيص Leapp Inhibitors",
+        "استخراج الموانع والإجابات المطلوبة ثم إعادة Preupgrade."
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-leapp",
+        "task-leapp-preupgrade",
+        "task-leapp-upgrade",
+        "path-advanced-rhel-administration",
+        "concept-leapp-upgrade"
+      ],
+      "tags_ar": [
+        "حل مشكلة",
+        "Leapp"
+      ],
+      "status": "reviewed",
+      "content_level": "troubleshooting",
+      "goal_ar": "Leapp يمنع الترقية",
+      "estimated_minutes": 25,
+      "risk": "high",
+      "prerequisites_ar": [],
+      "variables": [],
+      "steps": [
+        {
+          "id": "report",
+          "title_ar": "عرض الموانع",
+          "command": "grep -n -A8 -B2 'inhibitor' /var/log/leapp/leapp-report.txt",
+          "explanation_ar": "يجمع الموانع.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "List.",
+          "notes_ar": ""
+        },
+        {
+          "id": "answer",
+          "title_ar": "فحص Answerfile",
+          "command": "sudo cat /var/log/leapp/answerfile",
+          "explanation_ar": "يكشف الإجابات.",
+          "requires_sudo": true,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "No unanswered.",
+          "notes_ar": ""
+        },
+        {
+          "id": "rerun",
+          "title_ar": "إعادة الفحص",
+          "command": "sudo leapp preupgrade",
+          "explanation_ar": "يتحقق من الإصلاح.",
+          "requires_sudo": true,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "No inhibitors.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "عدد الموانع",
+          "command": "grep -c 'inhibitor' /var/log/leapp/leapp-report.txt",
+          "expected_result_ar": "0.",
+          "requires_sudo": false
+        }
+      ],
+      "rollback_ar": [
+        "استعد النسخة السابقة أو Snapshot."
+      ],
+      "common_errors": [],
+      "files": [
+        "/var/log/leapp/"
+      ],
+      "ports": [],
+      "safety_notes_ar": [],
+      "sources": []
+    },
+    {
+      "id": "troubleshoot-openscap",
+      "entity_type": "troubleshooting",
+      "title_ar": "تشخيص أثر OpenSCAP Remediation",
+      "summary_ar": "ربط التغيير بالقواعد والسجلات والتقارير السابقة.",
+      "category": "compliance",
+      "keywords_ar": [
+        "تشخيص أثر OpenSCAP Remediation",
+        "ربط التغيير بالقواعد والسجلات والتقارير السابقة."
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-oscap",
+        "cmd-autotailor",
+        "task-openscap-scan",
+        "task-openscap-remediate",
+        "path-advanced-rhel-administration",
+        "concept-openscap-compliance"
+      ],
+      "tags_ar": [
+        "حل مشكلة",
+        "OpenSCAP"
+      ],
+      "status": "reviewed",
+      "content_level": "troubleshooting",
+      "goal_ar": "توقفت خدمة بعد المعالجة",
+      "estimated_minutes": 25,
+      "risk": "high",
+      "prerequisites_ar": [],
+      "variables": [],
+      "steps": [
+        {
+          "id": "failed",
+          "title_ar": "عرض الخدمات الفاشلة",
+          "command": "systemctl --failed",
+          "explanation_ar": "يحدد الخدمات.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "List.",
+          "notes_ar": ""
+        },
+        {
+          "id": "logs",
+          "title_ar": "قراءة السجل",
+          "command": "journalctl -u <SERVICE> -b --no-pager",
+          "explanation_ar": "يكشف الخطأ.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Actionable message.",
+          "notes_ar": ""
+        },
+        {
+          "id": "report",
+          "title_ar": "مراجعة التقارير",
+          "command": "grep -i <SERVICE> before.html after.html",
+          "explanation_ar": "يربط القاعدة.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Rule IDs.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "حالة الخدمة",
+          "command": "systemctl is-active <SERVICE>",
+          "expected_result_ar": "active",
+          "requires_sudo": false
+        }
+      ],
+      "rollback_ar": [
+        "استعد النسخة السابقة أو Snapshot."
+      ],
+      "common_errors": [],
+      "files": [
+        "before.html",
+        "after.html"
+      ],
+      "ports": [],
+      "safety_notes_ar": [
+        "احتفظ بوصول Console."
+      ],
+      "sources": []
+    },
+    {
+      "id": "troubleshoot-bootc",
+      "entity_type": "troubleshooting",
+      "title_ar": "تشخيص فشل تحديث bootc",
+      "summary_ar": "فحص المرجع وRegistry والتخزين والسجل ثم Rollback.",
+      "category": "image_mode",
+      "keywords_ar": [
+        "تشخيص فشل تحديث bootc",
+        "فحص المرجع وRegistry والتخزين والسجل ثم Rollback."
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "concept-rhel-image-mode",
+        "cmd-bootc",
+        "task-bootc-update"
+      ],
+      "tags_ar": [
+        "حل مشكلة",
+        "bootc"
+      ],
+      "status": "reviewed",
+      "content_level": "troubleshooting",
+      "goal_ar": "الصورة لا تُجلب أو النظام لا يقلع",
+      "estimated_minutes": 25,
+      "risk": "high",
+      "prerequisites_ar": [],
+      "variables": [],
+      "steps": [
+        {
+          "id": "status",
+          "title_ar": "عرض الحالة",
+          "command": "bootc status --verbose",
+          "explanation_ar": "يعرض المرجع.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Image reference.",
+          "notes_ar": ""
+        },
+        {
+          "id": "pull",
+          "title_ar": "اختبار Registry",
+          "command": "podman pull <IMAGE>",
+          "explanation_ar": "يكشف المصادقة.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Pulled.",
+          "notes_ar": ""
+        },
+        {
+          "id": "space",
+          "title_ar": "فحص التخزين",
+          "command": "df -h / /var",
+          "explanation_ar": "يكشف النقص.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Enough space.",
+          "notes_ar": ""
+        },
+        {
+          "id": "rollback",
+          "title_ar": "تجهيز الرجوع",
+          "command": "sudo bootc rollback",
+          "explanation_ar": "يختار السابق.",
+          "requires_sudo": true,
+          "risk": "high",
+          "optional": false,
+          "expected_result_ar": "Staged.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "الحالة النهائية",
+          "command": "bootc status --verbose",
+          "expected_result_ar": "Bootable deployment.",
+          "requires_sudo": false
+        }
+      ],
+      "rollback_ar": [
+        "استعد النسخة السابقة أو Snapshot."
+      ],
+      "common_errors": [],
+      "files": [
+        "/etc/containers/"
+      ],
+      "ports": [
+        443
+      ],
+      "safety_notes_ar": [],
+      "sources": []
+    },
+    {
+      "id": "path-advanced-rhel-administration",
+      "entity_type": "learning_path",
+      "title_ar": "Advanced RHEL Administration",
+      "summary_ar": "مسار متقدم للتوفير الآلي والإدارة المركزية والأتمتة والامتثال وبناء الصور والترقيات وImage Mode.",
+      "category": "learning",
+      "keywords_ar": [
+        "Advanced RHEL Administration",
+        "مسار متقدم للتوفير الآلي والإدارة المركزية والأتمتة والامتثال وبناء الصور والترقيات وImage Mode.",
+        "Satellite",
+        "Lightspeed",
+        "Ansible",
+        "OpenSCAP",
+        "Cockpit",
+        "Image Builder",
+        "Leapp",
+        "bootc"
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "path-rhel-admin",
+        "path-rhel-troubleshooting",
+        "concept-rhel-management-models",
+        "task-validate-kickstart",
+        "task-launch-kickstart",
+        "task-register-satellite",
+        "task-satellite-content",
+        "task-satellite-remote-job",
+        "task-register-lightspeed",
+        "task-run-ansible",
+        "task-build-execution-environment",
+        "task-openscap-scan",
+        "task-openscap-remediate",
+        "task-enable-cockpit",
+        "task-image-builder",
+        "task-leapp-preupgrade",
+        "task-leapp-upgrade",
+        "concept-containers-podman",
+        "concept-rhel-image-mode",
+        "concept-kickstart-automation"
+      ],
+      "tags_ar": [
+        "مسار تعلم",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "description_ar": "مسار خارج نطاق EX200 الأساسي للانتقال من إدارة جهاز منفرد إلى بناء ونشر وإدارة أسطول RHEL بأدوات مؤسسية.",
+      "estimated_hours": 48,
+      "modules": [
+        {
+          "entity_id": "concept-rhel-management-models",
+          "objective_ar": "فهم المفهوم وتطبيق المسار العملي.",
+          "optional": false
+        },
+        {
+          "entity_id": "concept-kickstart-automation",
+          "objective_ar": "فهم المفهوم وتطبيق المسار العملي.",
+          "optional": false
+        },
+        {
+          "entity_id": "task-validate-kickstart",
+          "objective_ar": "فهم المفهوم وتطبيق المسار العملي.",
+          "optional": false
+        },
+        {
+          "entity_id": "task-launch-kickstart",
+          "objective_ar": "فهم المفهوم وتطبيق المسار العملي.",
+          "optional": false
+        },
+        {
+          "entity_id": "concept-satellite-management",
+          "objective_ar": "فهم المفهوم وتطبيق المسار العملي.",
+          "optional": false
+        },
+        {
+          "entity_id": "task-register-satellite",
+          "objective_ar": "فهم المفهوم وتطبيق المسار العملي.",
+          "optional": false
+        },
+        {
+          "entity_id": "task-satellite-content",
+          "objective_ar": "فهم المفهوم وتطبيق المسار العملي.",
+          "optional": false
+        },
+        {
+          "entity_id": "task-satellite-remote-job",
+          "objective_ar": "فهم المفهوم وتطبيق المسار العملي.",
+          "optional": false
+        },
+        {
+          "entity_id": "concept-lightspeed-insights",
+          "objective_ar": "فهم المفهوم وتطبيق المسار العملي.",
+          "optional": false
+        },
+        {
+          "entity_id": "task-register-lightspeed",
+          "objective_ar": "فهم المفهوم وتطبيق المسار العملي.",
+          "optional": false
+        },
+        {
+          "entity_id": "concept-ansible-core",
+          "objective_ar": "فهم المفهوم وتطبيق المسار العملي.",
+          "optional": false
+        },
+        {
+          "entity_id": "task-run-ansible",
+          "objective_ar": "فهم المفهوم وتطبيق المسار العملي.",
+          "optional": false
+        },
+        {
+          "entity_id": "concept-aap-platform",
+          "objective_ar": "فهم المفهوم وتطبيق المسار العملي.",
+          "optional": false
+        },
+        {
+          "entity_id": "task-build-execution-environment",
+          "objective_ar": "فهم المفهوم وتطبيق المسار العملي.",
+          "optional": false
+        },
+        {
+          "entity_id": "concept-openscap-compliance",
+          "objective_ar": "فهم المفهوم وتطبيق المسار العملي.",
+          "optional": false
+        },
+        {
+          "entity_id": "task-openscap-scan",
+          "objective_ar": "فهم المفهوم وتطبيق المسار العملي.",
+          "optional": false
+        },
+        {
+          "entity_id": "task-openscap-remediate",
+          "objective_ar": "فهم المفهوم وتطبيق المسار العملي.",
+          "optional": false
+        },
+        {
+          "entity_id": "concept-rhel-web-console",
+          "objective_ar": "فهم المفهوم وتطبيق المسار العملي.",
+          "optional": false
+        },
+        {
+          "entity_id": "task-enable-cockpit",
+          "objective_ar": "فهم المفهوم وتطبيق المسار العملي.",
+          "optional": false
+        },
+        {
+          "entity_id": "concept-image-builder-composer",
+          "objective_ar": "فهم المفهوم وتطبيق المسار العملي.",
+          "optional": false
+        },
+        {
+          "entity_id": "task-image-builder",
+          "objective_ar": "فهم المفهوم وتطبيق المسار العملي.",
+          "optional": false
+        },
+        {
+          "entity_id": "concept-leapp-upgrade",
+          "objective_ar": "فهم المفهوم وتطبيق المسار العملي.",
+          "optional": false
+        },
+        {
+          "entity_id": "task-leapp-preupgrade",
+          "objective_ar": "فهم المفهوم وتطبيق المسار العملي.",
+          "optional": false
+        },
+        {
+          "entity_id": "task-leapp-upgrade",
+          "objective_ar": "فهم المفهوم وتطبيق المسار العملي.",
+          "optional": false
+        },
+        {
+          "entity_id": "concept-rpm-ostree",
+          "objective_ar": "فهم المفهوم وتطبيق المسار العملي.",
+          "optional": false
+        },
+        {
+          "entity_id": "concept-rhel-image-mode",
+          "objective_ar": "فهم المفهوم وتطبيق المسار العملي.",
+          "optional": false
+        },
+        {
+          "entity_id": "task-bootc-update",
+          "objective_ar": "فهم المفهوم وتطبيق المسار العملي.",
+          "optional": false
+        },
+        {
+          "entity_id": "task-bootc-build",
+          "objective_ar": "فهم المفهوم وتطبيق المسار العملي.",
+          "optional": false
+        },
+        {
+          "entity_id": "concept-containers-podman",
+          "objective_ar": "فهم المفهوم وتطبيق المسار العملي.",
+          "optional": false
+        },
+        {
+          "entity_id": "task-podman-rootless",
+          "objective_ar": "فهم المفهوم وتطبيق المسار العملي.",
+          "optional": false
+        }
+      ],
+      "outcomes_ar": [
+        "تصميم تثبيت آلي بـKickstart.",
+        "إدارة محتوى ومضيفين عبر Satellite.",
+        "استخدام Lightspeed وAnsible وOpenSCAP.",
+        "بناء صور RHEL وإدارة Leapp وbootc."
       ]
     }
   ]

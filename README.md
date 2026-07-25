@@ -40,6 +40,7 @@ Verify the result
 - Arabic and English interfaces
 - A complete 12-module RHCSA command reference
 - Practical RHEL administration tasks
+- Advanced RHEL administration coverage for enterprise environments
 - Command references and Linux concepts
 - Natural-language search
 - Guided execution workflows
@@ -64,16 +65,34 @@ Verify the result
 11. Firewalld
 12. Troubleshooting and Verification
 
+## Advanced RHEL Administration
+
+In addition to the RHCSA learning modules, the platform includes references and practical guidance for modern and enterprise RHEL administration technologies:
+
+- Kickstart
+- Red Hat Satellite
+- Red Hat Lightspeed
+- Ansible / Red Hat Ansible Automation Platform (AAP)
+- OpenSCAP
+- Cockpit
+- Image Builder
+- Leapp
+- rpm-ostree
+- Podman
+- bootc
+
+This section extends the platform beyond RHCSA preparation, making it a practical knowledge companion for day-to-day RHEL administration, automation, security compliance, system upgrades, image-based deployment, and container workflows.
+
 ## Current Content
 
 | Component | Count |
 |---|---:|
-| Knowledge entities | 414 |
+| Knowledge entities | 467 |
 | Practical tasks | 181 |
-| Command references | 189 |
-| Concepts | 25 |
+| Command references | 208 |
+| Concepts | 36 |
 | Troubleshooting pages | 3 |
-| Learning paths | 16 |
+| Learning paths | 17 |
 | RHCSA modules | 12 |
 | Guided workflows | 184 |
 | Search intents | 43 |
@@ -184,6 +203,7 @@ https://rhel-knowledge-engine.pages.dev/
 - واجهة عربية وواجهة إنجليزية
 - مرجع أوامر RHCSA منظم في 12 وحدة تدريبية
 - مهام عملية لإدارة RHEL
+- تغطية للإدارة المتقدمة لأنظمة RHEL في بيئات العمل
 - مراجع أوامر ومفاهيم Linux
 - بحث باللغة الطبيعية
 - مسارات تنفيذ موجهة
@@ -208,16 +228,34 @@ https://rhel-knowledge-engine.pages.dev/
 11. Firewalld
 12. التشخيص والتحقق
 
+## الإدارة المتقدمة لـ RHEL
+
+بالإضافة إلى وحدات RHCSA، يتضمن المشروع مراجع وإرشادات عملية لتقنيات الإدارة الحديثة والمتقدمة في بيئات RHEL:
+
+- Kickstart
+- Red Hat Satellite
+- Red Hat Lightspeed
+- Ansible / Red Hat Ansible Automation Platform (AAP)
+- OpenSCAP
+- Cockpit
+- Image Builder
+- Leapp
+- rpm-ostree
+- Podman
+- bootc
+
+يوسّع هذا القسم نطاق المنصة إلى ما بعد التحضير لاختبار RHCSA، لتصبح مرجعاً عملياً لمسؤولي أنظمة RHEL في الإدارة اليومية، والأتمتة، والامتثال الأمني، وترقية الأنظمة، والنشر المعتمد على الصور، وإدارة الحاويات.
+
 ## حجم المحتوى
 
 | المكوّن | العدد |
 |---|---:|
-| كيانات المعرفة | 414 |
+| كيانات المعرفة | 467 |
 | المهام العملية | 181 |
-| مراجع الأوامر | 189 |
-| المفاهيم | 25 |
+| مراجع الأوامر | 208 |
+| المفاهيم | 36 |
 | صفحات حل المشكلات | 3 |
-| مسارات التعلم | 16 |
+| مسارات التعلم | 17 |
 | وحدات RHCSA | 12 |
 | مسارات التنفيذ | 184 |
 | نوايا البحث | 43 |

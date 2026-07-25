@@ -18,7 +18,17 @@
     "firewall": "الجدار الناري",
     "selinux": "SELinux",
     "ssh": "SSH والوصول البعيد",
-    "scheduling": "الجدولة والمهام"
+    "scheduling": "الجدولة والمهام",
+    "advanced_provisioning": "التثبيت والأتمتة المتقدمة",
+    "satellite": "الإدارة المركزية وRed Hat Satellite",
+    "lightspeed": "Red Hat Lightspeed وInsights",
+    "automation": "الأتمتة وAnsible",
+    "compliance": "الامتثال وOpenSCAP",
+    "web_console": "Cockpit ووحدة تحكم الويب",
+    "image_building": "بناء صور النظام",
+    "upgrades": "الترقيات الكبرى",
+    "image_mode": "Image Mode وOSTree",
+    "containers": "الحاويات وPodman"
   },
   "tasks": [
     {
@@ -727,6 +737,1648 @@
       ],
       "sources": [],
       "status": "draft"
+    },
+    {
+      "id": "task-validate-kickstart",
+      "title_ar": "إنشاء والتحقق من Kickstart",
+      "summary_ar": "إنشاء ملف Kickstart ومراجعة الأقسام وفحص الصياغة.",
+      "category": "advanced_provisioning",
+      "keywords_ar": [
+        "إنشاء والتحقق من Kickstart",
+        "إنشاء ملف Kickstart ومراجعة الأقسام وفحص الصياغة.",
+        "أريد تجهيز ملف تثبيت آلي"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "tags_ar": [
+        "مسار عملي",
+        "Kickstart"
+      ],
+      "status": "reviewed",
+      "content_level": "workflow",
+      "goal_ar": "أريد تجهيز ملف تثبيت آلي",
+      "estimated_minutes": 15,
+      "risk": "medium",
+      "prerequisites_ar": [
+        "تحديد إصدار RHEL"
+      ],
+      "variables": [],
+      "steps": [
+        {
+          "id": "copy",
+          "title_ar": "استخدام ملف سابق",
+          "command": "sudo cp /root/anaconda-ks.cfg server.ks",
+          "explanation_ar": "ينسخ نقطة بداية.",
+          "requires_sudo": true,
+          "risk": "medium",
+          "optional": false,
+          "expected_result_ar": "ملف قابل للتحرير.",
+          "notes_ar": ""
+        },
+        {
+          "id": "edit",
+          "title_ar": "تحرير الملف",
+          "command": "vim server.ks",
+          "explanation_ar": "راجع التخزين والشبكة والحزم وScripts.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "إعدادات مقصودة.",
+          "notes_ar": ""
+        },
+        {
+          "id": "protect",
+          "title_ar": "حماية الملف",
+          "command": "chmod 600 server.ks",
+          "explanation_ar": "يحمي الأسرار.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Mode 600.",
+          "notes_ar": ""
+        },
+        {
+          "id": "validate",
+          "title_ar": "فحص الصياغة",
+          "command": "ksvalidator -v RHEL10 server.ks",
+          "explanation_ar": "يفحص الصياغة.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "لا أخطاء.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "إعادة الفحص",
+          "command": "ksvalidator -v RHEL10 server.ks",
+          "expected_result_ar": "Exit 0.",
+          "requires_sudo": false
+        }
+      ],
+      "rollback_ar": [],
+      "common_errors": [],
+      "files": [],
+      "ports": [],
+      "safety_notes_ar": [
+        "اختبر على VM قابلة للمسح."
+      ],
+      "sources": [],
+      "related_tasks": [
+        "cmd-ksvalidator",
+        "task-validate-kickstart",
+        "task-launch-kickstart",
+        "troubleshoot-kickstart",
+        "path-advanced-rhel-administration"
+      ]
+    },
+    {
+      "id": "task-launch-kickstart",
+      "title_ar": "بدء تثبيت Kickstart",
+      "summary_ar": "نشر الملف وتمرير inst.ks ومتابعة التثبيت.",
+      "category": "advanced_provisioning",
+      "keywords_ar": [
+        "بدء تثبيت Kickstart",
+        "نشر الملف وتمرير inst.ks ومتابعة التثبيت.",
+        "أريد تشغيل تثبيت RHEL آلي"
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "tags_ar": [
+        "مسار عملي",
+        "Kickstart"
+      ],
+      "status": "reviewed",
+      "content_level": "workflow",
+      "goal_ar": "أريد تشغيل تثبيت RHEL آلي",
+      "estimated_minutes": 20,
+      "risk": "high",
+      "prerequisites_ar": [
+        "ملف صالح ونسخة احتياطية"
+      ],
+      "variables": [
+        {
+          "name": "KS_URL",
+          "label_ar": "عنوان Kickstart",
+          "example": "https://server/ks.cfg",
+          "required": true
+        }
+      ],
+      "steps": [
+        {
+          "id": "url",
+          "title_ar": "فحص الملف",
+          "command": "curl -fI <KS_URL>",
+          "explanation_ar": "يتحقق من الوصول.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "HTTP success.",
+          "notes_ar": ""
+        },
+        {
+          "id": "boot",
+          "title_ar": "إضافة Boot Option",
+          "command": "inst.ks=<KS_URL>",
+          "explanation_ar": "أضفها إلى GRUB أو PXE.",
+          "requires_sudo": false,
+          "risk": "high",
+          "optional": false,
+          "expected_result_ar": "Anaconda يجلب الملف.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "فحص النظام",
+          "command": "test -f /root/anaconda-ks.cfg",
+          "expected_result_ar": "ملف موجود.",
+          "requires_sudo": false
+        }
+      ],
+      "rollback_ar": [],
+      "common_errors": [],
+      "files": [],
+      "ports": [],
+      "safety_notes_ar": [
+        "قد يمسح التثبيت الأقراص."
+      ],
+      "sources": [],
+      "related_tasks": [
+        "cmd-ksvalidator",
+        "task-validate-kickstart",
+        "task-launch-kickstart",
+        "troubleshoot-kickstart",
+        "path-advanced-rhel-administration"
+      ]
+    },
+    {
+      "id": "task-register-satellite",
+      "title_ar": "تسجيل مضيف في Satellite",
+      "summary_ar": "تثبيت شهادة المستهلك والتسجيل بـActivation Key والتحقق من المحتوى.",
+      "category": "satellite",
+      "keywords_ar": [
+        "تسجيل مضيف في Satellite",
+        "تثبيت شهادة المستهلك والتسجيل بـActivation Key والتحقق من المحتوى.",
+        "أريد ربط RHEL بـSatellite"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "tags_ar": [
+        "مسار عملي",
+        "Satellite"
+      ],
+      "status": "reviewed",
+      "content_level": "workflow",
+      "goal_ar": "أريد ربط RHEL بـSatellite",
+      "estimated_minutes": 15,
+      "risk": "medium",
+      "prerequisites_ar": [
+        "DNS ووقت صحيحان"
+      ],
+      "variables": [
+        {
+          "name": "SATELLITE",
+          "label_ar": "اسم Satellite",
+          "example": "satellite.example.com",
+          "required": true
+        },
+        {
+          "name": "ORG",
+          "label_ar": "المؤسسة",
+          "example": "Org",
+          "required": true
+        },
+        {
+          "name": "KEY",
+          "label_ar": "Activation Key",
+          "example": "rhel-prod",
+          "required": true
+        }
+      ],
+      "steps": [
+        {
+          "id": "cert",
+          "title_ar": "تثبيت الشهادة",
+          "command": "sudo rpm -Uvh https://<SATELLITE>/pub/katello-ca-consumer-latest.noarch.rpm",
+          "explanation_ar": "يثبت الثقة.",
+          "requires_sudo": true,
+          "risk": "medium",
+          "optional": false,
+          "expected_result_ar": "Package installed.",
+          "notes_ar": ""
+        },
+        {
+          "id": "register",
+          "title_ar": "التسجيل",
+          "command": "sudo subscription-manager register --org=<ORG> --activationkey=<KEY>",
+          "explanation_ar": "يسجل المضيف.",
+          "requires_sudo": true,
+          "risk": "medium",
+          "optional": false,
+          "expected_result_ar": "Registered.",
+          "notes_ar": ""
+        },
+        {
+          "id": "repos",
+          "title_ar": "فحص المستودعات",
+          "command": "sudo subscription-manager repos --list-enabled",
+          "explanation_ar": "يعرض المحتوى.",
+          "requires_sudo": true,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Expected repos.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "عرض الهوية",
+          "command": "sudo subscription-manager identity",
+          "expected_result_ar": "Identity.",
+          "requires_sudo": true
+        }
+      ],
+      "rollback_ar": [
+        "sudo subscription-manager unregister"
+      ],
+      "common_errors": [],
+      "files": [
+        "/etc/rhsm/"
+      ],
+      "ports": [
+        443
+      ],
+      "safety_notes_ar": [],
+      "sources": [],
+      "related_tasks": [
+        "cmd-hammer",
+        "cmd-satellite-maintain",
+        "task-register-satellite",
+        "task-satellite-content",
+        "task-satellite-remote-job",
+        "troubleshoot-satellite",
+        "path-advanced-rhel-administration"
+      ]
+    },
+    {
+      "id": "task-satellite-content",
+      "title_ar": "بناء دورة محتوى Satellite",
+      "summary_ar": "إنشاء Lifecycle Environments ونشر Content View وترويجه.",
+      "category": "satellite",
+      "keywords_ar": [
+        "بناء دورة محتوى Satellite",
+        "إنشاء Lifecycle Environments ونشر Content View وترويجه.",
+        "أريد Content View وبيئات Dev/Test/Prod"
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "tags_ar": [
+        "مسار عملي",
+        "Satellite"
+      ],
+      "status": "reviewed",
+      "content_level": "workflow",
+      "goal_ar": "أريد Content View وبيئات Dev/Test/Prod",
+      "estimated_minutes": 25,
+      "risk": "high",
+      "prerequisites_ar": [],
+      "variables": [
+        {
+          "name": "ORG",
+          "label_ar": "المؤسسة",
+          "example": "Org",
+          "required": true
+        },
+        {
+          "name": "CV",
+          "label_ar": "Content View",
+          "example": "RHEL10_Base",
+          "required": true
+        }
+      ],
+      "steps": [
+        {
+          "id": "env",
+          "title_ar": "إنشاء بيئة",
+          "command": "hammer lifecycle-environment create --name Development --prior Library --organization <ORG>",
+          "explanation_ar": "ينشئ المرحلة.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Created.",
+          "notes_ar": ""
+        },
+        {
+          "id": "publish",
+          "title_ar": "نشر View",
+          "command": "hammer content-view publish --name <CV> --organization <ORG>",
+          "explanation_ar": "يثبت نسخة.",
+          "requires_sudo": false,
+          "risk": "high",
+          "optional": false,
+          "expected_result_ar": "Version created.",
+          "notes_ar": ""
+        },
+        {
+          "id": "promote",
+          "title_ar": "ترويج النسخة",
+          "command": "hammer content-view version promote --content-view <CV> --version <VERSION> --to-lifecycle-environment Development --organization <ORG>",
+          "explanation_ar": "يتيح المحتوى.",
+          "requires_sudo": false,
+          "risk": "high",
+          "optional": false,
+          "expected_result_ar": "Promoted.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "عرض النسخ",
+          "command": "hammer content-view version list --content-view <CV> --organization <ORG>",
+          "expected_result_ar": "Versions.",
+          "requires_sudo": false
+        }
+      ],
+      "rollback_ar": [],
+      "common_errors": [],
+      "files": [],
+      "ports": [],
+      "safety_notes_ar": [
+        "لا تروج إلى Production دون اختبار."
+      ],
+      "sources": [],
+      "related_tasks": [
+        "cmd-hammer",
+        "cmd-satellite-maintain",
+        "task-register-satellite",
+        "task-satellite-content",
+        "task-satellite-remote-job",
+        "troubleshoot-satellite",
+        "path-advanced-rhel-administration"
+      ]
+    },
+    {
+      "id": "task-satellite-remote-job",
+      "title_ar": "تشغيل وظيفة بعيدة من Satellite",
+      "summary_ar": "معاينة Search Query وتشغيل Job Template ومراجعة النتائج.",
+      "category": "satellite",
+      "keywords_ar": [
+        "تشغيل وظيفة بعيدة من Satellite",
+        "معاينة Search Query وتشغيل Job Template ومراجعة النتائج.",
+        "أريد تنفيذ أمر على مجموعة مضيفين"
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "tags_ar": [
+        "مسار عملي",
+        "Satellite"
+      ],
+      "status": "reviewed",
+      "content_level": "workflow",
+      "goal_ar": "أريد تنفيذ أمر على مجموعة مضيفين",
+      "estimated_minutes": 12,
+      "risk": "high",
+      "prerequisites_ar": [],
+      "variables": [
+        {
+          "name": "QUERY",
+          "label_ar": "Search Query",
+          "example": "hostgroup = web",
+          "required": true
+        },
+        {
+          "name": "COMMAND",
+          "label_ar": "الأمر",
+          "example": "uname -r",
+          "required": true
+        }
+      ],
+      "steps": [
+        {
+          "id": "preview",
+          "title_ar": "معاينة الهدف",
+          "command": "hammer host list --search <QUERY>",
+          "explanation_ar": "يعرض المضيفين.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Expected hosts.",
+          "notes_ar": ""
+        },
+        {
+          "id": "run",
+          "title_ar": "تشغيل الوظيفة",
+          "command": "hammer job-invocation create --job-template 'Run Command - Script Default' --inputs command='<COMMAND>' --search-query '<QUERY>'",
+          "explanation_ar": "ينشئ Job.",
+          "requires_sudo": false,
+          "risk": "high",
+          "optional": false,
+          "expected_result_ar": "Job ID.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "عرض الوظيفة",
+          "command": "hammer job-invocation info --id <JOB_ID>",
+          "expected_result_ar": "Host results.",
+          "requires_sudo": false
+        }
+      ],
+      "rollback_ar": [],
+      "common_errors": [],
+      "files": [],
+      "ports": [],
+      "safety_notes_ar": [
+        "ابدأ بأمر قراءة ومجموعة صغيرة."
+      ],
+      "sources": [],
+      "related_tasks": [
+        "cmd-hammer",
+        "cmd-satellite-maintain",
+        "task-register-satellite",
+        "task-satellite-content",
+        "task-satellite-remote-job",
+        "troubleshoot-satellite",
+        "path-advanced-rhel-administration"
+      ]
+    },
+    {
+      "id": "task-register-lightspeed",
+      "title_ar": "تسجيل مضيف في Lightspeed",
+      "summary_ar": "التحقق من الهوية ثم التسجيل والرفع وربط Remediations.",
+      "category": "lightspeed",
+      "keywords_ar": [
+        "تسجيل مضيف في Lightspeed",
+        "التحقق من الهوية ثم التسجيل والرفع وربط Remediations.",
+        "أريد ظهور النظام في Inventory"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "tags_ar": [
+        "مسار عملي",
+        "Lightspeed"
+      ],
+      "status": "reviewed",
+      "content_level": "workflow",
+      "goal_ar": "أريد ظهور النظام في Inventory",
+      "estimated_minutes": 10,
+      "risk": "medium",
+      "prerequisites_ar": [],
+      "variables": [
+        {
+          "name": "NAME",
+          "label_ar": "اسم العرض",
+          "example": "web01",
+          "required": true
+        }
+      ],
+      "steps": [
+        {
+          "id": "identity",
+          "title_ar": "فحص الهوية",
+          "command": "sudo subscription-manager identity",
+          "explanation_ar": "يتحقق من الاشتراك.",
+          "requires_sudo": true,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Identity.",
+          "notes_ar": ""
+        },
+        {
+          "id": "register",
+          "title_ar": "التسجيل",
+          "command": "sudo insights-client --register --display-name <NAME>",
+          "explanation_ar": "يسجل ويرفع بيانات.",
+          "requires_sudo": true,
+          "risk": "medium",
+          "optional": false,
+          "expected_result_ar": "Registered.",
+          "notes_ar": ""
+        },
+        {
+          "id": "rhc",
+          "title_ar": "ربط التنفيذ",
+          "command": "sudo rhc connect",
+          "explanation_ar": "يفعل Tasks وRemediations.",
+          "requires_sudo": true,
+          "risk": "medium",
+          "optional": false,
+          "expected_result_ar": "Connected.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "فحص الحالة",
+          "command": "sudo insights-client --status",
+          "expected_result_ar": "Registered.",
+          "requires_sudo": true
+        }
+      ],
+      "rollback_ar": [],
+      "common_errors": [],
+      "files": [],
+      "ports": [],
+      "safety_notes_ar": [
+        "راجع سياسة جمع البيانات."
+      ],
+      "sources": [],
+      "related_tasks": [
+        "cmd-insights-client",
+        "cmd-rhc",
+        "task-register-lightspeed",
+        "path-advanced-rhel-administration"
+      ]
+    },
+    {
+      "id": "task-run-ansible",
+      "title_ar": "تشغيل Ansible Playbook بأمان",
+      "summary_ar": "فحص Inventory والصياغة ثم Check Mode والتنفيذ المحدود.",
+      "category": "automation",
+      "keywords_ar": [
+        "تشغيل Ansible Playbook بأمان",
+        "فحص Inventory والصياغة ثم Check Mode والتنفيذ المحدود.",
+        "أريد تنفيذ أتمتة على مجموعة أنظمة"
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "tags_ar": [
+        "مسار عملي",
+        "Ansible"
+      ],
+      "status": "reviewed",
+      "content_level": "workflow",
+      "goal_ar": "أريد تنفيذ أتمتة على مجموعة أنظمة",
+      "estimated_minutes": 20,
+      "risk": "high",
+      "prerequisites_ar": [],
+      "variables": [
+        {
+          "name": "INV",
+          "label_ar": "Inventory",
+          "example": "inventory.ini",
+          "required": true
+        },
+        {
+          "name": "PLAY",
+          "label_ar": "Playbook",
+          "example": "site.yml",
+          "required": true
+        },
+        {
+          "name": "LIMIT",
+          "label_ar": "مجموعة الاختبار",
+          "example": "test",
+          "required": true
+        }
+      ],
+      "steps": [
+        {
+          "id": "inventory",
+          "title_ar": "فحص Inventory",
+          "command": "ansible-inventory -i <INV> --graph",
+          "explanation_ar": "يعرض الهدف.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Correct hosts.",
+          "notes_ar": ""
+        },
+        {
+          "id": "syntax",
+          "title_ar": "فحص الصياغة",
+          "command": "ansible-playbook -i <INV> <PLAY> --syntax-check",
+          "explanation_ar": "يكشف أخطاء البناء.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "No errors.",
+          "notes_ar": ""
+        },
+        {
+          "id": "check",
+          "title_ar": "معاينة",
+          "command": "ansible-playbook -i <INV> <PLAY> --check --diff --limit <LIMIT>",
+          "explanation_ar": "يعرض التغيير.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Expected changes.",
+          "notes_ar": ""
+        },
+        {
+          "id": "run",
+          "title_ar": "تنفيذ محدود",
+          "command": "ansible-playbook -i <INV> <PLAY> --limit <LIMIT>",
+          "explanation_ar": "يطبق الحالة.",
+          "requires_sudo": false,
+          "risk": "high",
+          "optional": false,
+          "expected_result_ar": "failed=0.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "إعادة Check",
+          "command": "ansible-playbook -i <INV> <PLAY> --check --limit <LIMIT>",
+          "expected_result_ar": "changed=0.",
+          "requires_sudo": false
+        }
+      ],
+      "rollback_ar": [],
+      "common_errors": [],
+      "files": [],
+      "ports": [],
+      "safety_notes_ar": [
+        "راجع --limit قبل التنفيذ."
+      ],
+      "sources": [],
+      "related_tasks": [
+        "cmd-ansible",
+        "cmd-ansible-playbook",
+        "cmd-ansible-inventory",
+        "cmd-ansible-vault",
+        "task-run-ansible",
+        "path-advanced-rhel-administration"
+      ]
+    },
+    {
+      "id": "task-build-execution-environment",
+      "title_ar": "بناء Ansible Execution Environment",
+      "summary_ar": "تعريف الاعتماديات وبناء الصورة واختبارها بـansible-navigator.",
+      "category": "automation",
+      "keywords_ar": [
+        "بناء Ansible Execution Environment",
+        "تعريف الاعتماديات وبناء الصورة واختبارها بـansible-navigator.",
+        "أريد بيئة تشغيل موحدة للأتمتة"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "tags_ar": [
+        "مسار عملي",
+        "AAP"
+      ],
+      "status": "reviewed",
+      "content_level": "workflow",
+      "goal_ar": "أريد بيئة تشغيل موحدة للأتمتة",
+      "estimated_minutes": 20,
+      "risk": "medium",
+      "prerequisites_ar": [],
+      "variables": [],
+      "steps": [
+        {
+          "id": "build",
+          "title_ar": "بناء الصورة",
+          "command": "ansible-builder build -f execution-environment.yml -t corp-ee:1.0",
+          "explanation_ar": "يجمع الاعتماديات.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Image built.",
+          "notes_ar": ""
+        },
+        {
+          "id": "inspect",
+          "title_ar": "فحص الصورة",
+          "command": "podman image inspect corp-ee:1.0",
+          "explanation_ar": "يتحقق من Metadata.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Image metadata.",
+          "notes_ar": ""
+        },
+        {
+          "id": "test",
+          "title_ar": "تشغيل اختبار",
+          "command": "ansible-navigator run test.yml -i inventory.ini --eei corp-ee:1.0 --mode stdout",
+          "explanation_ar": "يتحقق من المحتوى.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Successful recap.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "عرض الصورة",
+          "command": "podman images corp-ee",
+          "expected_result_ar": "Image tag.",
+          "requires_sudo": false
+        }
+      ],
+      "rollback_ar": [],
+      "common_errors": [],
+      "files": [],
+      "ports": [],
+      "safety_notes_ar": [
+        "ثبت إصدارات الاعتماديات."
+      ],
+      "sources": [],
+      "related_tasks": [
+        "cmd-ansible-navigator",
+        "cmd-ansible-builder",
+        "task-build-execution-environment",
+        "path-advanced-rhel-administration"
+      ]
+    },
+    {
+      "id": "task-openscap-scan",
+      "title_ar": "فحص امتثال OpenSCAP",
+      "summary_ar": "عرض Profiles وتشغيل فحص ينتج XML وتقرير HTML.",
+      "category": "compliance",
+      "keywords_ar": [
+        "فحص امتثال OpenSCAP",
+        "عرض Profiles وتشغيل فحص ينتج XML وتقرير HTML.",
+        "أريد تقييم النظام مقابل Baseline أمني"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "tags_ar": [
+        "مسار عملي",
+        "OpenSCAP"
+      ],
+      "status": "reviewed",
+      "content_level": "workflow",
+      "goal_ar": "أريد تقييم النظام مقابل Baseline أمني",
+      "estimated_minutes": 15,
+      "risk": "low",
+      "prerequisites_ar": [],
+      "variables": [
+        {
+          "name": "DATASTREAM",
+          "label_ar": "Data Stream",
+          "example": "/usr/share/xml/scap/ssg/content/ssg-rhel10-ds.xml",
+          "required": true
+        },
+        {
+          "name": "PROFILE",
+          "label_ar": "Profile ID",
+          "example": "xccdf_org.ssgproject.content_profile_cis",
+          "required": true
+        }
+      ],
+      "steps": [
+        {
+          "id": "info",
+          "title_ar": "عرض Profiles",
+          "command": "oscap info <DATASTREAM>",
+          "explanation_ar": "يعرض المعرفات.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Profiles.",
+          "notes_ar": ""
+        },
+        {
+          "id": "scan",
+          "title_ar": "تنفيذ الفحص",
+          "command": "sudo oscap xccdf eval --profile <PROFILE> --results results.xml --report report.html <DATASTREAM>",
+          "explanation_ar": "يقيم النظام.",
+          "requires_sudo": true,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Reports created.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "فحص الملفات",
+          "command": "test -s results.xml && test -s report.html",
+          "expected_result_ar": "Files exist.",
+          "requires_sudo": false
+        }
+      ],
+      "rollback_ar": [],
+      "common_errors": [],
+      "files": [],
+      "ports": [],
+      "safety_notes_ar": [
+        "احمِ التقرير لأنه يكشف إعدادات."
+      ],
+      "sources": [],
+      "related_tasks": [
+        "cmd-oscap",
+        "cmd-autotailor",
+        "task-openscap-scan",
+        "task-openscap-remediate",
+        "troubleshoot-openscap",
+        "path-advanced-rhel-administration"
+      ]
+    },
+    {
+      "id": "task-openscap-remediate",
+      "title_ar": "تخصيص ومعالجة OpenSCAP",
+      "summary_ar": "إنشاء Tailoring ثم فحص أولي ومعالجة وإعادة تقييم.",
+      "category": "compliance",
+      "keywords_ar": [
+        "تخصيص ومعالجة OpenSCAP",
+        "إنشاء Tailoring ثم فحص أولي ومعالجة وإعادة تقييم.",
+        "أريد تطبيق Baseline مع استثناءات معتمدة"
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "tags_ar": [
+        "مسار عملي",
+        "OpenSCAP"
+      ],
+      "status": "reviewed",
+      "content_level": "workflow",
+      "goal_ar": "أريد تطبيق Baseline مع استثناءات معتمدة",
+      "estimated_minutes": 30,
+      "risk": "high",
+      "prerequisites_ar": [],
+      "variables": [],
+      "steps": [
+        {
+          "id": "tailor",
+          "title_ar": "إنشاء Tailoring",
+          "command": "autotailor --unselect=<RULE> --output=tailoring.xml --tailored-profile-id=corp <DATASTREAM> <BASE_PROFILE>",
+          "explanation_ar": "يخصص السياسة.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "File created.",
+          "notes_ar": ""
+        },
+        {
+          "id": "before",
+          "title_ar": "فحص أولي",
+          "command": "sudo oscap xccdf eval --tailoring-file tailoring.xml --profile corp --report before.html <DATASTREAM>",
+          "explanation_ar": "يسجل الحالة.",
+          "requires_sudo": true,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Baseline report.",
+          "notes_ar": ""
+        },
+        {
+          "id": "remediate",
+          "title_ar": "تطبيق المعالجة",
+          "command": "sudo oscap xccdf eval --tailoring-file tailoring.xml --profile corp --remediate <DATASTREAM>",
+          "explanation_ar": "يغير الإعدادات.",
+          "requires_sudo": true,
+          "risk": "high",
+          "optional": false,
+          "expected_result_ar": "Completed.",
+          "notes_ar": ""
+        },
+        {
+          "id": "after",
+          "title_ar": "إعادة الفحص",
+          "command": "sudo oscap xccdf eval --tailoring-file tailoring.xml --profile corp --report after.html <DATASTREAM>",
+          "explanation_ar": "يقيس النتيجة.",
+          "requires_sudo": true,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "After report.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "مقارنة التقارير",
+          "command": "ls -lh before.html after.html",
+          "expected_result_ar": "Two reports.",
+          "requires_sudo": false
+        }
+      ],
+      "rollback_ar": [],
+      "common_errors": [],
+      "files": [],
+      "ports": [],
+      "safety_notes_ar": [
+        "خذ Snapshot واختبر خارج الإنتاج."
+      ],
+      "sources": [],
+      "related_tasks": [
+        "cmd-oscap",
+        "cmd-autotailor",
+        "task-openscap-scan",
+        "task-openscap-remediate",
+        "troubleshoot-openscap",
+        "path-advanced-rhel-administration"
+      ]
+    },
+    {
+      "id": "task-enable-cockpit",
+      "title_ar": "تفعيل RHEL Web Console",
+      "summary_ar": "تثبيت Cockpit وتفعيل Socket وفتح Firewall والتحقق من HTTPS.",
+      "category": "web_console",
+      "keywords_ar": [
+        "تفعيل RHEL Web Console",
+        "تثبيت Cockpit وتفعيل Socket وفتح Firewall والتحقق من HTTPS.",
+        "أريد إدارة النظام عبر Cockpit"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "tags_ar": [
+        "مسار عملي",
+        "Cockpit"
+      ],
+      "status": "reviewed",
+      "content_level": "workflow",
+      "goal_ar": "أريد إدارة النظام عبر Cockpit",
+      "estimated_minutes": 10,
+      "risk": "medium",
+      "prerequisites_ar": [],
+      "variables": [],
+      "steps": [
+        {
+          "id": "install",
+          "title_ar": "تثبيت Cockpit",
+          "command": "sudo dnf install cockpit",
+          "explanation_ar": "يثبت الواجهة.",
+          "requires_sudo": true,
+          "risk": "medium",
+          "optional": false,
+          "expected_result_ar": "Installed.",
+          "notes_ar": ""
+        },
+        {
+          "id": "enable",
+          "title_ar": "تفعيل Socket",
+          "command": "sudo systemctl enable --now cockpit.socket",
+          "explanation_ar": "يبدأ Socket Activation.",
+          "requires_sudo": true,
+          "risk": "medium",
+          "optional": false,
+          "expected_result_ar": "Active.",
+          "notes_ar": ""
+        },
+        {
+          "id": "fw",
+          "title_ar": "فتح Firewall",
+          "command": "sudo firewall-cmd --permanent --add-service=cockpit && sudo firewall-cmd --reload",
+          "explanation_ar": "يفتح الوصول.",
+          "requires_sudo": true,
+          "risk": "medium",
+          "optional": false,
+          "expected_result_ar": "success.",
+          "notes_ar": ""
+        },
+        {
+          "id": "test",
+          "title_ar": "اختبار HTTPS",
+          "command": "curl -kI https://localhost:9090",
+          "explanation_ar": "يتحقق من الواجهة.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "HTTP response.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "حالة Socket",
+          "command": "systemctl is-active cockpit.socket",
+          "expected_result_ar": "active",
+          "requires_sudo": false
+        }
+      ],
+      "rollback_ar": [],
+      "common_errors": [],
+      "files": [],
+      "ports": [
+        9090
+      ],
+      "safety_notes_ar": [
+        "قيد الوصول بشبكة الإدارة."
+      ],
+      "sources": [],
+      "related_tasks": [
+        "task-enable-cockpit",
+        "path-advanced-rhel-administration"
+      ]
+    },
+    {
+      "id": "task-image-builder",
+      "title_ar": "بناء صورة باستخدام Image Builder",
+      "summary_ar": "رفع Blueprint وحل الاعتماديات وبدء Compose وتنزيل Artifact.",
+      "category": "image_building",
+      "keywords_ar": [
+        "بناء صورة باستخدام Image Builder",
+        "رفع Blueprint وحل الاعتماديات وبدء Compose وتنزيل Artifact.",
+        "أريد تحويل Blueprint إلى صورة RHEL"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "tags_ar": [
+        "مسار عملي",
+        "Image Builder"
+      ],
+      "status": "reviewed",
+      "content_level": "workflow",
+      "goal_ar": "أريد تحويل Blueprint إلى صورة RHEL",
+      "estimated_minutes": 25,
+      "risk": "medium",
+      "prerequisites_ar": [],
+      "variables": [],
+      "steps": [
+        {
+          "id": "push",
+          "title_ar": "رفع Blueprint",
+          "command": "sudo composer-cli blueprints push server.toml",
+          "explanation_ar": "يحفظ Blueprint.",
+          "requires_sudo": true,
+          "risk": "medium",
+          "optional": false,
+          "expected_result_ar": "Pushed.",
+          "notes_ar": ""
+        },
+        {
+          "id": "deps",
+          "title_ar": "حل الاعتماديات",
+          "command": "sudo composer-cli blueprints depsolve server",
+          "explanation_ar": "يتحقق من الحزم.",
+          "requires_sudo": true,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Success.",
+          "notes_ar": ""
+        },
+        {
+          "id": "start",
+          "title_ar": "بدء Compose",
+          "command": "sudo composer-cli compose start server qcow2",
+          "explanation_ar": "يبدأ البناء.",
+          "requires_sudo": true,
+          "risk": "medium",
+          "optional": false,
+          "expected_result_ar": "UUID.",
+          "notes_ar": ""
+        },
+        {
+          "id": "status",
+          "title_ar": "متابعة الحالة",
+          "command": "sudo composer-cli compose status",
+          "explanation_ar": "يعرض FINISHED.",
+          "requires_sudo": true,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "FINISHED.",
+          "notes_ar": ""
+        },
+        {
+          "id": "download",
+          "title_ar": "تنزيل الصورة",
+          "command": "sudo composer-cli compose image <UUID>",
+          "explanation_ar": "ينزل Artifact.",
+          "requires_sudo": true,
+          "risk": "medium",
+          "optional": false,
+          "expected_result_ar": "Image file.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "فحص الملف",
+          "command": "ls -lh <IMAGE>",
+          "expected_result_ar": "Non-zero file.",
+          "requires_sudo": false
+        }
+      ],
+      "rollback_ar": [],
+      "common_errors": [],
+      "files": [],
+      "ports": [],
+      "safety_notes_ar": [
+        "اختبر الصورة على VM."
+      ],
+      "sources": [],
+      "related_tasks": [
+        "cmd-composer-cli",
+        "task-image-builder",
+        "path-advanced-rhel-administration"
+      ]
+    },
+    {
+      "id": "task-leapp-preupgrade",
+      "title_ar": "تشغيل Leapp Preupgrade",
+      "summary_ar": "تحديث النظام وتشغيل التقييم وقراءة Inhibitors وAnswerfile.",
+      "category": "upgrades",
+      "keywords_ar": [
+        "تشغيل Leapp Preupgrade",
+        "تحديث النظام وتشغيل التقييم وقراءة Inhibitors وAnswerfile.",
+        "أريد تقييم جاهزية الترقية"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "tags_ar": [
+        "مسار عملي",
+        "Leapp"
+      ],
+      "status": "reviewed",
+      "content_level": "workflow",
+      "goal_ar": "أريد تقييم جاهزية الترقية",
+      "estimated_minutes": 20,
+      "risk": "low",
+      "prerequisites_ar": [],
+      "variables": [],
+      "steps": [
+        {
+          "id": "pre",
+          "title_ar": "تشغيل التقييم",
+          "command": "sudo leapp preupgrade",
+          "explanation_ar": "ينشئ التقرير.",
+          "requires_sudo": true,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Report created.",
+          "notes_ar": ""
+        },
+        {
+          "id": "report",
+          "title_ar": "قراءة التقرير",
+          "command": "less /var/log/leapp/leapp-report.txt",
+          "explanation_ar": "يعرض المخاطر.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Action list.",
+          "notes_ar": ""
+        },
+        {
+          "id": "answer",
+          "title_ar": "فحص Answerfile",
+          "command": "sudo cat /var/log/leapp/answerfile",
+          "explanation_ar": "يكشف الإجابات الناقصة.",
+          "requires_sudo": true,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "No unanswered.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "عدد الموانع",
+          "command": "grep -c 'inhibitor' /var/log/leapp/leapp-report.txt",
+          "expected_result_ar": "0.",
+          "requires_sudo": false
+        }
+      ],
+      "rollback_ar": [],
+      "common_errors": [],
+      "files": [],
+      "ports": [],
+      "safety_notes_ar": [
+        "لا تتجاهل تحذيرًا عالي الخطورة."
+      ],
+      "sources": [],
+      "related_tasks": [
+        "cmd-leapp",
+        "task-leapp-preupgrade",
+        "task-leapp-upgrade",
+        "troubleshoot-leapp",
+        "path-advanced-rhel-administration"
+      ]
+    },
+    {
+      "id": "task-leapp-upgrade",
+      "title_ar": "تنفيذ ترقية Leapp",
+      "summary_ar": "إعادة التقييم وتجهيز المعاملة وإعادة التشغيل والتحقق من الإصدار.",
+      "category": "upgrades",
+      "keywords_ar": [
+        "تنفيذ ترقية Leapp",
+        "إعادة التقييم وتجهيز المعاملة وإعادة التشغيل والتحقق من الإصدار.",
+        "أريد الترقية إلى الإصدار الرئيسي التالي"
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "tags_ar": [
+        "مسار عملي",
+        "Leapp"
+      ],
+      "status": "reviewed",
+      "content_level": "workflow",
+      "goal_ar": "أريد الترقية إلى الإصدار الرئيسي التالي",
+      "estimated_minutes": 45,
+      "risk": "high",
+      "prerequisites_ar": [
+        "Backup مختبر ونافذة صيانة"
+      ],
+      "variables": [],
+      "steps": [
+        {
+          "id": "upgrade",
+          "title_ar": "تجهيز الترقية",
+          "command": "sudo leapp upgrade",
+          "explanation_ar": "يبني بيئة الترقية.",
+          "requires_sudo": true,
+          "risk": "high",
+          "optional": false,
+          "expected_result_ar": "Prepared.",
+          "notes_ar": ""
+        },
+        {
+          "id": "reboot",
+          "title_ar": "بدء الترقية",
+          "command": "sudo systemctl reboot",
+          "explanation_ar": "يقلع إلى بيئة Leapp.",
+          "requires_sudo": true,
+          "risk": "high",
+          "optional": false,
+          "expected_result_ar": "System returns.",
+          "notes_ar": ""
+        },
+        {
+          "id": "release",
+          "title_ar": "فحص الإصدار",
+          "command": "cat /etc/redhat-release",
+          "explanation_ar": "يعرض الإصدار الجديد.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Target release.",
+          "notes_ar": ""
+        },
+        {
+          "id": "failed",
+          "title_ar": "فحص الخدمات",
+          "command": "systemctl --failed",
+          "explanation_ar": "يكشف المشاكل.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "No unexpected failures.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "فحص الحزم",
+          "command": "sudo dnf check",
+          "expected_result_ar": "No dependency issues.",
+          "requires_sudo": true
+        }
+      ],
+      "rollback_ar": [],
+      "common_errors": [],
+      "files": [],
+      "ports": [],
+      "safety_notes_ar": [
+        "لا تعتمد على Downgrade للحزم كخطة رجوع."
+      ],
+      "sources": [],
+      "related_tasks": [
+        "cmd-leapp",
+        "task-leapp-preupgrade",
+        "task-leapp-upgrade",
+        "troubleshoot-leapp",
+        "path-advanced-rhel-administration"
+      ]
+    },
+    {
+      "id": "task-bootc-update",
+      "title_ar": "تحديث ورجوع bootc",
+      "summary_ar": "عرض المرجع وتنزيل التحديث وإعادة التشغيل أو Rollback.",
+      "category": "image_mode",
+      "keywords_ar": [
+        "تحديث ورجوع bootc",
+        "عرض المرجع وتنزيل التحديث وإعادة التشغيل أو Rollback.",
+        "أريد تحديث نظام Image Mode بأمان"
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "9",
+        "10"
+      ],
+      "tags_ar": [
+        "مسار عملي",
+        "bootc"
+      ],
+      "status": "reviewed",
+      "content_level": "workflow",
+      "goal_ar": "أريد تحديث نظام Image Mode بأمان",
+      "estimated_minutes": 20,
+      "risk": "high",
+      "prerequisites_ar": [],
+      "variables": [],
+      "steps": [
+        {
+          "id": "status",
+          "title_ar": "عرض الحالة",
+          "command": "bootc status --verbose",
+          "explanation_ar": "يسجل المرجع الحالي.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Current deployment.",
+          "notes_ar": ""
+        },
+        {
+          "id": "download",
+          "title_ar": "تنزيل فقط",
+          "command": "sudo bootc upgrade --download-only",
+          "explanation_ar": "يجهز التحديث.",
+          "requires_sudo": true,
+          "risk": "medium",
+          "optional": false,
+          "expected_result_ar": "Pending deployment.",
+          "notes_ar": ""
+        },
+        {
+          "id": "reboot",
+          "title_ar": "تطبيق التحديث",
+          "command": "sudo systemctl reboot",
+          "explanation_ar": "يقلع إلى الجديد.",
+          "requires_sudo": true,
+          "risk": "high",
+          "optional": false,
+          "expected_result_ar": "System returns.",
+          "notes_ar": ""
+        },
+        {
+          "id": "rollback",
+          "title_ar": "تجهيز Rollback",
+          "command": "sudo bootc rollback",
+          "explanation_ar": "يختار السابق.",
+          "requires_sudo": true,
+          "risk": "high",
+          "optional": true,
+          "expected_result_ar": "Rollback staged.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "فحص الحالة",
+          "command": "bootc status --verbose",
+          "expected_result_ar": "Booted deployment.",
+          "requires_sudo": false
+        }
+      ],
+      "rollback_ar": [],
+      "common_errors": [],
+      "files": [],
+      "ports": [],
+      "safety_notes_ar": [
+        "راجع تغييرات /etc بعد Rollback."
+      ],
+      "sources": [],
+      "related_tasks": [
+        "concept-rhel-image-mode",
+        "cmd-bootc",
+        "troubleshoot-bootc"
+      ]
+    },
+    {
+      "id": "task-bootc-build",
+      "title_ar": "بناء صورة قرص من bootc",
+      "summary_ar": "جلب صورة المصدر وتشغيل bootc-image-builder وفحص Artifact.",
+      "category": "image_mode",
+      "keywords_ar": [
+        "بناء صورة قرص من bootc",
+        "جلب صورة المصدر وتشغيل bootc-image-builder وفحص Artifact.",
+        "أريد QCOW2 أو ISO من صورة bootc"
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "9",
+        "10"
+      ],
+      "tags_ar": [
+        "مسار عملي",
+        "bootc"
+      ],
+      "status": "reviewed",
+      "content_level": "workflow",
+      "goal_ar": "أريد QCOW2 أو ISO من صورة bootc",
+      "estimated_minutes": 30,
+      "risk": "high",
+      "prerequisites_ar": [],
+      "variables": [
+        {
+          "name": "IMAGE",
+          "label_ar": "صورة bootc",
+          "example": "quay.example/rhel/web:1",
+          "required": true
+        }
+      ],
+      "steps": [
+        {
+          "id": "pull",
+          "title_ar": "جلب المصدر",
+          "command": "sudo podman pull <IMAGE>",
+          "explanation_ar": "يجعل الصورة محلية.",
+          "requires_sudo": true,
+          "risk": "medium",
+          "optional": false,
+          "expected_result_ar": "Pulled.",
+          "notes_ar": ""
+        },
+        {
+          "id": "build",
+          "title_ar": "تشغيل Builder",
+          "command": "sudo podman run --rm --privileged -v ./output:/output -v /var/lib/containers/storage:/var/lib/containers/storage registry.redhat.io/rhel10/bootc-image-builder:latest --type qcow2 <IMAGE>",
+          "explanation_ar": "يبني Artifact.",
+          "requires_sudo": true,
+          "risk": "high",
+          "optional": false,
+          "expected_result_ar": "Build complete.",
+          "notes_ar": ""
+        },
+        {
+          "id": "list",
+          "title_ar": "عرض النتيجة",
+          "command": "find output -type f -ls",
+          "explanation_ar": "يعرض الملف.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Artifact exists.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "حجم output",
+          "command": "du -sh output",
+          "expected_result_ar": "Reasonable size.",
+          "requires_sudo": false
+        }
+      ],
+      "rollback_ar": [],
+      "common_errors": [],
+      "files": [],
+      "ports": [],
+      "safety_notes_ar": [
+        "نفذ Builder على Build Host مخصص."
+      ],
+      "sources": [],
+      "related_tasks": [
+        "concept-rhel-image-mode",
+        "cmd-bootc-image-builder",
+        "cmd-podman"
+      ]
+    },
+    {
+      "id": "task-podman-rootless",
+      "title_ar": "تشغيل خدمة Rootless بـPodman",
+      "summary_ar": "جلب صورة وإنشاء Volume وتشغيل الحاوية ونشر منفذ وفحص السجل.",
+      "category": "containers",
+      "keywords_ar": [
+        "تشغيل خدمة Rootless بـPodman",
+        "جلب صورة وإنشاء Volume وتشغيل الحاوية ونشر منفذ وفحص السجل.",
+        "أريد تشغيل تطبيق داخل حاوية دون Root"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "tags_ar": [
+        "مسار عملي",
+        "Podman"
+      ],
+      "status": "reviewed",
+      "content_level": "workflow",
+      "goal_ar": "أريد تشغيل تطبيق داخل حاوية دون Root",
+      "estimated_minutes": 12,
+      "risk": "medium",
+      "prerequisites_ar": [],
+      "variables": [
+        {
+          "name": "IMAGE",
+          "label_ar": "صورة التطبيق",
+          "example": "registry.example/app:1",
+          "required": true
+        }
+      ],
+      "steps": [
+        {
+          "id": "pull",
+          "title_ar": "جلب الصورة",
+          "command": "podman pull <IMAGE>",
+          "explanation_ar": "ينزل الصورة.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Pulled.",
+          "notes_ar": ""
+        },
+        {
+          "id": "volume",
+          "title_ar": "إنشاء Volume",
+          "command": "podman volume create appdata",
+          "explanation_ar": "يحفظ البيانات.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Created.",
+          "notes_ar": ""
+        },
+        {
+          "id": "run",
+          "title_ar": "تشغيل الحاوية",
+          "command": "podman run -d --name web -p 8080:8080 -v appdata:/var/lib/app:Z <IMAGE>",
+          "explanation_ar": "يشغل Rootless.",
+          "requires_sudo": false,
+          "risk": "medium",
+          "optional": false,
+          "expected_result_ar": "Container ID.",
+          "notes_ar": ""
+        },
+        {
+          "id": "logs",
+          "title_ar": "فحص السجل",
+          "command": "podman logs --tail 100 web",
+          "explanation_ar": "يكشف الأخطاء.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "No critical errors.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "عرض الحالة",
+          "command": "podman ps --filter name=web",
+          "expected_result_ar": "Up.",
+          "requires_sudo": false
+        }
+      ],
+      "rollback_ar": [],
+      "common_errors": [],
+      "files": [],
+      "ports": [
+        8080
+      ],
+      "safety_notes_ar": [
+        "استخدم :Z وفق SELinux."
+      ],
+      "sources": [],
+      "related_tasks": [
+        "concept-containers-podman",
+        "cmd-podman"
+      ]
     }
   ]
 }

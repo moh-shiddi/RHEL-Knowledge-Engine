@@ -37,7 +37,17 @@
     "web_servers": "Web Servers",
     "concepts": "Core Concepts",
     "learning": "Learning Paths",
-    "reference": "Command Reference"
+    "reference": "Command Reference",
+    "advanced_provisioning": "Advanced Installation and Provisioning",
+    "satellite": "Centralized Management and Red Hat Satellite",
+    "lightspeed": "Red Hat Lightspeed and Insights",
+    "automation": "Automation and Ansible",
+    "compliance": "Compliance and OpenSCAP",
+    "web_console": "Cockpit and the RHEL Web Console",
+    "image_building": "System Image Building",
+    "upgrades": "Major-version Upgrades",
+    "image_mode": "Image Mode and OSTree",
+    "containers": "Containers and Podman"
   },
   "entities": [
     {
@@ -9876,7 +9886,9 @@
         "cmd-ssh",
         "path-rhcsa-module-7-services",
         "path-rhcsa-module-11-firewalld",
-        "path-rhcsa-module-12-troubleshooting"
+        "path-rhcsa-module-12-troubleshooting",
+        "troubleshoot-ssh-connection",
+        "concept-persistent-configuration"
       ],
       "tags_ar": [
         "Reference",
@@ -11768,7 +11780,8 @@
         "concept-firewalld",
         "concept-storage-stack",
         "concept-containers-podman",
-        "concept-rhel-image-mode"
+        "concept-rhel-image-mode",
+        "path-advanced-rhel-administration"
       ],
       "tags_ar": [
         "Learning path"
@@ -11880,7 +11893,8 @@
       "related_entities": [
         "path-rhel-admin",
         "troubleshoot-systemd-service",
-        "concept-ssh"
+        "concept-ssh",
+        "path-advanced-rhel-administration"
       ],
       "tags_ar": [
         "Learning path"
@@ -22525,7 +22539,12 @@
         "cmd-basename",
         "cmd-cat",
         "cmd-cut",
-        "cmd-diff"
+        "cmd-diff",
+        "cmd-dirname",
+        "cmd-head",
+        "cmd-less",
+        "cmd-locate",
+        "cmd-sed"
       ],
       "tags_ar": [
         "RHCSA path",
@@ -22717,7 +22736,11 @@
         "cmd-gunzip",
         "cmd-gzip",
         "cmd-mktemp",
-        "cmd-tar"
+        "cmd-tar",
+        "cmd-unzip",
+        "cmd-vim",
+        "cmd-zip",
+        "concept-inodes-links"
       ],
       "tags_ar": [
         "RHCSA path",
@@ -22991,7 +23014,8 @@
         "cmd-newgrp",
         "cmd-su",
         "cmd-sudo",
-        "cmd-visudo"
+        "cmd-visudo",
+        "cmd-w"
       ],
       "tags_ar": [
         "RHCSA path",
@@ -23400,7 +23424,9 @@
         "cmd-grubby",
         "cmd-shutdown",
         "concept-persistent-configuration",
-        "concept-boot-process"
+        "concept-boot-process",
+        "concept-logs-time",
+        "concept-task-scheduling"
       ],
       "tags_ar": [
         "RHCSA path",
@@ -23568,7 +23594,8 @@
         "cmd-sftp",
         "cmd-ssh-copy-id",
         "cmd-ssh-keygen",
-        "concept-persistent-configuration"
+        "concept-persistent-configuration",
+        "concept-name-resolution"
       ],
       "tags_ar": [
         "RHCSA path",
@@ -23860,7 +23887,12 @@
         "cmd-e2fsck",
         "cmd-findmnt",
         "cmd-lvcreate",
-        "cmd-lvextend"
+        "cmd-lvextend",
+        "cmd-lvreduce",
+        "cmd-lvremove",
+        "cmd-lvs",
+        "cmd-mkfs-ext4",
+        "cmd-mkfs-vfat"
       ],
       "tags_ar": [
         "RHCSA path",
@@ -24305,7 +24337,12 @@
         "cmd-ip",
         "cmd-nmcli",
         "cmd-find",
-        "cmd-lsblk"
+        "cmd-lsblk",
+        "cmd-restorecon",
+        "cmd-ausearch",
+        "cmd-chroot",
+        "cmd-curl",
+        "cmd-df"
       ],
       "tags_ar": [
         "RHCSA path",
@@ -24944,7 +24981,10 @@
         "concept-systemd",
         "cmd-systemctl",
         "path-rhel-admin",
-        "concept-rhel-image-mode"
+        "concept-rhel-image-mode",
+        "cmd-podman",
+        "task-podman-rootless",
+        "path-advanced-rhel-administration"
       ],
       "tags_ar": [
         "Concept",
@@ -24985,6 +25025,7 @@
       ],
       "difficulty": "advanced",
       "supported_versions": [
+        "9",
         "10"
       ],
       "related_entities": [
@@ -24993,7 +25034,16 @@
         "concept-systemd",
         "concept-storage-stack",
         "concept-persistent-configuration",
-        "path-rhel-admin"
+        "path-rhel-admin",
+        "cmd-bootc",
+        "cmd-bootc-image-builder",
+        "task-bootc-update",
+        "task-bootc-build",
+        "concept-rpm-ostree",
+        "path-advanced-rhel-administration",
+        "concept-rhel-management-models",
+        "cmd-rpm-ostree",
+        "troubleshoot-bootc"
       ],
       "tags_ar": [
         "Concept",
@@ -25015,6 +25065,4199 @@
       "misconceptions_ar": [
         "Image Mode does not mean that the final server runs inside an application container.",
         "Installing packages directly at runtime is not the primary replacement for changing and rebuilding the image."
+      ]
+    },
+    {
+      "id": "concept-kickstart-automation",
+      "entity_type": "concept",
+      "title_ar": "Kickstart and Anaconda Automated Installation",
+      "summary_ar": "Automate RHEL installation from a file defining storage, networking, packages, users, and scripts.",
+      "category": "advanced_provisioning",
+      "keywords_ar": [
+        "Kickstart and Anaconda Automated Installation",
+        "Automate RHEL installation from a file defining storage, networking, packages, users, and scripts.",
+        "Kickstart",
+        "Anaconda",
+        "ksvalidator",
+        "inst.ks",
+        "PXE",
+        "%packages",
+        "%pre",
+        "%post",
+        "It contains commands and sections such as %packages, %pre, and %post.",
+        "The inst.ks= boot option identifies the Kickstart location.",
+        "/root/anaconda-ks.cfg is a useful starting point after review and sanitization.",
+        "ksvalidator checks syntax and deprecated options but cannot guarantee installation success.",
+        "PXE or UEFI HTTP Boot can automate the complete boot and installation chain."
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-ksvalidator",
+        "task-validate-kickstart",
+        "task-launch-kickstart",
+        "troubleshoot-kickstart",
+        "path-advanced-rhel-administration"
+      ],
+      "tags_ar": [
+        "Concept",
+        "Kickstart",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "definition_ar": "Kickstart is a configuration file consumed by Anaconda to turn interactive installation choices into a repeatable process.",
+      "why_it_matters_ar": "It standardizes server builds and supports local, network, PXE, and HTTP Boot deployment.",
+      "key_points_ar": [
+        "It contains commands and sections such as %packages, %pre, and %post.",
+        "The inst.ks= boot option identifies the Kickstart location.",
+        "/root/anaconda-ks.cfg is a useful starting point after review and sanitization.",
+        "ksvalidator checks syntax and deprecated options but cannot guarantee installation success.",
+        "PXE or UEFI HTTP Boot can automate the complete boot and installation chain."
+      ],
+      "mental_model_ar": "Kickstart is the installation contract and Anaconda is the executor.",
+      "misconceptions_ar": [
+        "Passing validation does not prove storage or scripts will work.",
+        "Publishing anaconda-ks.cfg can expose secrets."
+      ]
+    },
+    {
+      "id": "concept-satellite-management",
+      "entity_type": "concept",
+      "title_ar": "Red Hat Satellite Host and Content Lifecycle",
+      "summary_ar": "Centralized registration, content, provisioning, and remote execution through Satellite and Capsule.",
+      "category": "satellite",
+      "keywords_ar": [
+        "Red Hat Satellite Host and Content Lifecycle",
+        "Centralized registration, content, provisioning, and remote execution through Satellite and Capsule.",
+        "Satellite Server",
+        "Capsule",
+        "Content Views",
+        "Lifecycle Environments",
+        "Activation Keys",
+        "Hammer",
+        "Remote Execution",
+        "Satellite Server is the central control point.",
+        "Capsule distributes content and localized services.",
+        "A Content View freezes a promotable content version.",
+        "Lifecycle Environments separate Development, Test, and Production.",
+        "Activation Keys automate registration and content assignment.",
+        "Hammer, APIs, and Remote Execution support automated operations."
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-hammer",
+        "cmd-satellite-maintain",
+        "task-register-satellite",
+        "task-satellite-content",
+        "task-satellite-remote-job",
+        "troubleshoot-satellite",
+        "path-advanced-rhel-administration",
+        "concept-rhel-management-models"
+      ],
+      "tags_ar": [
+        "Concept",
+        "Satellite",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "definition_ar": "Satellite combines host management, repositories, Content Views, lifecycle, provisioning, and remote jobs.",
+      "why_it_matters_ar": "It provides controlled content, permissions, audit, and distributed services for large fleets.",
+      "key_points_ar": [
+        "Satellite Server is the central control point.",
+        "Capsule distributes content and localized services.",
+        "A Content View freezes a promotable content version.",
+        "Lifecycle Environments separate Development, Test, and Production.",
+        "Activation Keys automate registration and content assignment.",
+        "Hammer, APIs, and Remote Execution support automated operations."
+      ],
+      "mental_model_ar": "Satellite is the control tower, Capsules are regional stations, and hosts consume approved content.",
+      "misconceptions_ar": [
+        "Repository synchronization does not expose content to every host.",
+        "Promotion does not automatically install packages."
+      ]
+    },
+    {
+      "id": "concept-lightspeed-insights",
+      "entity_type": "concept",
+      "title_ar": "Red Hat Lightspeed and Insights",
+      "summary_ar": "Analytics for inventory, recommendations, vulnerability, compliance, malware, and remediation plans.",
+      "category": "lightspeed",
+      "keywords_ar": [
+        "Red Hat Lightspeed and Insights",
+        "Analytics for inventory, recommendations, vulnerability, compliance, malware, and remediation plans.",
+        "Red Hat Lightspeed",
+        "Insights",
+        "Advisor",
+        "Vulnerability",
+        "Compliance",
+        "Malware",
+        "Remediations",
+        "Inventory",
+        "insights-client collects and uploads data.",
+        "Inventory organizes systems, groups, and facts.",
+        "Advisor provides operational recommendations.",
+        "Vulnerability, Compliance, and Malware cover different security areas.",
+        "Remediations create executable repair plans.",
+        "Collection and exclusions are configurable."
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-insights-client",
+        "cmd-rhc",
+        "task-register-lightspeed",
+        "path-advanced-rhel-administration",
+        "concept-rhel-management-models"
+      ],
+      "tags_ar": [
+        "Concept",
+        "Lightspeed",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "definition_ar": "Lightspeed, formerly Insights, collects controlled RHEL facts and turns them into inventory and recommendations.",
+      "why_it_matters_ar": "It exposes fleet risk proactively instead of waiting for each host to fail.",
+      "key_points_ar": [
+        "insights-client collects and uploads data.",
+        "Inventory organizes systems, groups, and facts.",
+        "Advisor provides operational recommendations.",
+        "Vulnerability, Compliance, and Malware cover different security areas.",
+        "Remediations create executable repair plans.",
+        "Collection and exclusions are configurable."
+      ],
+      "mental_model_ar": "The client supplies facts and the service connects them to Red Hat knowledge.",
+      "misconceptions_ar": [
+        "Remediation does not replace change management.",
+        "The service does not upload every system file."
+      ]
+    },
+    {
+      "id": "concept-ansible-core",
+      "entity_type": "concept",
+      "title_ar": "Ansible Automation Fundamentals",
+      "summary_ar": "Manage desired state with inventories, modules, playbooks, variables, roles, collections, and Vault.",
+      "category": "automation",
+      "keywords_ar": [
+        "Ansible Automation Fundamentals",
+        "Manage desired state with inventories, modules, playbooks, variables, roles, collections, and Vault.",
+        "Ansible",
+        "Inventory",
+        "Modules",
+        "Tasks",
+        "Playbooks",
+        "Idempotency",
+        "Roles",
+        "Collections",
+        "Vault",
+        "Inventory defines hosts, groups, and variables.",
+        "A module performs a function, a task invokes it, and a play maps it to hosts.",
+        "Idempotency avoids extra changes when state is already correct.",
+        "Handlers run after real changes.",
+        "Roles and Collections organize reusable content.",
+        "Vault protects secrets."
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-ansible",
+        "cmd-ansible-playbook",
+        "cmd-ansible-inventory",
+        "cmd-ansible-vault",
+        "task-run-ansible",
+        "path-advanced-rhel-administration",
+        "concept-rhel-management-models"
+      ],
+      "tags_ar": [
+        "Concept",
+        "Ansible",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "definition_ar": "Ansible applies tasks to inventory hosts through modules and YAML playbooks.",
+      "why_it_matters_ar": "It turns repeated administration into reviewable automation across many systems.",
+      "key_points_ar": [
+        "Inventory defines hosts, groups, and variables.",
+        "A module performs a function, a task invokes it, and a play maps it to hosts.",
+        "Idempotency avoids extra changes when state is already correct.",
+        "Handlers run after real changes.",
+        "Roles and Collections organize reusable content.",
+        "Vault protects secrets."
+      ],
+      "mental_model_ar": "A playbook describes desired state rather than merely listing commands.",
+      "misconceptions_ar": [
+        "Using shell for every action loses module benefits.",
+        "Plaintext secrets do not belong in Git."
+      ]
+    },
+    {
+      "id": "concept-aap-platform",
+      "entity_type": "concept",
+      "title_ar": "Red Hat Ansible Automation Platform",
+      "summary_ar": "Enterprise automation through Controller, Execution Environments, Automation Hub, RBAC, and event-driven workflows.",
+      "category": "automation",
+      "keywords_ar": [
+        "Red Hat Ansible Automation Platform",
+        "Enterprise automation through Controller, Execution Environments, Automation Hub, RBAC, and event-driven workflows.",
+        "Ansible Automation Platform",
+        "Automation Controller",
+        "Execution Environments",
+        "Automation Hub",
+        "RBAC",
+        "Event-Driven Ansible",
+        "Automation Controller manages Projects, Inventories, Credentials, and Job Templates.",
+        "An Execution Environment contains ansible-core and dependencies.",
+        "Private Automation Hub stores approved content.",
+        "RBAC controls access to resources.",
+        "ansible-navigator runs content inside an EE.",
+        "Event-Driven Ansible maps events to rulebooks and actions."
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-ansible-navigator",
+        "cmd-ansible-builder",
+        "task-build-execution-environment",
+        "path-advanced-rhel-administration",
+        "concept-rhel-management-models"
+      ],
+      "tags_ar": [
+        "Concept",
+        "AAP",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "definition_ar": "AAP adds centralized execution, isolated dependencies, permissions, audit, and content distribution around Ansible.",
+      "why_it_matters_ar": "It enables delegated, scheduled, and auditable automation without distributing direct server access.",
+      "key_points_ar": [
+        "Automation Controller manages Projects, Inventories, Credentials, and Job Templates.",
+        "An Execution Environment contains ansible-core and dependencies.",
+        "Private Automation Hub stores approved content.",
+        "RBAC controls access to resources.",
+        "ansible-navigator runs content inside an EE.",
+        "Event-Driven Ansible maps events to rulebooks and actions."
+      ],
+      "mental_model_ar": "Content lives in Git, dependencies in an EE, and execution and audit in Controller.",
+      "misconceptions_ar": [
+        "Controller cannot fix a poorly designed playbook.",
+        "An Execution Environment is not the managed host."
+      ]
+    },
+    {
+      "id": "concept-openscap-compliance",
+      "entity_type": "concept",
+      "title_ar": "OpenSCAP and the SCAP Security Guide",
+      "summary_ar": "Assess compliance, generate reports, tailor profiles, and apply automated remediation.",
+      "category": "compliance",
+      "keywords_ar": [
+        "OpenSCAP and the SCAP Security Guide",
+        "Assess compliance, generate reports, tailor profiles, and apply automated remediation.",
+        "OpenSCAP",
+        "oscap",
+        "SCAP Security Guide",
+        "XCCDF",
+        "OVAL",
+        "profiles",
+        "tailoring",
+        "remediation",
+        "oscap info lists profiles.",
+        "oscap xccdf eval performs assessment.",
+        "XML results and HTML reports can be generated.",
+        "--remediate changes system configuration.",
+        "autotailor creates a separate Tailoring file.",
+        "SCAP content must match the RHEL release."
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-oscap",
+        "cmd-autotailor",
+        "task-openscap-scan",
+        "task-openscap-remediate",
+        "troubleshoot-openscap",
+        "path-advanced-rhel-administration"
+      ],
+      "tags_ar": [
+        "Concept",
+        "OpenSCAP",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "definition_ar": "OpenSCAP evaluates a host against compliance content such as SCAP Security Guide profiles and XCCDF/OVAL rules.",
+      "why_it_matters_ar": "It produces repeatable measurement and evidence instead of inconsistent manual audits.",
+      "key_points_ar": [
+        "oscap info lists profiles.",
+        "oscap xccdf eval performs assessment.",
+        "XML results and HTML reports can be generated.",
+        "--remediate changes system configuration.",
+        "autotailor creates a separate Tailoring file.",
+        "SCAP content must match the RHEL release."
+      ],
+      "mental_model_ar": "A policy is a set of tests, a profile selects them, and oscap measures the host.",
+      "misconceptions_ar": [
+        "A pass does not cover every threat.",
+        "Remediation requires testing and recovery."
+      ]
+    },
+    {
+      "id": "concept-rhel-web-console",
+      "entity_type": "concept",
+      "title_ar": "RHEL Web Console Based on Cockpit",
+      "summary_ar": "A web interface for services, logs, networking, storage, accounts, and terminal access.",
+      "category": "web_console",
+      "keywords_ar": [
+        "RHEL Web Console Based on Cockpit",
+        "A web interface for services, logs, networking, storage, accounts, and terminal access.",
+        "Cockpit",
+        "RHEL web console",
+        "cockpit.socket",
+        "9090",
+        "services",
+        "logs",
+        "storage",
+        "networking",
+        "It normally uses cockpit.socket.",
+        "The default HTTPS port is 9090.",
+        "Add-ons extend storage, virtualization, and software pages.",
+        "Remote hosts can be managed.",
+        "System accounts and polkit still apply."
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "task-enable-cockpit",
+        "path-advanced-rhel-administration"
+      ],
+      "tags_ar": [
+        "Concept",
+        "Cockpit",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "definition_ar": "Cockpit uses existing RHEL services and APIs with socket activation and HTTPS.",
+      "why_it_matters_ar": "It simplifies daily operations and links service state to logs and resources.",
+      "key_points_ar": [
+        "It normally uses cockpit.socket.",
+        "The default HTTPS port is 9090.",
+        "Add-ons extend storage, virtualization, and software pages.",
+        "Remote hosts can be managed.",
+        "System accounts and polkit still apply."
+      ],
+      "mental_model_ar": "Cockpit is a window into systemd, NetworkManager, storage, and the journal.",
+      "misconceptions_ar": [
+        "Opening the port is insufficient when the socket is inactive.",
+        "The UI does not remove the need to understand changes."
+      ]
+    },
+    {
+      "id": "concept-image-builder-composer",
+      "entity_type": "concept",
+      "title_ar": "RHEL Image Builder and Composer",
+      "summary_ar": "Create customized RHEL images from a Blueprint with packages, services, users, and multiple formats.",
+      "category": "image_building",
+      "keywords_ar": [
+        "RHEL Image Builder and Composer",
+        "Create customized RHEL images from a Blueprint with packages, services, users, and multiple formats.",
+        "RHEL Image Builder",
+        "osbuild-composer",
+        "composer-cli",
+        "Blueprint",
+        "TOML",
+        "Compose",
+        "qcow2",
+        "A Blueprint defines packages and customizations.",
+        "A Compose is one build and its result.",
+        "composer-cli manages Blueprints and Composes.",
+        "Image types depend on release and architecture.",
+        "Cockpit provides a graphical workflow.",
+        "It differs from bootc-image-builder."
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-composer-cli",
+        "task-image-builder",
+        "path-advanced-rhel-administration",
+        "concept-rhel-management-models"
+      ],
+      "tags_ar": [
+        "Concept",
+        "Image Builder",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "definition_ar": "Image Builder converts a TOML Blueprint into a customized VM, cloud, or installer image.",
+      "why_it_matters_ar": "It turns system configuration into a reproducible deployment artifact.",
+      "key_points_ar": [
+        "A Blueprint defines packages and customizations.",
+        "A Compose is one build and its result.",
+        "composer-cli manages Blueprints and Composes.",
+        "Image types depend on release and architecture.",
+        "Cockpit provides a graphical workflow.",
+        "It differs from bootc-image-builder."
+      ],
+      "mental_model_ar": "A Blueprint is the description, a Compose executes it, and the artifact is deployed.",
+      "misconceptions_ar": [
+        "Changing a Blueprint does not modify an old image.",
+        "List supported image types instead of guessing."
+      ]
+    },
+    {
+      "id": "concept-leapp-upgrade",
+      "entity_type": "concept",
+      "title_ar": "In-place Upgrades with Leapp",
+      "summary_ar": "Assess and perform a RHEL upgrade between consecutive major releases with reports and inhibitors.",
+      "category": "upgrades",
+      "keywords_ar": [
+        "In-place Upgrades with Leapp",
+        "Assess and perform a RHEL upgrade between consecutive major releases with reports and inhibitors.",
+        "Leapp",
+        "preupgrade",
+        "inhibitor",
+        "answerfile",
+        "RHEL 8 to 9",
+        "RHEL 9 to 10",
+        "Paths move between consecutive releases.",
+        "preupgrade creates the Leapp report.",
+        "An inhibitor blocks upgrade.",
+        "The answer file records required decisions.",
+        "upgrade prepares the transaction and requires reboot.",
+        "Recovery depends on backup or snapshot."
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-leapp",
+        "task-leapp-preupgrade",
+        "task-leapp-upgrade",
+        "troubleshoot-leapp",
+        "path-advanced-rhel-administration"
+      ],
+      "tags_ar": [
+        "Concept",
+        "Leapp",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "definition_ar": "Leapp evaluates the source system and prepares an environment that replaces it with the next supported major release.",
+      "why_it_matters_ar": "It avoids reinstalling the host but requires preparation and backup.",
+      "key_points_ar": [
+        "Paths move between consecutive releases.",
+        "preupgrade creates the Leapp report.",
+        "An inhibitor blocks upgrade.",
+        "The answer file records required decisions.",
+        "upgrade prepares the transaction and requires reboot.",
+        "Recovery depends on backup or snapshot."
+      ],
+      "mental_model_ar": "Leapp is an assessment gate followed by an upgrade transaction.",
+      "misconceptions_ar": [
+        "RHEL 8 cannot jump directly to 10.",
+        "A clean assessment does not replace backup."
+      ]
+    },
+    {
+      "id": "concept-rpm-ostree",
+      "entity_type": "concept",
+      "title_ar": "rpm-ostree and the Transition to bootc",
+      "summary_ar": "Manage atomic deployments on earlier RHEL for Edge systems and understand migration to Image Mode.",
+      "category": "image_mode",
+      "keywords_ar": [
+        "rpm-ostree and the Transition to bootc",
+        "Manage atomic deployments on earlier RHEL for Edge systems and understand migration to Image Mode.",
+        "rpm-ostree",
+        "OSTree",
+        "deployments",
+        "rollback",
+        "package layering",
+        "RHEL for Edge",
+        "bootc migration",
+        "status shows deployments.",
+        "upgrade creates a new deployment.",
+        "rollback selects an earlier state.",
+        "Package layering increases host drift.",
+        "bootc is the modern path.",
+        "rpm-ostree is unsupported for mutating bootc systems."
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9"
+      ],
+      "related_entities": [
+        "cmd-rpm-ostree",
+        "cmd-bootc",
+        "concept-rhel-image-mode",
+        "path-advanced-rhel-administration"
+      ],
+      "tags_ar": [
+        "Concept",
+        "rpm-ostree",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "definition_ar": "rpm-ostree combines OSTree and RPM metadata to create bootable, rollback-capable system states.",
+      "why_it_matters_ar": "It matters for older deployments and migration planning to bootc.",
+      "key_points_ar": [
+        "status shows deployments.",
+        "upgrade creates a new deployment.",
+        "rollback selects an earlier state.",
+        "Package layering increases host drift.",
+        "bootc is the modern path.",
+        "rpm-ostree is unsupported for mutating bootc systems."
+      ],
+      "mental_model_ar": "Every update creates a new system slice selected at boot.",
+      "misconceptions_ar": [
+        "It is not a conventional package manager like dnf.",
+        "Do not use it to mutate bootc."
+      ]
+    },
+    {
+      "id": "concept-rhel-management-models",
+      "entity_type": "concept",
+      "title_ar": "Advanced RHEL Management Models",
+      "summary_ar": "Choose when to use packages, Ansible, images, Satellite, or Lightspeed.",
+      "category": "concepts",
+      "keywords_ar": [
+        "Advanced RHEL Management Models",
+        "Choose when to use packages, Ansible, images, Satellite, or Lightspeed.",
+        "Package Mode",
+        "configuration management",
+        "Image Mode",
+        "fleet management",
+        "drift",
+        "desired state",
+        "Package Mode supports direct change.",
+        "Ansible applies desired state.",
+        "Image Builder produces customized images.",
+        "bootc treats the OS as an image artifact.",
+        "Satellite manages content and hosts.",
+        "Lightspeed analyzes risk and recommendations."
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "concept-ansible-core",
+        "concept-aap-platform",
+        "concept-image-builder-composer",
+        "concept-rhel-image-mode",
+        "concept-satellite-management",
+        "concept-lightspeed-insights",
+        "path-advanced-rhel-administration"
+      ],
+      "tags_ar": [
+        "Concept",
+        "Architecture",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "definition_ar": "RHEL can be managed through direct changes, desired-state automation, complete images, or centralized fleet platforms.",
+      "why_it_matters_ar": "A deliberate model reduces drift and connects build, deployment, observation, and remediation.",
+      "key_points_ar": [
+        "Package Mode supports direct change.",
+        "Ansible applies desired state.",
+        "Image Builder produces customized images.",
+        "bootc treats the OS as an image artifact.",
+        "Satellite manages content and hosts.",
+        "Lightspeed analyzes risk and recommendations."
+      ],
+      "mental_model_ar": "Separate build, deploy, configure, observe, and remediate, then choose a tool for each phase.",
+      "misconceptions_ar": [
+        "A golden image alone does not prevent drift.",
+        "A central platform does not replace a source of truth."
+      ]
+    },
+    {
+      "id": "cmd-ksvalidator",
+      "entity_type": "command",
+      "title_ar": "ksvalidator Command Reference",
+      "summary_ar": "Validate Kickstart syntax and deprecated options.",
+      "category": "advanced_provisioning",
+      "keywords_ar": [
+        "ksvalidator Command Reference",
+        "Validate Kickstart syntax and deprecated options.",
+        "ksvalidator",
+        "ksvalidator [-v RHEL_VERSION] <KICKSTART_FILE>",
+        "ksvalidator -v RHEL10 server.ks"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "task-validate-kickstart",
+        "task-launch-kickstart",
+        "troubleshoot-kickstart",
+        "path-advanced-rhel-administration",
+        "concept-kickstart-automation"
+      ],
+      "tags_ar": [
+        "Command Reference",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "command_name": "ksvalidator",
+      "purpose_ar": "Validate Kickstart syntax and deprecated options.",
+      "syntax": "ksvalidator [-v RHEL_VERSION] <KICKSTART_FILE>",
+      "provided_by": "pykickstart",
+      "requires_sudo": false,
+      "risk": "low",
+      "options": [
+        {
+          "option": "-v RHEL10",
+          "description_ar": "Validate against RHEL 10 rules.",
+          "example": "ksvalidator -v RHEL10 server.ks"
+        },
+        {
+          "option": "--list-versions",
+          "description_ar": "List supported versions.",
+          "example": "ksvalidator --list-versions"
+        }
+      ],
+      "examples": [
+        {
+          "title_ar": "Validate a file",
+          "command": "ksvalidator -v RHEL10 server.ks",
+          "explanation_ar": "Checks known syntax."
+        }
+      ],
+      "common_mistakes_ar": [
+        "It cannot guarantee installation success.",
+        "It does not fully validate scripts."
+      ]
+    },
+    {
+      "id": "cmd-hammer",
+      "entity_type": "command",
+      "title_ar": "hammer Command Reference",
+      "summary_ar": "Manage Satellite resources from the CLI.",
+      "category": "satellite",
+      "keywords_ar": [
+        "hammer Command Reference",
+        "Manage Satellite resources from the CLI.",
+        "hammer",
+        "hammer <RESOURCE> <ACTION> [OPTIONS]",
+        "hammer host list --organization <ORG>"
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-satellite-maintain",
+        "task-register-satellite",
+        "task-satellite-content",
+        "task-satellite-remote-job",
+        "troubleshoot-satellite",
+        "path-advanced-rhel-administration",
+        "concept-satellite-management"
+      ],
+      "tags_ar": [
+        "Command Reference",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "command_name": "hammer",
+      "purpose_ar": "Manage Satellite resources from the CLI.",
+      "syntax": "hammer <RESOURCE> <ACTION> [OPTIONS]",
+      "provided_by": "Hammer CLI",
+      "requires_sudo": false,
+      "risk": "high",
+      "options": [
+        {
+          "option": "host list",
+          "description_ar": "List hosts.",
+          "example": "hammer host list"
+        },
+        {
+          "option": "content-view list",
+          "description_ar": "List Content Views.",
+          "example": "hammer content-view list"
+        },
+        {
+          "option": "job-invocation list",
+          "description_ar": "List remote jobs.",
+          "example": "hammer job-invocation list"
+        }
+      ],
+      "examples": [
+        {
+          "title_ar": "List hosts",
+          "command": "hammer host list --organization <ORG>",
+          "explanation_ar": "Lists organization hosts."
+        }
+      ],
+      "common_mistakes_ar": [
+        "Operate in the correct organization."
+      ]
+    },
+    {
+      "id": "cmd-satellite-maintain",
+      "entity_type": "command",
+      "title_ar": "satellite-maintain Command Reference",
+      "summary_ar": "Maintain, assess, upgrade, and back up Satellite.",
+      "category": "satellite",
+      "keywords_ar": [
+        "satellite-maintain Command Reference",
+        "Maintain, assess, upgrade, and back up Satellite.",
+        "satellite-maintain",
+        "satellite-maintain <health|service|backup|upgrade> <ACTION>",
+        "sudo satellite-maintain health check"
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-hammer",
+        "task-register-satellite",
+        "task-satellite-content",
+        "task-satellite-remote-job",
+        "troubleshoot-satellite",
+        "path-advanced-rhel-administration",
+        "concept-satellite-management"
+      ],
+      "tags_ar": [
+        "Command Reference",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "command_name": "satellite-maintain",
+      "purpose_ar": "Maintain, assess, upgrade, and back up Satellite.",
+      "syntax": "satellite-maintain <health|service|backup|upgrade> <ACTION>",
+      "provided_by": "foreman-maintain",
+      "requires_sudo": true,
+      "risk": "high",
+      "options": [
+        {
+          "option": "health check",
+          "description_ar": "Run health checks.",
+          "example": "sudo satellite-maintain health check"
+        },
+        {
+          "option": "service status",
+          "description_ar": "Show services.",
+          "example": "sudo satellite-maintain service status"
+        },
+        {
+          "option": "upgrade check",
+          "description_ar": "Check upgrade readiness.",
+          "example": "sudo satellite-maintain upgrade check"
+        }
+      ],
+      "examples": [
+        {
+          "title_ar": "Check health",
+          "command": "sudo satellite-maintain health check",
+          "explanation_ar": "Runs the health suite."
+        }
+      ],
+      "common_mistakes_ar": [
+        "Do not run disruptive maintenance in production."
+      ]
+    },
+    {
+      "id": "cmd-insights-client",
+      "entity_type": "command",
+      "title_ar": "insights-client Command Reference",
+      "summary_ar": "Register the system and upload Lightspeed data.",
+      "category": "lightspeed",
+      "keywords_ar": [
+        "insights-client Command Reference",
+        "Register the system and upload Lightspeed data.",
+        "insights-client",
+        "insights-client [OPTIONS]",
+        "sudo insights-client"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-rhc",
+        "task-register-lightspeed",
+        "path-advanced-rhel-administration",
+        "concept-lightspeed-insights"
+      ],
+      "tags_ar": [
+        "Command Reference",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "command_name": "insights-client",
+      "purpose_ar": "Register the system and upload Lightspeed data.",
+      "syntax": "insights-client [OPTIONS]",
+      "provided_by": "insights-client",
+      "requires_sudo": true,
+      "risk": "medium",
+      "options": [
+        {
+          "option": "--register",
+          "description_ar": "Register the system.",
+          "example": "sudo insights-client --register"
+        },
+        {
+          "option": "--status",
+          "description_ar": "Show status.",
+          "example": "sudo insights-client --status"
+        },
+        {
+          "option": "--display-name NAME",
+          "description_ar": "Set display name.",
+          "example": "sudo insights-client --display-name web01"
+        }
+      ],
+      "examples": [
+        {
+          "title_ar": "Upload now",
+          "command": "sudo insights-client",
+          "explanation_ar": "Collects and uploads an archive."
+        }
+      ],
+      "common_mistakes_ar": [
+        "Review privacy configuration."
+      ]
+    },
+    {
+      "id": "cmd-rhc",
+      "entity_type": "command",
+      "title_ar": "rhc Command Reference",
+      "summary_ar": "Connect RHEL to Red Hat services and remediation execution.",
+      "category": "lightspeed",
+      "keywords_ar": [
+        "rhc Command Reference",
+        "Connect RHEL to Red Hat services and remediation execution.",
+        "rhc",
+        "rhc <connect|status|disconnect>",
+        "sudo rhc connect"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-insights-client",
+        "task-register-lightspeed",
+        "path-advanced-rhel-administration",
+        "concept-lightspeed-insights"
+      ],
+      "tags_ar": [
+        "Command Reference",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "command_name": "rhc",
+      "purpose_ar": "Connect RHEL to Red Hat services and remediation execution.",
+      "syntax": "rhc <connect|status|disconnect>",
+      "provided_by": "rhc",
+      "requires_sudo": true,
+      "risk": "medium",
+      "options": [
+        {
+          "option": "connect",
+          "description_ar": "Connect services.",
+          "example": "sudo rhc connect"
+        },
+        {
+          "option": "status",
+          "description_ar": "Show status.",
+          "example": "sudo rhc status"
+        },
+        {
+          "option": "disconnect",
+          "description_ar": "Disconnect.",
+          "example": "sudo rhc disconnect"
+        }
+      ],
+      "examples": [
+        {
+          "title_ar": "Connect the system",
+          "command": "sudo rhc connect",
+          "explanation_ar": "Enables connectivity."
+        }
+      ],
+      "common_mistakes_ar": [
+        "Understand the effect of disconnect."
+      ]
+    },
+    {
+      "id": "cmd-ansible",
+      "entity_type": "command",
+      "title_ar": "ansible Command Reference",
+      "summary_ar": "Run an ad-hoc module against inventory hosts.",
+      "category": "automation",
+      "keywords_ar": [
+        "ansible Command Reference",
+        "Run an ad-hoc module against inventory hosts.",
+        "ansible",
+        "ansible <PATTERN> -i <INVENTORY> -m <MODULE> [-a ARGS]",
+        "ansible all -i inventory.ini -m ansible.builtin.ping"
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-ansible-playbook",
+        "cmd-ansible-inventory",
+        "cmd-ansible-vault",
+        "task-run-ansible",
+        "path-advanced-rhel-administration",
+        "concept-ansible-core"
+      ],
+      "tags_ar": [
+        "Command Reference",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "command_name": "ansible",
+      "purpose_ar": "Run an ad-hoc module against inventory hosts.",
+      "syntax": "ansible <PATTERN> -i <INVENTORY> -m <MODULE> [-a ARGS]",
+      "provided_by": "ansible-core",
+      "requires_sudo": false,
+      "risk": "high",
+      "options": [
+        {
+          "option": "-i FILE",
+          "description_ar": "Select inventory.",
+          "example": "-i inventory.ini"
+        },
+        {
+          "option": "-m MODULE",
+          "description_ar": "Select module.",
+          "example": "-m ansible.builtin.ping"
+        },
+        {
+          "option": "--check",
+          "description_ar": "Preview changes.",
+          "example": "--check"
+        }
+      ],
+      "examples": [
+        {
+          "title_ar": "Test connectivity",
+          "command": "ansible all -i inventory.ini -m ansible.builtin.ping",
+          "explanation_ar": "Returns pong."
+        }
+      ],
+      "common_mistakes_ar": [
+        "Review the host pattern before execution."
+      ]
+    },
+    {
+      "id": "cmd-ansible-playbook",
+      "entity_type": "command",
+      "title_ar": "ansible-playbook Command Reference",
+      "summary_ar": "Run, validate, preview, and limit playbooks.",
+      "category": "automation",
+      "keywords_ar": [
+        "ansible-playbook Command Reference",
+        "Run, validate, preview, and limit playbooks.",
+        "ansible-playbook",
+        "ansible-playbook -i <INVENTORY> <PLAYBOOK> [OPTIONS]",
+        "ansible-playbook -i inventory.ini site.yml --check --diff --limit test"
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-ansible",
+        "cmd-ansible-inventory",
+        "cmd-ansible-vault",
+        "task-run-ansible",
+        "path-advanced-rhel-administration",
+        "concept-ansible-core"
+      ],
+      "tags_ar": [
+        "Command Reference",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "command_name": "ansible-playbook",
+      "purpose_ar": "Run, validate, preview, and limit playbooks.",
+      "syntax": "ansible-playbook -i <INVENTORY> <PLAYBOOK> [OPTIONS]",
+      "provided_by": "ansible-core",
+      "requires_sudo": false,
+      "risk": "high",
+      "options": [
+        {
+          "option": "--syntax-check",
+          "description_ar": "Validate syntax.",
+          "example": "--syntax-check"
+        },
+        {
+          "option": "--check",
+          "description_ar": "Preview changes.",
+          "example": "--check"
+        },
+        {
+          "option": "--limit PATTERN",
+          "description_ar": "Limit hosts.",
+          "example": "--limit test"
+        }
+      ],
+      "examples": [
+        {
+          "title_ar": "Safe preview",
+          "command": "ansible-playbook -i inventory.ini site.yml --check --diff --limit test",
+          "explanation_ar": "Previews expected changes."
+        }
+      ],
+      "common_mistakes_ar": [
+        "Do not start with production."
+      ]
+    },
+    {
+      "id": "cmd-ansible-inventory",
+      "entity_type": "command",
+      "title_ar": "ansible-inventory Command Reference",
+      "summary_ar": "Inspect inventory hosts, groups, and variables.",
+      "category": "automation",
+      "keywords_ar": [
+        "ansible-inventory Command Reference",
+        "Inspect inventory hosts, groups, and variables.",
+        "ansible-inventory",
+        "ansible-inventory -i <INVENTORY> <--graph|--list|--host HOST>",
+        "ansible-inventory -i inventory.ini --graph"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-ansible",
+        "cmd-ansible-playbook",
+        "cmd-ansible-vault",
+        "task-run-ansible",
+        "path-advanced-rhel-administration",
+        "concept-ansible-core"
+      ],
+      "tags_ar": [
+        "Command Reference",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "command_name": "ansible-inventory",
+      "purpose_ar": "Inspect inventory hosts, groups, and variables.",
+      "syntax": "ansible-inventory -i <INVENTORY> <--graph|--list|--host HOST>",
+      "provided_by": "ansible-core",
+      "requires_sudo": false,
+      "risk": "low",
+      "options": [
+        {
+          "option": "--graph",
+          "description_ar": "Show group hierarchy.",
+          "example": "--graph"
+        },
+        {
+          "option": "--host HOST",
+          "description_ar": "Show host variables.",
+          "example": "--host web01"
+        }
+      ],
+      "examples": [
+        {
+          "title_ar": "Show graph",
+          "command": "ansible-inventory -i inventory.ini --graph",
+          "explanation_ar": "Shows the target structure."
+        }
+      ],
+      "common_mistakes_ar": [
+        "Review group_vars and host_vars."
+      ]
+    },
+    {
+      "id": "cmd-ansible-vault",
+      "entity_type": "command",
+      "title_ar": "ansible-vault Command Reference",
+      "summary_ar": "Encrypt secrets used by playbooks.",
+      "category": "automation",
+      "keywords_ar": [
+        "ansible-vault Command Reference",
+        "Encrypt secrets used by playbooks.",
+        "ansible-vault",
+        "ansible-vault <create|encrypt|edit|view|rekey> <FILE>",
+        "ansible-vault create group_vars/all/vault.yml"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-ansible",
+        "cmd-ansible-playbook",
+        "cmd-ansible-inventory",
+        "task-run-ansible",
+        "path-advanced-rhel-administration",
+        "concept-ansible-core"
+      ],
+      "tags_ar": [
+        "Command Reference",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "command_name": "ansible-vault",
+      "purpose_ar": "Encrypt secrets used by playbooks.",
+      "syntax": "ansible-vault <create|encrypt|edit|view|rekey> <FILE>",
+      "provided_by": "ansible-core",
+      "requires_sudo": false,
+      "risk": "medium",
+      "options": [
+        {
+          "option": "create FILE",
+          "description_ar": "Create an encrypted file.",
+          "example": "ansible-vault create secrets.yml"
+        },
+        {
+          "option": "rekey FILE",
+          "description_ar": "Change the password.",
+          "example": "ansible-vault rekey secrets.yml"
+        }
+      ],
+      "examples": [
+        {
+          "title_ar": "Create secrets",
+          "command": "ansible-vault create group_vars/all/vault.yml",
+          "explanation_ar": "Creates an encrypted file."
+        }
+      ],
+      "common_mistakes_ar": [
+        "Do not store the Vault password with the file."
+      ]
+    },
+    {
+      "id": "cmd-ansible-navigator",
+      "entity_type": "command",
+      "title_ar": "ansible-navigator Command Reference",
+      "summary_ar": "Run and explore Ansible content in an Execution Environment.",
+      "category": "automation",
+      "keywords_ar": [
+        "ansible-navigator Command Reference",
+        "Run and explore Ansible content in an Execution Environment.",
+        "ansible-navigator",
+        "ansible-navigator <run|inventory|collections|images> [ARGS]",
+        "ansible-navigator run site.yml -i inventory.ini --eei corp-ee:1.0 --mode stdout"
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-ansible-builder",
+        "task-build-execution-environment",
+        "path-advanced-rhel-administration",
+        "concept-aap-platform"
+      ],
+      "tags_ar": [
+        "Command Reference",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "command_name": "ansible-navigator",
+      "purpose_ar": "Run and explore Ansible content in an Execution Environment.",
+      "syntax": "ansible-navigator <run|inventory|collections|images> [ARGS]",
+      "provided_by": "ansible-navigator",
+      "requires_sudo": false,
+      "risk": "high",
+      "options": [
+        {
+          "option": "run PLAYBOOK",
+          "description_ar": "Run a playbook.",
+          "example": "ansible-navigator run site.yml"
+        },
+        {
+          "option": "--eei IMAGE",
+          "description_ar": "Select an EE.",
+          "example": "--eei corp-ee:1.0"
+        },
+        {
+          "option": "--mode stdout",
+          "description_ar": "Use stdout mode.",
+          "example": "--mode stdout"
+        }
+      ],
+      "examples": [
+        {
+          "title_ar": "Run inside an EE",
+          "command": "ansible-navigator run site.yml -i inventory.ini --eei corp-ee:1.0 --mode stdout",
+          "explanation_ar": "Runs with consistent dependencies."
+        }
+      ],
+      "common_mistakes_ar": [
+        "Match the EE to project requirements."
+      ]
+    },
+    {
+      "id": "cmd-ansible-builder",
+      "entity_type": "command",
+      "title_ar": "ansible-builder Command Reference",
+      "summary_ar": "Build an Execution Environment from Collections and dependencies.",
+      "category": "automation",
+      "keywords_ar": [
+        "ansible-builder Command Reference",
+        "Build an Execution Environment from Collections and dependencies.",
+        "ansible-builder",
+        "ansible-builder <create|build> -f execution-environment.yml [OPTIONS]",
+        "ansible-builder build -f execution-environment.yml -t corp-ee:1.0"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-ansible-navigator",
+        "task-build-execution-environment",
+        "path-advanced-rhel-administration",
+        "concept-aap-platform"
+      ],
+      "tags_ar": [
+        "Command Reference",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "command_name": "ansible-builder",
+      "purpose_ar": "Build an Execution Environment from Collections and dependencies.",
+      "syntax": "ansible-builder <create|build> -f execution-environment.yml [OPTIONS]",
+      "provided_by": "ansible-builder",
+      "requires_sudo": false,
+      "risk": "medium",
+      "options": [
+        {
+          "option": "build",
+          "description_ar": "Build the image.",
+          "example": "ansible-builder build -t corp-ee:1.0"
+        },
+        {
+          "option": "-f FILE",
+          "description_ar": "Select definition.",
+          "example": "-f execution-environment.yml"
+        }
+      ],
+      "examples": [
+        {
+          "title_ar": "Build an EE",
+          "command": "ansible-builder build -f execution-environment.yml -t corp-ee:1.0",
+          "explanation_ar": "Creates a runtime image."
+        }
+      ],
+      "common_mistakes_ar": [
+        "Pin dependency versions."
+      ]
+    },
+    {
+      "id": "cmd-oscap",
+      "entity_type": "command",
+      "title_ar": "oscap Command Reference",
+      "summary_ar": "Assess SCAP compliance, produce reports, and remediate.",
+      "category": "compliance",
+      "keywords_ar": [
+        "oscap Command Reference",
+        "Assess SCAP compliance, produce reports, and remediate.",
+        "oscap",
+        "oscap <MODULE> <ACTION> [OPTIONS] <CONTENT>",
+        "sudo oscap xccdf eval --profile <PROFILE> --results results.xml --report report.html <DATASTREAM>"
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-autotailor",
+        "task-openscap-scan",
+        "task-openscap-remediate",
+        "troubleshoot-openscap",
+        "path-advanced-rhel-administration",
+        "concept-openscap-compliance"
+      ],
+      "tags_ar": [
+        "Command Reference",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "command_name": "oscap",
+      "purpose_ar": "Assess SCAP compliance, produce reports, and remediate.",
+      "syntax": "oscap <MODULE> <ACTION> [OPTIONS] <CONTENT>",
+      "provided_by": "openscap-scanner",
+      "requires_sudo": false,
+      "risk": "high",
+      "options": [
+        {
+          "option": "info",
+          "description_ar": "List profiles.",
+          "example": "oscap info <DATASTREAM>"
+        },
+        {
+          "option": "xccdf eval",
+          "description_ar": "Run an assessment.",
+          "example": "oscap xccdf eval --profile <PROFILE> <DATASTREAM>"
+        },
+        {
+          "option": "--remediate",
+          "description_ar": "Apply remediation.",
+          "example": "--remediate"
+        }
+      ],
+      "examples": [
+        {
+          "title_ar": "Scan with report",
+          "command": "sudo oscap xccdf eval --profile <PROFILE> --results results.xml --report report.html <DATASTREAM>",
+          "explanation_ar": "Creates XML and HTML."
+        }
+      ],
+      "common_mistakes_ar": [
+        "Match content to the RHEL release."
+      ]
+    },
+    {
+      "id": "cmd-autotailor",
+      "entity_type": "command",
+      "title_ar": "autotailor Command Reference",
+      "summary_ar": "Customize a SCAP profile without modifying source content.",
+      "category": "compliance",
+      "keywords_ar": [
+        "autotailor Command Reference",
+        "Customize a SCAP profile without modifying source content.",
+        "autotailor",
+        "autotailor [SELECTIONS] --output=<FILE> --tailored-profile-id=<ID> <DATASTREAM> <PROFILE>",
+        "autotailor --unselect=<RULE> --output=tailoring.xml --tailored-profile-id=corp <DATASTREAM> <PROFILE>"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-oscap",
+        "task-openscap-scan",
+        "task-openscap-remediate",
+        "troubleshoot-openscap",
+        "path-advanced-rhel-administration",
+        "concept-openscap-compliance"
+      ],
+      "tags_ar": [
+        "Command Reference",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "command_name": "autotailor",
+      "purpose_ar": "Customize a SCAP profile without modifying source content.",
+      "syntax": "autotailor [SELECTIONS] --output=<FILE> --tailored-profile-id=<ID> <DATASTREAM> <PROFILE>",
+      "provided_by": "openscap-utils",
+      "requires_sudo": false,
+      "risk": "low",
+      "options": [
+        {
+          "option": "--select=RULE",
+          "description_ar": "Select a rule.",
+          "example": "--select=<RULE>"
+        },
+        {
+          "option": "--unselect=RULE",
+          "description_ar": "Unselect a rule.",
+          "example": "--unselect=<RULE>"
+        }
+      ],
+      "examples": [
+        {
+          "title_ar": "Create Tailoring",
+          "command": "autotailor --unselect=<RULE> --output=tailoring.xml --tailored-profile-id=corp <DATASTREAM> <PROFILE>",
+          "explanation_ar": "Creates a separate file."
+        }
+      ],
+      "common_mistakes_ar": [
+        "Document every exception."
+      ]
+    },
+    {
+      "id": "cmd-composer-cli",
+      "entity_type": "command",
+      "title_ar": "composer-cli Command Reference",
+      "summary_ar": "Manage Blueprints, Composes, and RHEL images.",
+      "category": "image_building",
+      "keywords_ar": [
+        "composer-cli Command Reference",
+        "Manage Blueprints, Composes, and RHEL images.",
+        "composer-cli",
+        "composer-cli <blueprints|compose> <ACTION> [ARGS]",
+        "sudo composer-cli compose start server qcow2"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "task-image-builder",
+        "path-advanced-rhel-administration",
+        "concept-image-builder-composer"
+      ],
+      "tags_ar": [
+        "Command Reference",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "command_name": "composer-cli",
+      "purpose_ar": "Manage Blueprints, Composes, and RHEL images.",
+      "syntax": "composer-cli <blueprints|compose> <ACTION> [ARGS]",
+      "provided_by": "composer-cli",
+      "requires_sudo": true,
+      "risk": "medium",
+      "options": [
+        {
+          "option": "blueprints push FILE",
+          "description_ar": "Import a Blueprint.",
+          "example": "composer-cli blueprints push server.toml"
+        },
+        {
+          "option": "compose types",
+          "description_ar": "List image types.",
+          "example": "composer-cli compose types"
+        },
+        {
+          "option": "compose start NAME TYPE",
+          "description_ar": "Start a build.",
+          "example": "composer-cli compose start server qcow2"
+        }
+      ],
+      "examples": [
+        {
+          "title_ar": "Start QCOW2",
+          "command": "sudo composer-cli compose start server qcow2",
+          "explanation_ar": "Returns a UUID."
+        }
+      ],
+      "common_mistakes_ar": [
+        "Run dependency resolution first."
+      ]
+    },
+    {
+      "id": "cmd-leapp",
+      "entity_type": "command",
+      "title_ar": "leapp Command Reference",
+      "summary_ar": "Assess and perform a major in-place upgrade.",
+      "category": "upgrades",
+      "keywords_ar": [
+        "leapp Command Reference",
+        "Assess and perform a major in-place upgrade.",
+        "leapp",
+        "leapp <preupgrade|upgrade|answer> [OPTIONS]",
+        "less /var/log/leapp/leapp-report.txt"
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "task-leapp-preupgrade",
+        "task-leapp-upgrade",
+        "troubleshoot-leapp",
+        "path-advanced-rhel-administration",
+        "concept-leapp-upgrade"
+      ],
+      "tags_ar": [
+        "Command Reference",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "command_name": "leapp",
+      "purpose_ar": "Assess and perform a major in-place upgrade.",
+      "syntax": "leapp <preupgrade|upgrade|answer> [OPTIONS]",
+      "provided_by": "leapp-upgrade",
+      "requires_sudo": true,
+      "risk": "high",
+      "options": [
+        {
+          "option": "preupgrade",
+          "description_ar": "Assess readiness.",
+          "example": "sudo leapp preupgrade"
+        },
+        {
+          "option": "upgrade",
+          "description_ar": "Prepare upgrade.",
+          "example": "sudo leapp upgrade"
+        },
+        {
+          "option": "answer",
+          "description_ar": "Record an answer.",
+          "example": "sudo leapp answer --section <SECTION>.<KEY>=<VALUE>"
+        }
+      ],
+      "examples": [
+        {
+          "title_ar": "Read report",
+          "command": "less /var/log/leapp/leapp-report.txt",
+          "explanation_ar": "Shows inhibitors."
+        }
+      ],
+      "common_mistakes_ar": [
+        "Do not upgrade with inhibitors."
+      ]
+    },
+    {
+      "id": "cmd-rpm-ostree",
+      "entity_type": "command",
+      "title_ar": "rpm-ostree Command Reference",
+      "summary_ar": "Manage deployments on legacy OSTree systems.",
+      "category": "image_mode",
+      "keywords_ar": [
+        "rpm-ostree Command Reference",
+        "Manage deployments on legacy OSTree systems.",
+        "rpm-ostree",
+        "rpm-ostree <status|upgrade|rollback|install>",
+        "rpm-ostree status"
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9"
+      ],
+      "related_entities": [
+        "cmd-bootc",
+        "concept-rhel-image-mode",
+        "path-advanced-rhel-administration",
+        "concept-rpm-ostree"
+      ],
+      "tags_ar": [
+        "Command Reference",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "command_name": "rpm-ostree",
+      "purpose_ar": "Manage deployments on legacy OSTree systems.",
+      "syntax": "rpm-ostree <status|upgrade|rollback|install>",
+      "provided_by": "rpm-ostree",
+      "requires_sudo": true,
+      "risk": "high",
+      "options": [
+        {
+          "option": "status",
+          "description_ar": "Show deployments.",
+          "example": "rpm-ostree status"
+        },
+        {
+          "option": "upgrade",
+          "description_ar": "Stage update.",
+          "example": "sudo rpm-ostree upgrade"
+        },
+        {
+          "option": "rollback",
+          "description_ar": "Stage rollback.",
+          "example": "sudo rpm-ostree rollback"
+        }
+      ],
+      "examples": [
+        {
+          "title_ar": "Show status",
+          "command": "rpm-ostree status",
+          "explanation_ar": "Shows current and previous states."
+        }
+      ],
+      "common_mistakes_ar": [
+        "Do not use it to mutate bootc."
+      ]
+    },
+    {
+      "id": "cmd-bootc",
+      "entity_type": "command",
+      "title_ar": "bootc Command Reference",
+      "summary_ar": "Manage Image Mode updates, switches, and rollback.",
+      "category": "image_mode",
+      "keywords_ar": [
+        "bootc Command Reference",
+        "Manage Image Mode updates, switches, and rollback.",
+        "bootc",
+        "bootc <status|update|upgrade|switch|rollback>",
+        "bootc status --verbose"
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "concept-rhel-image-mode",
+        "concept-rpm-ostree",
+        "task-bootc-update",
+        "troubleshoot-bootc",
+        "cmd-rpm-ostree"
+      ],
+      "tags_ar": [
+        "Command Reference",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "command_name": "bootc",
+      "purpose_ar": "Manage Image Mode updates, switches, and rollback.",
+      "syntax": "bootc <status|update|upgrade|switch|rollback>",
+      "provided_by": "bootc",
+      "requires_sudo": true,
+      "risk": "high",
+      "options": [
+        {
+          "option": "status --verbose",
+          "description_ar": "Show image and deployments.",
+          "example": "bootc status --verbose"
+        },
+        {
+          "option": "upgrade --download-only",
+          "description_ar": "Download and stage only.",
+          "example": "sudo bootc upgrade --download-only"
+        },
+        {
+          "option": "rollback",
+          "description_ar": "Stage rollback.",
+          "example": "sudo bootc rollback"
+        }
+      ],
+      "examples": [
+        {
+          "title_ar": "Inspect status",
+          "command": "bootc status --verbose",
+          "explanation_ar": "Shows image reference and state."
+        }
+      ],
+      "common_mistakes_ar": [
+        "Changes normally require a reboot."
+      ]
+    },
+    {
+      "id": "cmd-bootc-image-builder",
+      "entity_type": "command",
+      "title_ar": "bootc-image-builder Command Reference",
+      "summary_ar": "Convert a bootc image to QCOW2, raw, or ISO.",
+      "category": "image_mode",
+      "keywords_ar": [
+        "bootc-image-builder Command Reference",
+        "Convert a bootc image to QCOW2, raw, or ISO.",
+        "bootc-image-builder",
+        "podman run --privileged ... bootc-image-builder --type <TYPE> <IMAGE>",
+        "sudo podman run --rm --privileged -v ./output:/output -v /var/lib/containers/storage:/var/lib/containers/storage registry.redhat.io/rhel10/bootc-image-builder:latest --type qcow2 <IMAGE>"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "concept-rhel-image-mode",
+        "task-bootc-build",
+        "cmd-podman"
+      ],
+      "tags_ar": [
+        "Command Reference",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "command_name": "bootc-image-builder",
+      "purpose_ar": "Convert a bootc image to QCOW2, raw, or ISO.",
+      "syntax": "podman run --privileged ... bootc-image-builder --type <TYPE> <IMAGE>",
+      "provided_by": "bootc-image-builder container image",
+      "requires_sudo": true,
+      "risk": "medium",
+      "options": [
+        {
+          "option": "--type qcow2",
+          "description_ar": "Build QCOW2.",
+          "example": "--type qcow2"
+        },
+        {
+          "option": "--type raw",
+          "description_ar": "Build raw.",
+          "example": "--type raw"
+        },
+        {
+          "option": "--type iso",
+          "description_ar": "Build ISO.",
+          "example": "--type iso"
+        }
+      ],
+      "examples": [
+        {
+          "title_ar": "Build image",
+          "command": "sudo podman run --rm --privileged -v ./output:/output -v /var/lib/containers/storage:/var/lib/containers/storage registry.redhat.io/rhel10/bootc-image-builder:latest --type qcow2 <IMAGE>",
+          "explanation_ar": "Creates an artifact."
+        }
+      ],
+      "common_mistakes_ar": [
+        "Make the source image available locally."
+      ]
+    },
+    {
+      "id": "cmd-podman",
+      "entity_type": "command",
+      "title_ar": "podman Command Reference",
+      "summary_ar": "Manage images, containers, volumes, and networks without a central daemon.",
+      "category": "containers",
+      "keywords_ar": [
+        "podman Command Reference",
+        "Manage images, containers, volumes, and networks without a central daemon.",
+        "podman",
+        "podman <pull|run|ps|logs|build|volume|network> [OPTIONS]",
+        "podman ps -a"
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "concept-containers-podman",
+        "task-podman-rootless",
+        "cmd-bootc-image-builder",
+        "task-bootc-build"
+      ],
+      "tags_ar": [
+        "Command Reference",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "command_name": "podman",
+      "purpose_ar": "Manage images, containers, volumes, and networks without a central daemon.",
+      "syntax": "podman <pull|run|ps|logs|build|volume|network> [OPTIONS]",
+      "provided_by": "podman",
+      "requires_sudo": false,
+      "risk": "high",
+      "options": [
+        {
+          "option": "pull IMAGE",
+          "description_ar": "Pull an image.",
+          "example": "podman pull <IMAGE>"
+        },
+        {
+          "option": "run",
+          "description_ar": "Run a container.",
+          "example": "podman run -d --name web -p 8080:80 <IMAGE>"
+        },
+        {
+          "option": "build -t IMAGE .",
+          "description_ar": "Build an image.",
+          "example": "podman build -t myapp:1.0 ."
+        }
+      ],
+      "examples": [
+        {
+          "title_ar": "List containers",
+          "command": "podman ps -a",
+          "explanation_ar": "Shows running and stopped containers."
+        }
+      ],
+      "common_mistakes_ar": [
+        "Do not keep important data only in the writable layer."
+      ]
+    },
+    {
+      "id": "task-validate-kickstart",
+      "entity_type": "task",
+      "title_ar": "Create and Validate Kickstart",
+      "summary_ar": "Create a Kickstart file, review sections, and validate syntax.",
+      "category": "advanced_provisioning",
+      "keywords_ar": [
+        "Create and Validate Kickstart",
+        "Create a Kickstart file, review sections, and validate syntax.",
+        "I want to prepare an automated installation file"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-ksvalidator",
+        "task-launch-kickstart",
+        "troubleshoot-kickstart",
+        "path-advanced-rhel-administration",
+        "concept-kickstart-automation"
+      ],
+      "tags_ar": [
+        "Workflow",
+        "Kickstart"
+      ],
+      "status": "reviewed",
+      "content_level": "workflow",
+      "goal_ar": "I want to prepare an automated installation file",
+      "estimated_minutes": 15,
+      "risk": "medium",
+      "prerequisites_ar": [
+        "Choose the target RHEL release"
+      ],
+      "variables": [],
+      "steps": [
+        {
+          "id": "copy",
+          "title_ar": "Use a previous file",
+          "command": "sudo cp /root/anaconda-ks.cfg server.ks",
+          "explanation_ar": "Copies a starting point.",
+          "requires_sudo": true,
+          "risk": "medium",
+          "optional": false,
+          "expected_result_ar": "Editable file.",
+          "notes_ar": ""
+        },
+        {
+          "id": "edit",
+          "title_ar": "Edit the file",
+          "command": "vim server.ks",
+          "explanation_ar": "Review storage, networking, packages, and scripts.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Intended settings.",
+          "notes_ar": ""
+        },
+        {
+          "id": "protect",
+          "title_ar": "Protect the file",
+          "command": "chmod 600 server.ks",
+          "explanation_ar": "Restricts secrets.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Mode 600.",
+          "notes_ar": ""
+        },
+        {
+          "id": "validate",
+          "title_ar": "Validate syntax",
+          "command": "ksvalidator -v RHEL10 server.ks",
+          "explanation_ar": "Checks syntax.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "No errors.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "Validate again",
+          "command": "ksvalidator -v RHEL10 server.ks",
+          "expected_result_ar": "Exit 0.",
+          "requires_sudo": false
+        }
+      ],
+      "rollback_ar": [],
+      "common_errors": [],
+      "files": [],
+      "ports": [],
+      "safety_notes_ar": [
+        "Test on a disposable VM."
+      ],
+      "sources": []
+    },
+    {
+      "id": "task-launch-kickstart",
+      "entity_type": "task",
+      "title_ar": "Start a Kickstart Installation",
+      "summary_ar": "Publish the file, pass inst.ks, and monitor installation.",
+      "category": "advanced_provisioning",
+      "keywords_ar": [
+        "Start a Kickstart Installation",
+        "Publish the file, pass inst.ks, and monitor installation.",
+        "I want to start an automated RHEL installation"
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-ksvalidator",
+        "task-validate-kickstart",
+        "troubleshoot-kickstart",
+        "path-advanced-rhel-administration",
+        "concept-kickstart-automation"
+      ],
+      "tags_ar": [
+        "Workflow",
+        "Kickstart"
+      ],
+      "status": "reviewed",
+      "content_level": "workflow",
+      "goal_ar": "I want to start an automated RHEL installation",
+      "estimated_minutes": 20,
+      "risk": "high",
+      "prerequisites_ar": [
+        "Validated file and backup"
+      ],
+      "variables": [
+        {
+          "name": "KS_URL",
+          "label_ar": "Kickstart URL",
+          "example": "https://server/ks.cfg",
+          "required": true
+        }
+      ],
+      "steps": [
+        {
+          "id": "url",
+          "title_ar": "Check file access",
+          "command": "curl -fI <KS_URL>",
+          "explanation_ar": "Validates access.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "HTTP success.",
+          "notes_ar": ""
+        },
+        {
+          "id": "boot",
+          "title_ar": "Add the boot option",
+          "command": "inst.ks=<KS_URL>",
+          "explanation_ar": "Add it to GRUB or PXE.",
+          "requires_sudo": false,
+          "risk": "high",
+          "optional": false,
+          "expected_result_ar": "Anaconda retrieves the file.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "Verify installed system",
+          "command": "test -f /root/anaconda-ks.cfg",
+          "expected_result_ar": "File exists.",
+          "requires_sudo": false
+        }
+      ],
+      "rollback_ar": [],
+      "common_errors": [],
+      "files": [],
+      "ports": [],
+      "safety_notes_ar": [
+        "Installation can erase disks."
+      ],
+      "sources": []
+    },
+    {
+      "id": "task-register-satellite",
+      "entity_type": "task",
+      "title_ar": "Register a Host with Satellite",
+      "summary_ar": "Install the consumer certificate, register with an Activation Key, and verify content.",
+      "category": "satellite",
+      "keywords_ar": [
+        "Register a Host with Satellite",
+        "Install the consumer certificate, register with an Activation Key, and verify content.",
+        "I want to connect RHEL to Satellite"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-hammer",
+        "cmd-satellite-maintain",
+        "task-satellite-content",
+        "task-satellite-remote-job",
+        "troubleshoot-satellite",
+        "path-advanced-rhel-administration",
+        "concept-satellite-management"
+      ],
+      "tags_ar": [
+        "Workflow",
+        "Satellite"
+      ],
+      "status": "reviewed",
+      "content_level": "workflow",
+      "goal_ar": "I want to connect RHEL to Satellite",
+      "estimated_minutes": 15,
+      "risk": "medium",
+      "prerequisites_ar": [
+        "Working DNS and time"
+      ],
+      "variables": [
+        {
+          "name": "SATELLITE",
+          "label_ar": "Satellite hostname",
+          "example": "satellite.example.com",
+          "required": true
+        },
+        {
+          "name": "ORG",
+          "label_ar": "Organization",
+          "example": "Org",
+          "required": true
+        },
+        {
+          "name": "KEY",
+          "label_ar": "Activation Key",
+          "example": "rhel-prod",
+          "required": true
+        }
+      ],
+      "steps": [
+        {
+          "id": "cert",
+          "title_ar": "Install consumer certificate",
+          "command": "sudo rpm -Uvh https://<SATELLITE>/pub/katello-ca-consumer-latest.noarch.rpm",
+          "explanation_ar": "Installs trust.",
+          "requires_sudo": true,
+          "risk": "medium",
+          "optional": false,
+          "expected_result_ar": "Package installed.",
+          "notes_ar": ""
+        },
+        {
+          "id": "register",
+          "title_ar": "Register",
+          "command": "sudo subscription-manager register --org=<ORG> --activationkey=<KEY>",
+          "explanation_ar": "Registers the host.",
+          "requires_sudo": true,
+          "risk": "medium",
+          "optional": false,
+          "expected_result_ar": "Registered.",
+          "notes_ar": ""
+        },
+        {
+          "id": "repos",
+          "title_ar": "Check repositories",
+          "command": "sudo subscription-manager repos --list-enabled",
+          "explanation_ar": "Lists content.",
+          "requires_sudo": true,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Expected repos.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "Show identity",
+          "command": "sudo subscription-manager identity",
+          "expected_result_ar": "Identity.",
+          "requires_sudo": true
+        }
+      ],
+      "rollback_ar": [
+        "sudo subscription-manager unregister"
+      ],
+      "common_errors": [],
+      "files": [
+        "/etc/rhsm/"
+      ],
+      "ports": [
+        443
+      ],
+      "safety_notes_ar": [],
+      "sources": []
+    },
+    {
+      "id": "task-satellite-content",
+      "entity_type": "task",
+      "title_ar": "Build a Satellite Content Lifecycle",
+      "summary_ar": "Create Lifecycle Environments, publish a Content View, and promote it.",
+      "category": "satellite",
+      "keywords_ar": [
+        "Build a Satellite Content Lifecycle",
+        "Create Lifecycle Environments, publish a Content View, and promote it.",
+        "I want a Content View and Dev/Test/Prod environments"
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-hammer",
+        "cmd-satellite-maintain",
+        "task-register-satellite",
+        "task-satellite-remote-job",
+        "troubleshoot-satellite",
+        "path-advanced-rhel-administration",
+        "concept-satellite-management"
+      ],
+      "tags_ar": [
+        "Workflow",
+        "Satellite"
+      ],
+      "status": "reviewed",
+      "content_level": "workflow",
+      "goal_ar": "I want a Content View and Dev/Test/Prod environments",
+      "estimated_minutes": 25,
+      "risk": "high",
+      "prerequisites_ar": [],
+      "variables": [
+        {
+          "name": "ORG",
+          "label_ar": "Organization",
+          "example": "Org",
+          "required": true
+        },
+        {
+          "name": "CV",
+          "label_ar": "Content View",
+          "example": "RHEL10_Base",
+          "required": true
+        }
+      ],
+      "steps": [
+        {
+          "id": "env",
+          "title_ar": "Create an environment",
+          "command": "hammer lifecycle-environment create --name Development --prior Library --organization <ORG>",
+          "explanation_ar": "Creates the stage.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Created.",
+          "notes_ar": ""
+        },
+        {
+          "id": "publish",
+          "title_ar": "Publish the view",
+          "command": "hammer content-view publish --name <CV> --organization <ORG>",
+          "explanation_ar": "Freezes a version.",
+          "requires_sudo": false,
+          "risk": "high",
+          "optional": false,
+          "expected_result_ar": "Version created.",
+          "notes_ar": ""
+        },
+        {
+          "id": "promote",
+          "title_ar": "Promote the version",
+          "command": "hammer content-view version promote --content-view <CV> --version <VERSION> --to-lifecycle-environment Development --organization <ORG>",
+          "explanation_ar": "Exposes content.",
+          "requires_sudo": false,
+          "risk": "high",
+          "optional": false,
+          "expected_result_ar": "Promoted.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "List versions",
+          "command": "hammer content-view version list --content-view <CV> --organization <ORG>",
+          "expected_result_ar": "Versions.",
+          "requires_sudo": false
+        }
+      ],
+      "rollback_ar": [],
+      "common_errors": [],
+      "files": [],
+      "ports": [],
+      "safety_notes_ar": [
+        "Do not promote to Production without testing."
+      ],
+      "sources": []
+    },
+    {
+      "id": "task-satellite-remote-job",
+      "entity_type": "task",
+      "title_ar": "Run a Satellite Remote Job",
+      "summary_ar": "Preview a search query, launch a Job Template, and review results.",
+      "category": "satellite",
+      "keywords_ar": [
+        "Run a Satellite Remote Job",
+        "Preview a search query, launch a Job Template, and review results.",
+        "I want to run a command on a host group"
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-hammer",
+        "cmd-satellite-maintain",
+        "task-register-satellite",
+        "task-satellite-content",
+        "troubleshoot-satellite",
+        "path-advanced-rhel-administration",
+        "concept-satellite-management"
+      ],
+      "tags_ar": [
+        "Workflow",
+        "Satellite"
+      ],
+      "status": "reviewed",
+      "content_level": "workflow",
+      "goal_ar": "I want to run a command on a host group",
+      "estimated_minutes": 12,
+      "risk": "high",
+      "prerequisites_ar": [],
+      "variables": [
+        {
+          "name": "QUERY",
+          "label_ar": "Search Query",
+          "example": "hostgroup = web",
+          "required": true
+        },
+        {
+          "name": "COMMAND",
+          "label_ar": "Command",
+          "example": "uname -r",
+          "required": true
+        }
+      ],
+      "steps": [
+        {
+          "id": "preview",
+          "title_ar": "Preview targets",
+          "command": "hammer host list --search <QUERY>",
+          "explanation_ar": "Lists hosts.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Expected hosts.",
+          "notes_ar": ""
+        },
+        {
+          "id": "run",
+          "title_ar": "Launch the job",
+          "command": "hammer job-invocation create --job-template 'Run Command - Script Default' --inputs command='<COMMAND>' --search-query '<QUERY>'",
+          "explanation_ar": "Creates a job.",
+          "requires_sudo": false,
+          "risk": "high",
+          "optional": false,
+          "expected_result_ar": "Job ID.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "Show the job",
+          "command": "hammer job-invocation info --id <JOB_ID>",
+          "expected_result_ar": "Host results.",
+          "requires_sudo": false
+        }
+      ],
+      "rollback_ar": [],
+      "common_errors": [],
+      "files": [],
+      "ports": [],
+      "safety_notes_ar": [
+        "Start with a read-only command and a small group."
+      ],
+      "sources": []
+    },
+    {
+      "id": "task-register-lightspeed",
+      "entity_type": "task",
+      "title_ar": "Register a Host with Lightspeed",
+      "summary_ar": "Verify identity, register and upload, and connect Remediations.",
+      "category": "lightspeed",
+      "keywords_ar": [
+        "Register a Host with Lightspeed",
+        "Verify identity, register and upload, and connect Remediations.",
+        "I want the system in Inventory"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-insights-client",
+        "cmd-rhc",
+        "path-advanced-rhel-administration",
+        "concept-lightspeed-insights"
+      ],
+      "tags_ar": [
+        "Workflow",
+        "Lightspeed"
+      ],
+      "status": "reviewed",
+      "content_level": "workflow",
+      "goal_ar": "I want the system in Inventory",
+      "estimated_minutes": 10,
+      "risk": "medium",
+      "prerequisites_ar": [],
+      "variables": [
+        {
+          "name": "NAME",
+          "label_ar": "Display name",
+          "example": "web01",
+          "required": true
+        }
+      ],
+      "steps": [
+        {
+          "id": "identity",
+          "title_ar": "Check identity",
+          "command": "sudo subscription-manager identity",
+          "explanation_ar": "Validates subscription.",
+          "requires_sudo": true,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Identity.",
+          "notes_ar": ""
+        },
+        {
+          "id": "register",
+          "title_ar": "Register",
+          "command": "sudo insights-client --register --display-name <NAME>",
+          "explanation_ar": "Registers and uploads.",
+          "requires_sudo": true,
+          "risk": "medium",
+          "optional": false,
+          "expected_result_ar": "Registered.",
+          "notes_ar": ""
+        },
+        {
+          "id": "rhc",
+          "title_ar": "Connect execution",
+          "command": "sudo rhc connect",
+          "explanation_ar": "Enables Tasks and Remediations.",
+          "requires_sudo": true,
+          "risk": "medium",
+          "optional": false,
+          "expected_result_ar": "Connected.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "Check status",
+          "command": "sudo insights-client --status",
+          "expected_result_ar": "Registered.",
+          "requires_sudo": true
+        }
+      ],
+      "rollback_ar": [],
+      "common_errors": [],
+      "files": [],
+      "ports": [],
+      "safety_notes_ar": [
+        "Review data collection policy."
+      ],
+      "sources": []
+    },
+    {
+      "id": "task-run-ansible",
+      "entity_type": "task",
+      "title_ar": "Run an Ansible Playbook Safely",
+      "summary_ar": "Validate inventory and syntax, use check mode, and run on a limited group.",
+      "category": "automation",
+      "keywords_ar": [
+        "Run an Ansible Playbook Safely",
+        "Validate inventory and syntax, use check mode, and run on a limited group.",
+        "I want to automate a host group"
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-ansible",
+        "cmd-ansible-playbook",
+        "cmd-ansible-inventory",
+        "cmd-ansible-vault",
+        "path-advanced-rhel-administration",
+        "concept-ansible-core"
+      ],
+      "tags_ar": [
+        "Workflow",
+        "Ansible"
+      ],
+      "status": "reviewed",
+      "content_level": "workflow",
+      "goal_ar": "I want to automate a host group",
+      "estimated_minutes": 20,
+      "risk": "high",
+      "prerequisites_ar": [],
+      "variables": [
+        {
+          "name": "INV",
+          "label_ar": "Inventory",
+          "example": "inventory.ini",
+          "required": true
+        },
+        {
+          "name": "PLAY",
+          "label_ar": "Playbook",
+          "example": "site.yml",
+          "required": true
+        },
+        {
+          "name": "LIMIT",
+          "label_ar": "Test group",
+          "example": "test",
+          "required": true
+        }
+      ],
+      "steps": [
+        {
+          "id": "inventory",
+          "title_ar": "Check inventory",
+          "command": "ansible-inventory -i <INV> --graph",
+          "explanation_ar": "Shows targets.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Correct hosts.",
+          "notes_ar": ""
+        },
+        {
+          "id": "syntax",
+          "title_ar": "Validate syntax",
+          "command": "ansible-playbook -i <INV> <PLAY> --syntax-check",
+          "explanation_ar": "Finds structural errors.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "No errors.",
+          "notes_ar": ""
+        },
+        {
+          "id": "check",
+          "title_ar": "Preview",
+          "command": "ansible-playbook -i <INV> <PLAY> --check --diff --limit <LIMIT>",
+          "explanation_ar": "Shows changes.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Expected changes.",
+          "notes_ar": ""
+        },
+        {
+          "id": "run",
+          "title_ar": "Run on a limited group",
+          "command": "ansible-playbook -i <INV> <PLAY> --limit <LIMIT>",
+          "explanation_ar": "Applies state.",
+          "requires_sudo": false,
+          "risk": "high",
+          "optional": false,
+          "expected_result_ar": "failed=0.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "Check idempotency",
+          "command": "ansible-playbook -i <INV> <PLAY> --check --limit <LIMIT>",
+          "expected_result_ar": "changed=0.",
+          "requires_sudo": false
+        }
+      ],
+      "rollback_ar": [],
+      "common_errors": [],
+      "files": [],
+      "ports": [],
+      "safety_notes_ar": [
+        "Review --limit before execution."
+      ],
+      "sources": []
+    },
+    {
+      "id": "task-build-execution-environment",
+      "entity_type": "task",
+      "title_ar": "Build an Ansible Execution Environment",
+      "summary_ar": "Define dependencies, build the image, and test it with ansible-navigator.",
+      "category": "automation",
+      "keywords_ar": [
+        "Build an Ansible Execution Environment",
+        "Define dependencies, build the image, and test it with ansible-navigator.",
+        "I want a consistent automation runtime"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-ansible-navigator",
+        "cmd-ansible-builder",
+        "path-advanced-rhel-administration",
+        "concept-aap-platform"
+      ],
+      "tags_ar": [
+        "Workflow",
+        "AAP"
+      ],
+      "status": "reviewed",
+      "content_level": "workflow",
+      "goal_ar": "I want a consistent automation runtime",
+      "estimated_minutes": 20,
+      "risk": "medium",
+      "prerequisites_ar": [],
+      "variables": [],
+      "steps": [
+        {
+          "id": "build",
+          "title_ar": "Build the image",
+          "command": "ansible-builder build -f execution-environment.yml -t corp-ee:1.0",
+          "explanation_ar": "Resolves dependencies.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Image built.",
+          "notes_ar": ""
+        },
+        {
+          "id": "inspect",
+          "title_ar": "Inspect image",
+          "command": "podman image inspect corp-ee:1.0",
+          "explanation_ar": "Checks metadata.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Image metadata.",
+          "notes_ar": ""
+        },
+        {
+          "id": "test",
+          "title_ar": "Run a test",
+          "command": "ansible-navigator run test.yml -i inventory.ini --eei corp-ee:1.0 --mode stdout",
+          "explanation_ar": "Validates content.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Successful recap.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "List image",
+          "command": "podman images corp-ee",
+          "expected_result_ar": "Image tag.",
+          "requires_sudo": false
+        }
+      ],
+      "rollback_ar": [],
+      "common_errors": [],
+      "files": [],
+      "ports": [],
+      "safety_notes_ar": [
+        "Pin dependency versions."
+      ],
+      "sources": []
+    },
+    {
+      "id": "task-openscap-scan",
+      "entity_type": "task",
+      "title_ar": "Run an OpenSCAP Compliance Scan",
+      "summary_ar": "List profiles and run a scan that creates XML and HTML output.",
+      "category": "compliance",
+      "keywords_ar": [
+        "Run an OpenSCAP Compliance Scan",
+        "List profiles and run a scan that creates XML and HTML output.",
+        "I want to assess a host against a security baseline"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-oscap",
+        "cmd-autotailor",
+        "task-openscap-remediate",
+        "troubleshoot-openscap",
+        "path-advanced-rhel-administration",
+        "concept-openscap-compliance"
+      ],
+      "tags_ar": [
+        "Workflow",
+        "OpenSCAP"
+      ],
+      "status": "reviewed",
+      "content_level": "workflow",
+      "goal_ar": "I want to assess a host against a security baseline",
+      "estimated_minutes": 15,
+      "risk": "low",
+      "prerequisites_ar": [],
+      "variables": [
+        {
+          "name": "DATASTREAM",
+          "label_ar": "Data Stream",
+          "example": "/usr/share/xml/scap/ssg/content/ssg-rhel10-ds.xml",
+          "required": true
+        },
+        {
+          "name": "PROFILE",
+          "label_ar": "Profile ID",
+          "example": "xccdf_org.ssgproject.content_profile_cis",
+          "required": true
+        }
+      ],
+      "steps": [
+        {
+          "id": "info",
+          "title_ar": "List profiles",
+          "command": "oscap info <DATASTREAM>",
+          "explanation_ar": "Shows identifiers.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Profiles.",
+          "notes_ar": ""
+        },
+        {
+          "id": "scan",
+          "title_ar": "Run scan",
+          "command": "sudo oscap xccdf eval --profile <PROFILE> --results results.xml --report report.html <DATASTREAM>",
+          "explanation_ar": "Assesses the host.",
+          "requires_sudo": true,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Reports created.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "Check files",
+          "command": "test -s results.xml && test -s report.html",
+          "expected_result_ar": "Files exist.",
+          "requires_sudo": false
+        }
+      ],
+      "rollback_ar": [],
+      "common_errors": [],
+      "files": [],
+      "ports": [],
+      "safety_notes_ar": [
+        "Protect the report because it exposes configuration."
+      ],
+      "sources": []
+    },
+    {
+      "id": "task-openscap-remediate",
+      "entity_type": "task",
+      "title_ar": "Tailor and Remediate OpenSCAP",
+      "summary_ar": "Create Tailoring, record a baseline scan, remediate, and reassess.",
+      "category": "compliance",
+      "keywords_ar": [
+        "Tailor and Remediate OpenSCAP",
+        "Create Tailoring, record a baseline scan, remediate, and reassess.",
+        "I want to apply a baseline with approved exceptions"
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-oscap",
+        "cmd-autotailor",
+        "task-openscap-scan",
+        "troubleshoot-openscap",
+        "path-advanced-rhel-administration",
+        "concept-openscap-compliance"
+      ],
+      "tags_ar": [
+        "Workflow",
+        "OpenSCAP"
+      ],
+      "status": "reviewed",
+      "content_level": "workflow",
+      "goal_ar": "I want to apply a baseline with approved exceptions",
+      "estimated_minutes": 30,
+      "risk": "high",
+      "prerequisites_ar": [],
+      "variables": [],
+      "steps": [
+        {
+          "id": "tailor",
+          "title_ar": "Create Tailoring",
+          "command": "autotailor --unselect=<RULE> --output=tailoring.xml --tailored-profile-id=corp <DATASTREAM> <BASE_PROFILE>",
+          "explanation_ar": "Customizes the policy.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "File created.",
+          "notes_ar": ""
+        },
+        {
+          "id": "before",
+          "title_ar": "Baseline scan",
+          "command": "sudo oscap xccdf eval --tailoring-file tailoring.xml --profile corp --report before.html <DATASTREAM>",
+          "explanation_ar": "Records state.",
+          "requires_sudo": true,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Baseline report.",
+          "notes_ar": ""
+        },
+        {
+          "id": "remediate",
+          "title_ar": "Apply remediation",
+          "command": "sudo oscap xccdf eval --tailoring-file tailoring.xml --profile corp --remediate <DATASTREAM>",
+          "explanation_ar": "Changes configuration.",
+          "requires_sudo": true,
+          "risk": "high",
+          "optional": false,
+          "expected_result_ar": "Completed.",
+          "notes_ar": ""
+        },
+        {
+          "id": "after",
+          "title_ar": "Rescan",
+          "command": "sudo oscap xccdf eval --tailoring-file tailoring.xml --profile corp --report after.html <DATASTREAM>",
+          "explanation_ar": "Measures results.",
+          "requires_sudo": true,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "After report.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "Compare reports",
+          "command": "ls -lh before.html after.html",
+          "expected_result_ar": "Two reports.",
+          "requires_sudo": false
+        }
+      ],
+      "rollback_ar": [],
+      "common_errors": [],
+      "files": [],
+      "ports": [],
+      "safety_notes_ar": [
+        "Take a snapshot and test outside production."
+      ],
+      "sources": []
+    },
+    {
+      "id": "task-enable-cockpit",
+      "entity_type": "task",
+      "title_ar": "Enable the RHEL Web Console",
+      "summary_ar": "Install Cockpit, enable the socket, open the firewall, and verify HTTPS.",
+      "category": "web_console",
+      "keywords_ar": [
+        "Enable the RHEL Web Console",
+        "Install Cockpit, enable the socket, open the firewall, and verify HTTPS.",
+        "I want to manage the host with Cockpit"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "path-advanced-rhel-administration",
+        "concept-rhel-web-console"
+      ],
+      "tags_ar": [
+        "Workflow",
+        "Cockpit"
+      ],
+      "status": "reviewed",
+      "content_level": "workflow",
+      "goal_ar": "I want to manage the host with Cockpit",
+      "estimated_minutes": 10,
+      "risk": "medium",
+      "prerequisites_ar": [],
+      "variables": [],
+      "steps": [
+        {
+          "id": "install",
+          "title_ar": "Install Cockpit",
+          "command": "sudo dnf install cockpit",
+          "explanation_ar": "Installs the console.",
+          "requires_sudo": true,
+          "risk": "medium",
+          "optional": false,
+          "expected_result_ar": "Installed.",
+          "notes_ar": ""
+        },
+        {
+          "id": "enable",
+          "title_ar": "Enable socket",
+          "command": "sudo systemctl enable --now cockpit.socket",
+          "explanation_ar": "Starts socket activation.",
+          "requires_sudo": true,
+          "risk": "medium",
+          "optional": false,
+          "expected_result_ar": "Active.",
+          "notes_ar": ""
+        },
+        {
+          "id": "fw",
+          "title_ar": "Open firewall",
+          "command": "sudo firewall-cmd --permanent --add-service=cockpit && sudo firewall-cmd --reload",
+          "explanation_ar": "Allows access.",
+          "requires_sudo": true,
+          "risk": "medium",
+          "optional": false,
+          "expected_result_ar": "success.",
+          "notes_ar": ""
+        },
+        {
+          "id": "test",
+          "title_ar": "Test HTTPS",
+          "command": "curl -kI https://localhost:9090",
+          "explanation_ar": "Verifies the console.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "HTTP response.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "Socket state",
+          "command": "systemctl is-active cockpit.socket",
+          "expected_result_ar": "active",
+          "requires_sudo": false
+        }
+      ],
+      "rollback_ar": [],
+      "common_errors": [],
+      "files": [],
+      "ports": [
+        9090
+      ],
+      "safety_notes_ar": [
+        "Restrict access to the management network."
+      ],
+      "sources": []
+    },
+    {
+      "id": "task-image-builder",
+      "entity_type": "task",
+      "title_ar": "Build an Image with Image Builder",
+      "summary_ar": "Push a Blueprint, resolve dependencies, start a Compose, and download the artifact.",
+      "category": "image_building",
+      "keywords_ar": [
+        "Build an Image with Image Builder",
+        "Push a Blueprint, resolve dependencies, start a Compose, and download the artifact.",
+        "I want to convert a Blueprint into a RHEL image"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-composer-cli",
+        "path-advanced-rhel-administration",
+        "concept-image-builder-composer"
+      ],
+      "tags_ar": [
+        "Workflow",
+        "Image Builder"
+      ],
+      "status": "reviewed",
+      "content_level": "workflow",
+      "goal_ar": "I want to convert a Blueprint into a RHEL image",
+      "estimated_minutes": 25,
+      "risk": "medium",
+      "prerequisites_ar": [],
+      "variables": [],
+      "steps": [
+        {
+          "id": "push",
+          "title_ar": "Push Blueprint",
+          "command": "sudo composer-cli blueprints push server.toml",
+          "explanation_ar": "Stores the Blueprint.",
+          "requires_sudo": true,
+          "risk": "medium",
+          "optional": false,
+          "expected_result_ar": "Pushed.",
+          "notes_ar": ""
+        },
+        {
+          "id": "deps",
+          "title_ar": "Resolve dependencies",
+          "command": "sudo composer-cli blueprints depsolve server",
+          "explanation_ar": "Checks packages.",
+          "requires_sudo": true,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Success.",
+          "notes_ar": ""
+        },
+        {
+          "id": "start",
+          "title_ar": "Start Compose",
+          "command": "sudo composer-cli compose start server qcow2",
+          "explanation_ar": "Starts the build.",
+          "requires_sudo": true,
+          "risk": "medium",
+          "optional": false,
+          "expected_result_ar": "UUID.",
+          "notes_ar": ""
+        },
+        {
+          "id": "status",
+          "title_ar": "Monitor state",
+          "command": "sudo composer-cli compose status",
+          "explanation_ar": "Shows FINISHED.",
+          "requires_sudo": true,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "FINISHED.",
+          "notes_ar": ""
+        },
+        {
+          "id": "download",
+          "title_ar": "Download image",
+          "command": "sudo composer-cli compose image <UUID>",
+          "explanation_ar": "Downloads artifact.",
+          "requires_sudo": true,
+          "risk": "medium",
+          "optional": false,
+          "expected_result_ar": "Image file.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "Check file",
+          "command": "ls -lh <IMAGE>",
+          "expected_result_ar": "Non-zero file.",
+          "requires_sudo": false
+        }
+      ],
+      "rollback_ar": [],
+      "common_errors": [],
+      "files": [],
+      "ports": [],
+      "safety_notes_ar": [
+        "Test the image on a VM."
+      ],
+      "sources": []
+    },
+    {
+      "id": "task-leapp-preupgrade",
+      "entity_type": "task",
+      "title_ar": "Run a Leapp Preupgrade Assessment",
+      "summary_ar": "Update the host, run assessment, and review inhibitors and the answer file.",
+      "category": "upgrades",
+      "keywords_ar": [
+        "Run a Leapp Preupgrade Assessment",
+        "Update the host, run assessment, and review inhibitors and the answer file.",
+        "I want to assess upgrade readiness"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-leapp",
+        "task-leapp-upgrade",
+        "troubleshoot-leapp",
+        "path-advanced-rhel-administration",
+        "concept-leapp-upgrade"
+      ],
+      "tags_ar": [
+        "Workflow",
+        "Leapp"
+      ],
+      "status": "reviewed",
+      "content_level": "workflow",
+      "goal_ar": "I want to assess upgrade readiness",
+      "estimated_minutes": 20,
+      "risk": "low",
+      "prerequisites_ar": [],
+      "variables": [],
+      "steps": [
+        {
+          "id": "pre",
+          "title_ar": "Run assessment",
+          "command": "sudo leapp preupgrade",
+          "explanation_ar": "Creates reports.",
+          "requires_sudo": true,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Report created.",
+          "notes_ar": ""
+        },
+        {
+          "id": "report",
+          "title_ar": "Read report",
+          "command": "less /var/log/leapp/leapp-report.txt",
+          "explanation_ar": "Shows risks.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Action list.",
+          "notes_ar": ""
+        },
+        {
+          "id": "answer",
+          "title_ar": "Inspect answer file",
+          "command": "sudo cat /var/log/leapp/answerfile",
+          "explanation_ar": "Finds missing answers.",
+          "requires_sudo": true,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "No unanswered.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "Count inhibitors",
+          "command": "grep -c 'inhibitor' /var/log/leapp/leapp-report.txt",
+          "expected_result_ar": "0.",
+          "requires_sudo": false
+        }
+      ],
+      "rollback_ar": [],
+      "common_errors": [],
+      "files": [],
+      "ports": [],
+      "safety_notes_ar": [
+        "Do not ignore a high-risk warning."
+      ],
+      "sources": []
+    },
+    {
+      "id": "task-leapp-upgrade",
+      "entity_type": "task",
+      "title_ar": "Perform a Leapp Upgrade",
+      "summary_ar": "Reassess, prepare the transaction, reboot, and verify the new release.",
+      "category": "upgrades",
+      "keywords_ar": [
+        "Perform a Leapp Upgrade",
+        "Reassess, prepare the transaction, reboot, and verify the new release.",
+        "I want to upgrade to the next major release"
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-leapp",
+        "task-leapp-preupgrade",
+        "troubleshoot-leapp",
+        "path-advanced-rhel-administration",
+        "concept-leapp-upgrade"
+      ],
+      "tags_ar": [
+        "Workflow",
+        "Leapp"
+      ],
+      "status": "reviewed",
+      "content_level": "workflow",
+      "goal_ar": "I want to upgrade to the next major release",
+      "estimated_minutes": 45,
+      "risk": "high",
+      "prerequisites_ar": [
+        "Tested backup and maintenance window"
+      ],
+      "variables": [],
+      "steps": [
+        {
+          "id": "upgrade",
+          "title_ar": "Prepare upgrade",
+          "command": "sudo leapp upgrade",
+          "explanation_ar": "Builds the upgrade environment.",
+          "requires_sudo": true,
+          "risk": "high",
+          "optional": false,
+          "expected_result_ar": "Prepared.",
+          "notes_ar": ""
+        },
+        {
+          "id": "reboot",
+          "title_ar": "Start upgrade",
+          "command": "sudo systemctl reboot",
+          "explanation_ar": "Boots into Leapp.",
+          "requires_sudo": true,
+          "risk": "high",
+          "optional": false,
+          "expected_result_ar": "System returns.",
+          "notes_ar": ""
+        },
+        {
+          "id": "release",
+          "title_ar": "Check release",
+          "command": "cat /etc/redhat-release",
+          "explanation_ar": "Shows the new release.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Target release.",
+          "notes_ar": ""
+        },
+        {
+          "id": "failed",
+          "title_ar": "Check services",
+          "command": "systemctl --failed",
+          "explanation_ar": "Finds issues.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "No unexpected failures.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "Check packages",
+          "command": "sudo dnf check",
+          "expected_result_ar": "No dependency issues.",
+          "requires_sudo": true
+        }
+      ],
+      "rollback_ar": [],
+      "common_errors": [],
+      "files": [],
+      "ports": [],
+      "safety_notes_ar": [
+        "Do not rely on package downgrade as recovery."
+      ],
+      "sources": []
+    },
+    {
+      "id": "task-bootc-update",
+      "entity_type": "task",
+      "title_ar": "Update and Roll Back bootc",
+      "summary_ar": "Inspect the reference, download the update, reboot, or roll back.",
+      "category": "image_mode",
+      "keywords_ar": [
+        "Update and Roll Back bootc",
+        "Inspect the reference, download the update, reboot, or roll back.",
+        "I want to update an Image Mode system safely"
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "concept-rhel-image-mode",
+        "cmd-bootc",
+        "troubleshoot-bootc"
+      ],
+      "tags_ar": [
+        "Workflow",
+        "bootc"
+      ],
+      "status": "reviewed",
+      "content_level": "workflow",
+      "goal_ar": "I want to update an Image Mode system safely",
+      "estimated_minutes": 20,
+      "risk": "high",
+      "prerequisites_ar": [],
+      "variables": [],
+      "steps": [
+        {
+          "id": "status",
+          "title_ar": "Show status",
+          "command": "bootc status --verbose",
+          "explanation_ar": "Records current reference.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Current deployment.",
+          "notes_ar": ""
+        },
+        {
+          "id": "download",
+          "title_ar": "Download only",
+          "command": "sudo bootc upgrade --download-only",
+          "explanation_ar": "Stages the update.",
+          "requires_sudo": true,
+          "risk": "medium",
+          "optional": false,
+          "expected_result_ar": "Pending deployment.",
+          "notes_ar": ""
+        },
+        {
+          "id": "reboot",
+          "title_ar": "Apply update",
+          "command": "sudo systemctl reboot",
+          "explanation_ar": "Boots the new deployment.",
+          "requires_sudo": true,
+          "risk": "high",
+          "optional": false,
+          "expected_result_ar": "System returns.",
+          "notes_ar": ""
+        },
+        {
+          "id": "rollback",
+          "title_ar": "Stage rollback",
+          "command": "sudo bootc rollback",
+          "explanation_ar": "Selects the previous state.",
+          "requires_sudo": true,
+          "risk": "high",
+          "optional": true,
+          "expected_result_ar": "Rollback staged.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "Check status",
+          "command": "bootc status --verbose",
+          "expected_result_ar": "Booted deployment.",
+          "requires_sudo": false
+        }
+      ],
+      "rollback_ar": [],
+      "common_errors": [],
+      "files": [],
+      "ports": [],
+      "safety_notes_ar": [
+        "Review local /etc changes after rollback."
+      ],
+      "sources": []
+    },
+    {
+      "id": "task-bootc-build",
+      "entity_type": "task",
+      "title_ar": "Build a Disk Image from bootc",
+      "summary_ar": "Pull the source, run bootc-image-builder, and inspect the artifact.",
+      "category": "image_mode",
+      "keywords_ar": [
+        "Build a Disk Image from bootc",
+        "Pull the source, run bootc-image-builder, and inspect the artifact.",
+        "I want QCOW2 or ISO from a bootc image"
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "concept-rhel-image-mode",
+        "cmd-bootc-image-builder",
+        "cmd-podman"
+      ],
+      "tags_ar": [
+        "Workflow",
+        "bootc"
+      ],
+      "status": "reviewed",
+      "content_level": "workflow",
+      "goal_ar": "I want QCOW2 or ISO from a bootc image",
+      "estimated_minutes": 30,
+      "risk": "high",
+      "prerequisites_ar": [],
+      "variables": [
+        {
+          "name": "IMAGE",
+          "label_ar": "bootc image",
+          "example": "quay.example/rhel/web:1",
+          "required": true
+        }
+      ],
+      "steps": [
+        {
+          "id": "pull",
+          "title_ar": "Pull source",
+          "command": "sudo podman pull <IMAGE>",
+          "explanation_ar": "Makes the image local.",
+          "requires_sudo": true,
+          "risk": "medium",
+          "optional": false,
+          "expected_result_ar": "Pulled.",
+          "notes_ar": ""
+        },
+        {
+          "id": "build",
+          "title_ar": "Run builder",
+          "command": "sudo podman run --rm --privileged -v ./output:/output -v /var/lib/containers/storage:/var/lib/containers/storage registry.redhat.io/rhel10/bootc-image-builder:latest --type qcow2 <IMAGE>",
+          "explanation_ar": "Builds the artifact.",
+          "requires_sudo": true,
+          "risk": "high",
+          "optional": false,
+          "expected_result_ar": "Build complete.",
+          "notes_ar": ""
+        },
+        {
+          "id": "list",
+          "title_ar": "List output",
+          "command": "find output -type f -ls",
+          "explanation_ar": "Shows the file.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Artifact exists.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "Output size",
+          "command": "du -sh output",
+          "expected_result_ar": "Reasonable size.",
+          "requires_sudo": false
+        }
+      ],
+      "rollback_ar": [],
+      "common_errors": [],
+      "files": [],
+      "ports": [],
+      "safety_notes_ar": [
+        "Run the builder on a dedicated build host."
+      ],
+      "sources": []
+    },
+    {
+      "id": "task-podman-rootless",
+      "entity_type": "task",
+      "title_ar": "Run a Rootless Podman Service",
+      "summary_ar": "Pull an image, create a volume, run the container, publish a port, and inspect logs.",
+      "category": "containers",
+      "keywords_ar": [
+        "Run a Rootless Podman Service",
+        "Pull an image, create a volume, run the container, publish a port, and inspect logs.",
+        "I want to run an application without root"
+      ],
+      "difficulty": "intermediate",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "concept-containers-podman",
+        "cmd-podman"
+      ],
+      "tags_ar": [
+        "Workflow",
+        "Podman"
+      ],
+      "status": "reviewed",
+      "content_level": "workflow",
+      "goal_ar": "I want to run an application without root",
+      "estimated_minutes": 12,
+      "risk": "medium",
+      "prerequisites_ar": [],
+      "variables": [
+        {
+          "name": "IMAGE",
+          "label_ar": "Application image",
+          "example": "registry.example/app:1",
+          "required": true
+        }
+      ],
+      "steps": [
+        {
+          "id": "pull",
+          "title_ar": "Pull image",
+          "command": "podman pull <IMAGE>",
+          "explanation_ar": "Downloads the image.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Pulled.",
+          "notes_ar": ""
+        },
+        {
+          "id": "volume",
+          "title_ar": "Create volume",
+          "command": "podman volume create appdata",
+          "explanation_ar": "Preserves data.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Created.",
+          "notes_ar": ""
+        },
+        {
+          "id": "run",
+          "title_ar": "Run container",
+          "command": "podman run -d --name web -p 8080:8080 -v appdata:/var/lib/app:Z <IMAGE>",
+          "explanation_ar": "Runs rootless.",
+          "requires_sudo": false,
+          "risk": "medium",
+          "optional": false,
+          "expected_result_ar": "Container ID.",
+          "notes_ar": ""
+        },
+        {
+          "id": "logs",
+          "title_ar": "Check logs",
+          "command": "podman logs --tail 100 web",
+          "explanation_ar": "Finds errors.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "No critical errors.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "Show state",
+          "command": "podman ps --filter name=web",
+          "expected_result_ar": "Up.",
+          "requires_sudo": false
+        }
+      ],
+      "rollback_ar": [],
+      "common_errors": [],
+      "files": [],
+      "ports": [
+        8080
+      ],
+      "safety_notes_ar": [
+        "Use :Z according to SELinux requirements."
+      ],
+      "sources": []
+    },
+    {
+      "id": "troubleshoot-kickstart",
+      "entity_type": "troubleshooting",
+      "title_ar": "Troubleshoot Kickstart Failure",
+      "summary_ar": "Separate syntax, file source, storage, script, and Anaconda log failures.",
+      "category": "advanced_provisioning",
+      "keywords_ar": [
+        "Troubleshoot Kickstart Failure",
+        "Separate syntax, file source, storage, script, and Anaconda log failures."
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-ksvalidator",
+        "task-validate-kickstart",
+        "task-launch-kickstart",
+        "path-advanced-rhel-administration",
+        "concept-kickstart-automation"
+      ],
+      "tags_ar": [
+        "Troubleshooting",
+        "Kickstart"
+      ],
+      "status": "reviewed",
+      "content_level": "troubleshooting",
+      "goal_ar": "Automated installation fails",
+      "estimated_minutes": 25,
+      "risk": "high",
+      "prerequisites_ar": [],
+      "variables": [],
+      "steps": [
+        {
+          "id": "syntax",
+          "title_ar": "Validate syntax",
+          "command": "ksvalidator -v RHEL10 <FILE>",
+          "explanation_ar": "Finds errors.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "No errors.",
+          "notes_ar": ""
+        },
+        {
+          "id": "url",
+          "title_ar": "Check source",
+          "command": "curl -fI <URL>",
+          "explanation_ar": "Validates access.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "HTTP success.",
+          "notes_ar": ""
+        },
+        {
+          "id": "logs",
+          "title_ar": "Read Anaconda log",
+          "command": "less /tmp/anaconda.log",
+          "explanation_ar": "Shows the cause.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Actionable error.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "Test VM",
+          "command": "echo test installation",
+          "expected_result_ar": "Successful install.",
+          "requires_sudo": false
+        }
+      ],
+      "rollback_ar": [
+        "Restore the previous version or snapshot."
+      ],
+      "common_errors": [],
+      "files": [
+        "/tmp/anaconda.log",
+        "/tmp/storage.log"
+      ],
+      "ports": [],
+      "safety_notes_ar": [
+        "Use a disposable VM."
+      ],
+      "sources": []
+    },
+    {
+      "id": "troubleshoot-satellite",
+      "entity_type": "troubleshooting",
+      "title_ar": "Troubleshoot Satellite Registration",
+      "summary_ar": "Check DNS, time, TLS, consumer certificate, and Activation Key.",
+      "category": "satellite",
+      "keywords_ar": [
+        "Troubleshoot Satellite Registration",
+        "Check DNS, time, TLS, consumer certificate, and Activation Key."
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-hammer",
+        "cmd-satellite-maintain",
+        "task-register-satellite",
+        "task-satellite-content",
+        "task-satellite-remote-job",
+        "path-advanced-rhel-administration",
+        "concept-satellite-management"
+      ],
+      "tags_ar": [
+        "Troubleshooting",
+        "Satellite"
+      ],
+      "status": "reviewed",
+      "content_level": "troubleshooting",
+      "goal_ar": "The host cannot register",
+      "estimated_minutes": 25,
+      "risk": "high",
+      "prerequisites_ar": [],
+      "variables": [],
+      "steps": [
+        {
+          "id": "dns",
+          "title_ar": "Check DNS",
+          "command": "getent hosts <SATELLITE>",
+          "explanation_ar": "Validates resolution.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Correct address.",
+          "notes_ar": ""
+        },
+        {
+          "id": "time",
+          "title_ar": "Check time",
+          "command": "timedatectl status",
+          "explanation_ar": "Finds TLS clock drift.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Synchronized.",
+          "notes_ar": ""
+        },
+        {
+          "id": "tls",
+          "title_ar": "Check HTTPS",
+          "command": "curl -vk https://<SATELLITE>/pub/",
+          "explanation_ar": "Tests certificate and access.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Response.",
+          "notes_ar": ""
+        },
+        {
+          "id": "key",
+          "title_ar": "Check key",
+          "command": "hammer activation-key info --name <KEY> --organization <ORG>",
+          "explanation_ar": "Validates assignments.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Valid key.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "Check identity",
+          "command": "sudo subscription-manager identity",
+          "expected_result_ar": "Identity.",
+          "requires_sudo": true
+        }
+      ],
+      "rollback_ar": [
+        "Restore the previous version or snapshot."
+      ],
+      "common_errors": [],
+      "files": [],
+      "ports": [
+        443
+      ],
+      "safety_notes_ar": [],
+      "sources": []
+    },
+    {
+      "id": "troubleshoot-leapp",
+      "entity_type": "troubleshooting",
+      "title_ar": "Troubleshoot Leapp Inhibitors",
+      "summary_ar": "Extract inhibitors and required answers, then rerun preupgrade.",
+      "category": "upgrades",
+      "keywords_ar": [
+        "Troubleshoot Leapp Inhibitors",
+        "Extract inhibitors and required answers, then rerun preupgrade."
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-leapp",
+        "task-leapp-preupgrade",
+        "task-leapp-upgrade",
+        "path-advanced-rhel-administration",
+        "concept-leapp-upgrade"
+      ],
+      "tags_ar": [
+        "Troubleshooting",
+        "Leapp"
+      ],
+      "status": "reviewed",
+      "content_level": "troubleshooting",
+      "goal_ar": "Leapp blocks the upgrade",
+      "estimated_minutes": 25,
+      "risk": "high",
+      "prerequisites_ar": [],
+      "variables": [],
+      "steps": [
+        {
+          "id": "report",
+          "title_ar": "Show inhibitors",
+          "command": "grep -n -A8 -B2 'inhibitor' /var/log/leapp/leapp-report.txt",
+          "explanation_ar": "Collects blockers.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "List.",
+          "notes_ar": ""
+        },
+        {
+          "id": "answer",
+          "title_ar": "Inspect answer file",
+          "command": "sudo cat /var/log/leapp/answerfile",
+          "explanation_ar": "Finds answers.",
+          "requires_sudo": true,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "No unanswered.",
+          "notes_ar": ""
+        },
+        {
+          "id": "rerun",
+          "title_ar": "Run again",
+          "command": "sudo leapp preupgrade",
+          "explanation_ar": "Validates remediation.",
+          "requires_sudo": true,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "No inhibitors.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "Count inhibitors",
+          "command": "grep -c 'inhibitor' /var/log/leapp/leapp-report.txt",
+          "expected_result_ar": "0.",
+          "requires_sudo": false
+        }
+      ],
+      "rollback_ar": [
+        "Restore the previous version or snapshot."
+      ],
+      "common_errors": [],
+      "files": [
+        "/var/log/leapp/"
+      ],
+      "ports": [],
+      "safety_notes_ar": [],
+      "sources": []
+    },
+    {
+      "id": "troubleshoot-openscap",
+      "entity_type": "troubleshooting",
+      "title_ar": "Troubleshoot OpenSCAP Remediation Impact",
+      "summary_ar": "Connect the change to rules, logs, and before/after reports.",
+      "category": "compliance",
+      "keywords_ar": [
+        "Troubleshoot OpenSCAP Remediation Impact",
+        "Connect the change to rules, logs, and before/after reports."
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "cmd-oscap",
+        "cmd-autotailor",
+        "task-openscap-scan",
+        "task-openscap-remediate",
+        "path-advanced-rhel-administration",
+        "concept-openscap-compliance"
+      ],
+      "tags_ar": [
+        "Troubleshooting",
+        "OpenSCAP"
+      ],
+      "status": "reviewed",
+      "content_level": "troubleshooting",
+      "goal_ar": "A service stopped after remediation",
+      "estimated_minutes": 25,
+      "risk": "high",
+      "prerequisites_ar": [],
+      "variables": [],
+      "steps": [
+        {
+          "id": "failed",
+          "title_ar": "List failed services",
+          "command": "systemctl --failed",
+          "explanation_ar": "Identifies services.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "List.",
+          "notes_ar": ""
+        },
+        {
+          "id": "logs",
+          "title_ar": "Read logs",
+          "command": "journalctl -u <SERVICE> -b --no-pager",
+          "explanation_ar": "Finds error.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Actionable message.",
+          "notes_ar": ""
+        },
+        {
+          "id": "report",
+          "title_ar": "Review reports",
+          "command": "grep -i <SERVICE> before.html after.html",
+          "explanation_ar": "Links the rule.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Rule IDs.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "Service state",
+          "command": "systemctl is-active <SERVICE>",
+          "expected_result_ar": "active",
+          "requires_sudo": false
+        }
+      ],
+      "rollback_ar": [
+        "Restore the previous version or snapshot."
+      ],
+      "common_errors": [],
+      "files": [
+        "before.html",
+        "after.html"
+      ],
+      "ports": [],
+      "safety_notes_ar": [
+        "Maintain console access."
+      ],
+      "sources": []
+    },
+    {
+      "id": "troubleshoot-bootc",
+      "entity_type": "troubleshooting",
+      "title_ar": "Troubleshoot a bootc Update",
+      "summary_ar": "Check reference, registry, storage, logs, and roll back if needed.",
+      "category": "image_mode",
+      "keywords_ar": [
+        "Troubleshoot a bootc Update",
+        "Check reference, registry, storage, logs, and roll back if needed."
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "concept-rhel-image-mode",
+        "cmd-bootc",
+        "task-bootc-update"
+      ],
+      "tags_ar": [
+        "Troubleshooting",
+        "bootc"
+      ],
+      "status": "reviewed",
+      "content_level": "troubleshooting",
+      "goal_ar": "The image cannot be pulled or booted",
+      "estimated_minutes": 25,
+      "risk": "high",
+      "prerequisites_ar": [],
+      "variables": [],
+      "steps": [
+        {
+          "id": "status",
+          "title_ar": "Show state",
+          "command": "bootc status --verbose",
+          "explanation_ar": "Shows reference.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Image reference.",
+          "notes_ar": ""
+        },
+        {
+          "id": "pull",
+          "title_ar": "Test registry",
+          "command": "podman pull <IMAGE>",
+          "explanation_ar": "Finds authentication issues.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Pulled.",
+          "notes_ar": ""
+        },
+        {
+          "id": "space",
+          "title_ar": "Check storage",
+          "command": "df -h / /var",
+          "explanation_ar": "Finds capacity issues.",
+          "requires_sudo": false,
+          "risk": "low",
+          "optional": false,
+          "expected_result_ar": "Enough space.",
+          "notes_ar": ""
+        },
+        {
+          "id": "rollback",
+          "title_ar": "Stage rollback",
+          "command": "sudo bootc rollback",
+          "explanation_ar": "Selects previous state.",
+          "requires_sudo": true,
+          "risk": "high",
+          "optional": false,
+          "expected_result_ar": "Staged.",
+          "notes_ar": ""
+        }
+      ],
+      "verification": [
+        {
+          "title_ar": "Final state",
+          "command": "bootc status --verbose",
+          "expected_result_ar": "Bootable deployment.",
+          "requires_sudo": false
+        }
+      ],
+      "rollback_ar": [
+        "Restore the previous version or snapshot."
+      ],
+      "common_errors": [],
+      "files": [
+        "/etc/containers/"
+      ],
+      "ports": [
+        443
+      ],
+      "safety_notes_ar": [],
+      "sources": []
+    },
+    {
+      "id": "path-advanced-rhel-administration",
+      "entity_type": "learning_path",
+      "title_ar": "Advanced RHEL Administration",
+      "summary_ar": "An advanced path for automated provisioning, centralized management, automation, compliance, image building, upgrades, and Image Mode.",
+      "category": "learning",
+      "keywords_ar": [
+        "Advanced RHEL Administration",
+        "An advanced path for automated provisioning, centralized management, automation, compliance, image building, upgrades, and Image Mode.",
+        "Satellite",
+        "Lightspeed",
+        "Ansible",
+        "OpenSCAP",
+        "Cockpit",
+        "Image Builder",
+        "Leapp",
+        "bootc"
+      ],
+      "difficulty": "advanced",
+      "supported_versions": [
+        "8",
+        "9",
+        "10"
+      ],
+      "related_entities": [
+        "path-rhel-admin",
+        "path-rhel-troubleshooting",
+        "concept-rhel-management-models",
+        "concept-containers-podman",
+        "concept-rhel-image-mode",
+        "concept-kickstart-automation",
+        "concept-satellite-management",
+        "concept-lightspeed-insights",
+        "concept-ansible-core",
+        "concept-aap-platform",
+        "concept-openscap-compliance",
+        "concept-rhel-web-console",
+        "concept-image-builder-composer",
+        "concept-leapp-upgrade",
+        "concept-rpm-ostree",
+        "cmd-ksvalidator",
+        "cmd-hammer",
+        "cmd-satellite-maintain",
+        "cmd-insights-client",
+        "cmd-rhc",
+        "cmd-ansible",
+        "cmd-ansible-playbook",
+        "cmd-ansible-inventory",
+        "cmd-ansible-vault",
+        "cmd-ansible-navigator"
+      ],
+      "tags_ar": [
+        "Learning Path",
+        "Advanced RHEL"
+      ],
+      "status": "reviewed",
+      "description_ar": "A path beyond core EX200 for moving from single-host administration to enterprise RHEL fleet building and operations.",
+      "estimated_hours": 48,
+      "modules": [
+        {
+          "entity_id": "concept-rhel-management-models",
+          "objective_ar": "Understand the concept and complete the practical workflow.",
+          "optional": false
+        },
+        {
+          "entity_id": "concept-kickstart-automation",
+          "objective_ar": "Understand the concept and complete the practical workflow.",
+          "optional": false
+        },
+        {
+          "entity_id": "task-validate-kickstart",
+          "objective_ar": "Understand the concept and complete the practical workflow.",
+          "optional": false
+        },
+        {
+          "entity_id": "task-launch-kickstart",
+          "objective_ar": "Understand the concept and complete the practical workflow.",
+          "optional": false
+        },
+        {
+          "entity_id": "concept-satellite-management",
+          "objective_ar": "Understand the concept and complete the practical workflow.",
+          "optional": false
+        },
+        {
+          "entity_id": "task-register-satellite",
+          "objective_ar": "Understand the concept and complete the practical workflow.",
+          "optional": false
+        },
+        {
+          "entity_id": "task-satellite-content",
+          "objective_ar": "Understand the concept and complete the practical workflow.",
+          "optional": false
+        },
+        {
+          "entity_id": "task-satellite-remote-job",
+          "objective_ar": "Understand the concept and complete the practical workflow.",
+          "optional": false
+        },
+        {
+          "entity_id": "concept-lightspeed-insights",
+          "objective_ar": "Understand the concept and complete the practical workflow.",
+          "optional": false
+        },
+        {
+          "entity_id": "task-register-lightspeed",
+          "objective_ar": "Understand the concept and complete the practical workflow.",
+          "optional": false
+        },
+        {
+          "entity_id": "concept-ansible-core",
+          "objective_ar": "Understand the concept and complete the practical workflow.",
+          "optional": false
+        },
+        {
+          "entity_id": "task-run-ansible",
+          "objective_ar": "Understand the concept and complete the practical workflow.",
+          "optional": false
+        },
+        {
+          "entity_id": "concept-aap-platform",
+          "objective_ar": "Understand the concept and complete the practical workflow.",
+          "optional": false
+        },
+        {
+          "entity_id": "task-build-execution-environment",
+          "objective_ar": "Understand the concept and complete the practical workflow.",
+          "optional": false
+        },
+        {
+          "entity_id": "concept-openscap-compliance",
+          "objective_ar": "Understand the concept and complete the practical workflow.",
+          "optional": false
+        },
+        {
+          "entity_id": "task-openscap-scan",
+          "objective_ar": "Understand the concept and complete the practical workflow.",
+          "optional": false
+        },
+        {
+          "entity_id": "task-openscap-remediate",
+          "objective_ar": "Understand the concept and complete the practical workflow.",
+          "optional": false
+        },
+        {
+          "entity_id": "concept-rhel-web-console",
+          "objective_ar": "Understand the concept and complete the practical workflow.",
+          "optional": false
+        },
+        {
+          "entity_id": "task-enable-cockpit",
+          "objective_ar": "Understand the concept and complete the practical workflow.",
+          "optional": false
+        },
+        {
+          "entity_id": "concept-image-builder-composer",
+          "objective_ar": "Understand the concept and complete the practical workflow.",
+          "optional": false
+        },
+        {
+          "entity_id": "task-image-builder",
+          "objective_ar": "Understand the concept and complete the practical workflow.",
+          "optional": false
+        },
+        {
+          "entity_id": "concept-leapp-upgrade",
+          "objective_ar": "Understand the concept and complete the practical workflow.",
+          "optional": false
+        },
+        {
+          "entity_id": "task-leapp-preupgrade",
+          "objective_ar": "Understand the concept and complete the practical workflow.",
+          "optional": false
+        },
+        {
+          "entity_id": "task-leapp-upgrade",
+          "objective_ar": "Understand the concept and complete the practical workflow.",
+          "optional": false
+        },
+        {
+          "entity_id": "concept-rpm-ostree",
+          "objective_ar": "Understand the concept and complete the practical workflow.",
+          "optional": false
+        },
+        {
+          "entity_id": "concept-rhel-image-mode",
+          "objective_ar": "Understand the concept and complete the practical workflow.",
+          "optional": false
+        },
+        {
+          "entity_id": "task-bootc-update",
+          "objective_ar": "Understand the concept and complete the practical workflow.",
+          "optional": false
+        },
+        {
+          "entity_id": "task-bootc-build",
+          "objective_ar": "Understand the concept and complete the practical workflow.",
+          "optional": false
+        },
+        {
+          "entity_id": "concept-containers-podman",
+          "objective_ar": "Understand the concept and complete the practical workflow.",
+          "optional": false
+        },
+        {
+          "entity_id": "task-podman-rootless",
+          "objective_ar": "Understand the concept and complete the practical workflow.",
+          "optional": false
+        }
+      ],
+      "outcomes_ar": [
+        "Design automated Kickstart installations.",
+        "Manage Satellite content and hosts.",
+        "Use Lightspeed, Ansible, and OpenSCAP.",
+        "Build RHEL images and manage Leapp and bootc."
       ]
     }
   ]
